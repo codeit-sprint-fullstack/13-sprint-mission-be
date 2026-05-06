@@ -1,0 +1,15 @@
+### 
+POST http://localhost:3000/products
+Content-Type: application/json
+
+{
+  "name": "티셔츠",
+  "description": "아주 좋은 티셔츠입니다",
+  "price": 5000,
+  "tags": ["의류", "티셔츠"]
+}
+###
+GET http://localhost:3000/products
+
+###
+GET http://localhost:3000/products?page=1&pageSize=5&orderBy=recent
