@@ -1,8 +1,10 @@
-// 설치된 앱 불러오기
+//모델: 스키마 정의
+
 const mongoose = require("mongoose");
+const { Schema, model } = mongoose;
 
 // 스키마(데이터 구조) 정의
-const ProductSchema = new mongoose.Schema(
+const ProductSchema = new Schema(
   {
     name: {
       type: String,
@@ -11,21 +13,26 @@ const ProductSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: true,
+      required: [true, "상품 소개는 필수예요"],
+      min: [0, "가격은 0 이상이어야 해요."],
     },
     price: {
       type: Number,
-      required: [true, "가격은 필수예요"],
+      required: [true, "판매가격은 필수예요"],
     },
     tags: {
       type: [String],
       default: [],
+    },
+    favoriteCount: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true },
 );
 
 // 스키마를 모델로 만드는 함수 -> .model(모델 이름, 사용할 스키마)
-const Product = mongoose.model("Product", ProductSchema);
+const Product = model("Product", ProductSchema);
 
 module.exports = Product;
