@@ -1,0 +1,28 @@
+@baseUrl = http://localhost:3000
+
+###
+GET {{baseUrl}}/products?sort=recent
+
+###
+GET {{baseUrl}}/products/69fbf59bab51561dac9ba2bf
+
+###
+POST {{baseUrl}}/products/
+Content-Type: application/json
+
+{
+  "name": "페이스북",
+  "description": "페이스북은정말예전에해봤어요",
+  "price": 90000
+}
+
+###
+PATCH {{baseUrl}}/products/69fc1881067a941f60a6adcb
+Content-Type: application/json
+
+{
+  "price": 10000
+}
+
+###
+DELETE {{baseUrl}}/products/69fc1f59d5e8ab5e8fa732e5
