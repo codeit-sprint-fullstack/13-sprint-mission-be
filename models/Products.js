@@ -1,4 +1,6 @@
-const productsSchema = new mongoose.Schema(
+import mongoose from "mongoose";
+
+const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -15,8 +17,7 @@ const productsSchema = new mongoose.Schema(
       required: [true, "상품 설명은 필수예요."],
     },
     tags: {
-      type: Array,
-      required: [false],
+      type: [String],
     },
   },
   {
@@ -25,6 +26,6 @@ const productsSchema = new mongoose.Schema(
 );
 
 // 2. 모델 생성 (실제 DB와 연결되는 객체)
-const Products = mongoose.model("Products", productsSchema);
+const Product = mongoose.model("Products", productSchema);
 
-export default Products;
+export default Product;
