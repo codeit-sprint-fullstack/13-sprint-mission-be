@@ -17,6 +17,18 @@ app.use(express.json());
 
 connectDB();
 
+// ✅ 기본 엔드포인트에서 상품 목록 반환
+app.get(
+  "/",
+  asyncHandler(async (req, res) => {
+    const products = await Product.find({});
+    res.json({
+      list: products,
+      totalCount: products.length,
+    });
+  }),
+);
+
 // ✅ 전체 상품 조회 (list + totalCount)
 app.get(
   "/products",
