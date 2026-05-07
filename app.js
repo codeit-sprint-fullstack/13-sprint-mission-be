@@ -84,7 +84,20 @@ app.get(
 app.post(
   "/products",
   asyncHandler(async (req, res) => {
-    const { name, description, price, tags } = req.body;
+    const body = req.body ?? {};
+    const images = Array.isArray(body.images)
+      ? body.images
+      : body.image
+        ? [body.image]
+        : [];
+    const productData = {
+      ...body,
+      price: Number(body.price),
+      tags: Array.isArray(body.tags) ? body.tags : [],
+      images,
+      ownerId: body.ownerId ?? 1,
+    };
+    const { name, description, price, tags } = productData;
 
     if (!name || name.length < 1 || name.length > 10) {
       return res
@@ -105,7 +118,7 @@ app.post(
         .json({ message: "태그는 각각 5글자 이내여야 합니다." });
     }
 
-    const newProduct = await Product.create(req.body);
+    const newProduct = await Product.create(productData);
     res.status(201).json(newProduct);
   }),
 );
