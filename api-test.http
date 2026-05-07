@@ -1,0 +1,32 @@
+@baceUrl = http://localhost:3000
+
+### 상품 추가 1
+POST {{baceUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "티셔츠",
+  "description": "아주 좋은 티셔츠입니다",
+  "price": 5000,
+  "tags": ["의류", "티셔츠"]
+}
+### 상품 수정
+PATCH {{baceUrl}}/products/69hbe75d84a38ced7745a87f
+Content-Type: application/json
+
+{
+  "name": "의자",
+  "description": "아주 튼튼한 의자입니다",
+  "price": 600000,
+  "tags": ["가구"]
+}
+### 상품 조회
+GET {{baceUrl}}/products
+
+### 상품 정렬
+GET {{baceUrl}}/products?page=1&pageSize=5&orderBy=recent
+
+### 상품 검색
+GET {{baceUrl}}/products?page=1&pageSize=5&orderBy=recent&keyword=튼
+###
+
