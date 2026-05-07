@@ -1,34 +1,29 @@
 import Product from "../models/Product.js";
 
 export const getProducts = async (req, res) => {
-  const { name, description, page, limit, sort } = req.query;
+  const { name, description, page = 1, limit = 10, sort } = req.query;
   const sortOption = sort === "recent" ? { createdAt: -1 } : {};
   const skip = (page - 1) * limit;
+  const query = {};
+  if (name) {
+    query.name = new RegExp(name, "i"); // new RegExp(name,'i')의 반환값은 /name(실제쿼리의네임값)/i(대소문자구별x)
+  }
+  if (description) {
+    query.description = new RegExp(description, "i");
+  }
 
   try {
-    if (name || description) {
-      const query = {};
-      if (name) {
-        query.name = new RegExp(name, "i"); // new RegExp(name,'i')의 반환값은 /name(실제쿼리의네임값)/i(대소문자구별x)
-      }
-      if (description) {
-        query.description = new RegExp(description, "i");
-      }
-      const queryProducts = await Product.find(query, {
-        name: 1,
-        price: 1,
-        createdAt: 1,
-      })
-        .sort(sortOption)
-        .skip(skip)
-        .limit(Number(limit));
-      return res.status(200).json(queryProducts);
-    }
-    const products = await Product.find({}, { name: 1, price: 1, createdAt: 1 })
+    const totalCount = await Product.countDocuments(query);
+
+    const products = await Product.find(query, {
+      name: 1,
+      price: 1,
+      createdAt: 1,
+    })
       .sort(sortOption)
       .skip(skip)
       .limit(Number(limit));
-    res.status(200).json(products);
+    res.status(200).json({ products, totalCount });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
