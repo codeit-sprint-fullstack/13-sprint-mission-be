@@ -28,5 +28,8 @@ GET {{baceUrl}}/products?page=1&pageSize=5&orderBy=recent
 
 ### 상품 검색
 GET {{baceUrl}}/products?page=1&pageSize=5&orderBy=recent&keyword=튼
-###
 
+### 상품 삭제
+DELETE {{baceUrl}}/products/69fb358702d8966426e3f55d
+###
+GET {{baceUrl}}/products/69fbe75d84a38ced7745a87f

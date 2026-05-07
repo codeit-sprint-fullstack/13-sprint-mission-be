@@ -2,7 +2,7 @@
 
 const express = require("express");
 const router = express.Router(); // 요청을 받을 app 대리인
-const Product = require("./models/Product");
+const Product = require("../models/Product");
 
 // 상품 등록
 router.post("/", async (req, res) => {
@@ -84,4 +84,21 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+// 상품 상세 페이지 조회
+router.get("/:id", async (req, res) => {
+  // 상품 찾기
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({ message: "상품을 찾을 수 없음" });
+    }
+
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
+
 module.exports = router;
