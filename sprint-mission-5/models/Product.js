@@ -22,22 +22,22 @@ const ProductSchema = new mongoose.Schema(
     },
   },
   {
-    // createdAt, updatedAt
+    // createdAt, updatedAt 쟈둉 생성 갱신
     timestamps: true,
   },
 );
 
-ProductSchema.virtual("id").get(function () {
-  return this._id.toHexString();
-});
+// ProductSchema.virtual("id").get(function () {
+//   return this._id.toHexString();
+// });
 
-ProductSchema.set("toJSON", {
-  virtuals: true,
-  transform: (doc, ret) => {
-    delete ret._id;
-    delete ret.__v;
-    return ret;
-  },
-});
+// ProductSchema.set("toJSON", {
+//   virtuals: true,
+//   transform: (doc, ret) => {
+//     delete ret._id;
+//     delete ret.__v;
+//     return ret;
+//   },
+// });
 
 export default mongoose.model("Product", ProductSchema);

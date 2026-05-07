@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import Product from "./Products.js"; // ⚠️ 주의: ES Module에서는 끝에 '.js' 확장자를 반드시 적어주어야 합니다!
+import Product from "./models/Product.js"; // ⚠️ 주의: ES Module에서는 끝에 '.js' 확장자를 반드시 적어주어야 합니다!
 
 // .env 파일의 환경 변수를 로드합니다.
 dotenv.config();
