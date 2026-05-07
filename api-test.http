@@ -1,4 +1,4 @@
-@baceUrl = http://localhost:3000
+@baceUrl = https://one3-sprint-mission-be.onrender.com
 
 ### 상품 추가 1
 POST {{baceUrl}}/products
