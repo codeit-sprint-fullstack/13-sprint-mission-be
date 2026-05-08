@@ -30,6 +30,7 @@ export const getProducts = async (req, res) => {
       id: product._id,
       name: product.name,
       price: product.price,
+      favoriteCount: product.favoriteCount,
       createdAt: product.createdAt,
     }));
 
