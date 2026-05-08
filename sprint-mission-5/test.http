@@ -7,16 +7,16 @@ POST {{baseUrl}}/product
 Content-Type: application/json
 
 {
-  "name": "오버핏 베이지 트렌치 코트",
-  "description": "봄, 가을에 입기 좋은 기본 롱 트렌치 코트입니다. 실착 2회로 아주 깨끗해요.",
-  "price": 65000,
-  "tags": ["의류", "코트", "아우터"]
+  "name": "맥북 네오",
+  "description": "램 8GB, SSD 512GB 실버 모델입니다. 배터리 효율 90%!",
+  "price": 2800000,
+  "tags": ["노트북", "애플", "맥북", "전자기기"]
 }
 ### 상세 조회 
 GET {{baseUrl}}/product/69faf8a05c454e8a21dc712f
 
 ### 
-PATCH {{baseUrl}}/product/69fb0a4e652d385a259d0aa5
+PATCH {{baseUrl}}/product/69faf8a05c454e8a21dc712f
 Content-Type: application/json
 
 {
@@ -27,10 +27,5 @@ Content-Type: application/json
 DELETE {{baseUrl}}/product/69faf8a05c454e8a21dc712b
 
 ### 검색 
-GET {{baseUrl}}/product?prices=4500000
+GET {{baseUrl}}/product?keyword=램&offset=0&limit=10
 
-###
-GET {{baseUrl}}/product?keyword=노트북&offset=20&limit=10
-
-###
-GET {{baseUrl}}/product

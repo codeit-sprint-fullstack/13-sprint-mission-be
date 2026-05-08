@@ -9,6 +9,16 @@ import { keywordFilter, productSort, getPagination } from "./utils/findBy.js";
 dotenv.config(); // .env 파일 로드 (맨 먼저!)
 
 const app = express();
+// 개발할 때 (모든 도메인 허용 - 개발 편의상)
+app.use(cors());
+
+// 배포할 때 (특정 도메인만 허용 - 보안상 좋음)
+// app.use(cors({
+//   origin: [
+//     'http://localhost:5173',           // 개발용 프론트엔드
+//     'https://my-app.vercel.app',       // 배포된 프론트엔드
+//   ],
+// }));
 app.use(express.json());
 
 // DB 연결
