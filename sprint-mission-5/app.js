@@ -17,7 +17,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173", // 개발용 프론트엔드
-      "https://sprint-mission-fe-5.vercel.app", // 배포된 프론트엔드
+      "sprint-mission-fe-5-xi.vercel.app", // 배포된 프론트엔드
     ],
   }),
 );
