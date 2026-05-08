@@ -20,7 +20,6 @@ const productSchema = new mongoose.Schema(
     tags: {
       type: String,
       required: [true, "태그는 필수예요."],
-      // 기본값: 현재 날짜
     },
     favoriteCount: {
       type: Number,
