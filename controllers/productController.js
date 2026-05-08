@@ -8,3 +8,14 @@ export const createProduct = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+
+export const getProduct = async (req,res) =>{
+  try{
+    const productList = await Product.find()
+
+    res.status(200).json(productList)
+  }catch(error)[
+    res.status(400).json({message : error.message})
+  ]
+}
