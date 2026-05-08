@@ -1,5 +1,28 @@
 @baseUrl = https://one3-sprint-mission-be-owah.onrender.com
+@localUrl = http://localhost:3000
 
+
+###상품 ID 조회
+GET {{localUrl}}/product?keyword=이것은
+
+
+
+
+### 상품 목록 조회
+GET {{baseUrl}}/product
+
+
+
+###상품 목록 조회
+
+
+
+###
+DELETE {{localUrl}}/product/69fc6147960a192a02277df5
+
+
+
+### 상품 등록
 POST {{baseUrl}}/product
 Content-Type: application/json
 
@@ -7,5 +30,17 @@ Content-Type: application/json
   "name": "김대영",
   "price": 10000000000000,
   "description": "이것은 테스트 설명 입니다. 하하하하하하",
+  "tags": ["#4팀", "#화이팅", "#김대영"]
+}
+
+
+### 상품 수정
+PATCH  {{localUrl}}/product/69fd29249c61df4ea4722bb0
+Content-Type: application/json
+
+{
+  "name": "레노버 노트북",
+  "price": 100000,
+  "description": "PATCH 테스트",
   "tags": ["#4팀", "#화이팅", "#김대영"]
 }
