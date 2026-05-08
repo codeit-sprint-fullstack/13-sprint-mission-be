@@ -1,0 +1,39 @@
+@baseURL = http://localhost:3000
+
+###전체조회
+GET {{baseURL}}/products
+
+###ID 조회
+
+GET {{baseURL}}/products/69fbf4df5e7c280d3e27a7fc
+
+###검색
+GET {{baseURL}}/products?keyword=30
+
+###최신순
+GET {{baseURL}}/products?sort=recent
+
+###limit=10
+GET {{baseURL}}/products?limit=10
+
+###상품 추가
+POST {{baseURL}}/products
+Content-Type: application/json
+
+{
+    "name": "맥북에어",
+    "description": "맥북에어 M1입니다",
+    "price": 500000,
+    "tags":"전자제품"
+}
+
+### 상품 수정
+PATCH {{baseURL}}/products/69fbf4df5e7c280d3e27a7fc
+Content-Type: application/json
+
+{
+  "price": 50000
+}
+
+###상품 삭제
+DELETE {{baseURL}}/products/69fc2fa3d8b0b47636ef3720
