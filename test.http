@@ -2,19 +2,12 @@
 @localUrl = http://localhost:3000
 
 
-###상품 ID 조회
-GET {{localUrl}}/product?keyword=이것은
-
-
+###상품 조회
+GET {{localUrl}}/product?keyword=김대영
 
 
 ### 상품 목록 조회
-GET {{baseUrl}}/product
-
-
-
-###상품 목록 조회
-
+GET {{localUrl}}/product
 
 
 ###
@@ -36,7 +29,7 @@ Content-Type: application/json
 
 ### 상품 수정
 PATCH  {{localUrl}}/product/69fd29249c61df4ea4722bb0
-Content-Type: application/json
+Content-Type: application/json    
 
 {
   "name": "레노버 노트북",

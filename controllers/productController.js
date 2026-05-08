@@ -35,15 +35,14 @@ export const getProducts = async (req, res) => {
 
     const sort = orderBy === "recent" ? { createdAt: -1 } : {};
 
-    const productList = await Product.find(
-      searchFilter,
-      "id name price createdAt",
-    )
-      .sort(sort)
-      .skip(offset)
+    const totalCount = await Product.countDocuments(searchFilter);
+
+    const list = await Product.find(searchFilter, "name price createdAt")
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * pageSize)
       .limit(Number(pageSize));
 
-    res.status(200).json(productList);
+    res.status(200).json({ list, totalCount });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
