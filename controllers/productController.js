@@ -1,18 +1,18 @@
 import Product from "../models/Product.js";
 
 export const getProducts = async (req, res) => {
-  const { name, description, page = 1, limit = 10, sort } = req.query;
+  const { keyword, page = 1, limit = 10, sort } = req.query;
   const sortOption = sort === "recent" ? { createdAt: -1 } : {};
   const skip = (page - 1) * limit;
   const query = {};
-  if (name || description) {
+  if (keyword) {
     query.$or = [];
-    if (name) {
-      query.$or.push({ name: new RegExp(name, "i") }); // new RegExp(name,'i')의 반환값은 /name(실제쿼리의네임값)/i(대소문자구별x)
-    }
-    if (description) {
-      query.$or.push({ description: new RegExp(description, "i") });
-    }
+
+    query.$or.push(
+      { name: new RegExp(keyword, "i") }, // new RegExp(name,'i')의 반환값은 /name(실제쿼리의네임값)/i(대소문자구별x)
+
+      { description: new RegExp(keyword, "i") },
+    );
   }
   try {
     const totalCount = await Product.countDocuments(query);
