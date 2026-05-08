@@ -1,11 +1,11 @@
-@baseUrl = "http://localhost:3000"
+@baseUrl = https://one3-sprint-mission-be-owah.onrender.com
 
-POST http://localhost:3000/product
+POST {{baseUrl}}/product
 Content-Type: application/json
 
 {
-  "name": "테스트 상품",
-  "price": 10000,
-  "description": "테스트 설명",
-  "tags": ["태그1", "태그2"]
+  "name": "김대영",
+  "price": 10000000000000,
+  "description": "이것은 테스트 설명 입니다. 하하하하하하",
+  "tags": ["#4팀", "#화이팅", "#김대영"]
 }
