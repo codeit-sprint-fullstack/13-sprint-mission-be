@@ -1,3 +1,5 @@
+import Product from "../models/Product.js";
+
 /** ======== 상품 컨트롤러 ======== */
 
 // GET /items
