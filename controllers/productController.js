@@ -38,8 +38,8 @@ export const getProducts = async (req, res) => {
     const totalCount = await Product.countDocuments(searchFilter);
 
     const list = await Product.find(searchFilter, "name price createdAt")
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * pageSize)
+      .sort(sort)
+      .skip(offset)
       .limit(Number(pageSize));
 
     res.status(200).json({ list, totalCount });
