@@ -5,13 +5,15 @@ export const getProducts = async (req, res) => {
   const sortOption = sort === "recent" ? { createdAt: -1 } : {};
   const skip = (page - 1) * limit;
   const query = {};
-  if (name) {
-    query.name = new RegExp(name, "i"); // new RegExp(name,'i')의 반환값은 /name(실제쿼리의네임값)/i(대소문자구별x)
+  if (name || description) {
+    query.$or = [];
+    if (name) {
+      query.$or.push({ name: new RegExp(name, "i") }); // new RegExp(name,'i')의 반환값은 /name(실제쿼리의네임값)/i(대소문자구별x)
+    }
+    if (description) {
+      query.$or.push({ description: new RegExp(description, "i") });
+    }
   }
-  if (description) {
-    query.description = new RegExp(description, "i");
-  }
-
   try {
     const totalCount = await Product.countDocuments(query);
 

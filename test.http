@@ -11,8 +11,8 @@ POST {{baseUrl}}/products/
 Content-Type: application/json
 
 {
-  "name": "페이스북",
-  "description": "페이스북은정말예전에해봤어요",
+  "name": "앱코무선마우스",
+  "description": "시드데이터50개보다더만들걸",
   "price": 90000
 }
 
