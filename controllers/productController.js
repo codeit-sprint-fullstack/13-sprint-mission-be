@@ -35,12 +35,13 @@ export const getProducts = async (req, res) => {
 
     const sort = orderBy === "recent" ? { createdAt: -1 } : {};
 
-    const totalCount = await Product.countDocuments(searchFilter);
-
-    const list = await Product.find(searchFilter, "name price createdAt")
-      .sort(sort)
-      .skip(offset)
-      .limit(Number(pageSize));
+    const [totalCount, list] = await Promise.all([
+      Product.countDocuments(searchFilter),
+      Product.find(searchFilter, "name price createdAt")
+        .sort(sort)
+        .skip(offset)
+        .limit(Number(pageSize)),
+    ]);
 
     res.status(200).json({ list, totalCount });
   } catch (error) {
