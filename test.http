@@ -1,4 +1,4 @@
-@baseURL = http://localhost:3000
+@baseURL = https://one3-sprint-mission-be-62ar.onrender.com
 
 ###전체조회
 GET {{baseURL}}/products
@@ -36,4 +36,4 @@ Content-Type: application/json
 }
 
 ###상품 삭제
-DELETE {{baseURL}}/products/69fc2fa3d8b0b47636ef3720
+DELETE {{baseURL}}/products/69fd2ea1e9e7f64231d39088
