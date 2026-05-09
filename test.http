@@ -16,12 +16,12 @@ DELETE {{localUrl}}/product/69fc6147960a192a02277df5
 
 
 ### 상품 등록
-POST {{baseUrl}}/product
+POST {{localUrl}}/product
 Content-Type: application/json
 
 {
   "name": "김대영",
-  "price": 10000000000000,
+  "price": 1000000000,
   "description": "이것은 테스트 설명 입니다. 하하하하하하",
   "tags": ["#4팀", "#화이팅", "#김대영"]
 }
