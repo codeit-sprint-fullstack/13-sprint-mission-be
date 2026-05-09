@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
+const Product = require('./models/Product');
+
 dotenv.config();
 
 mongoose.connect(process.env.DATABASE_URL)
@@ -20,6 +22,21 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.send('판다마켓 백엔드 서버가 무사히 켜졌습니다. 🐼')
 });
+
+app.post('/products', async (req, res) => {
+  try {
+    const { name, description, price, tags } = req.body;
+    const newProduct = await Product.create({
+      name,
+      description,
+      price,
+      tags,
+    });
+    res.status(201).send(newProduct);
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+})
 
 const PORT = process.env.PORT || 4000;
 
