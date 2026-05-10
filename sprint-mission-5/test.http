@@ -1,0 +1,26 @@
+@baseUrl = http://localhost:4000
+@productId =69fdf47c7c473c609e1e2761
+###
+GET {{baseUrl}}/products?page=1&limit=6
+###
+GET {{baseUrl}}/products
+
+
+###
+GET {{baseUrl}}/products/{{productId}}
+
+
+###
+GET {{baseUrl}}/products/000000000000000000000000
+
+
+###
+PATCH {{baseUrl}}/products/{{productId}}
+Content-Type: application/json
+
+{
+  "name": "수정된 상품명",
+  "price": 2000111111111
+}
+
+# 검색할때 요구조건은 name,description 안나눠서 keyword 로 통합검색하게 되는데 어케 나누지?
