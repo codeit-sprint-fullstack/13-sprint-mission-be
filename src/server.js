@@ -6,17 +6,19 @@ dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 
+console.log("PORT:", PORT);
+console.log("MONGODB_URI exists:", Boolean(process.env.MONGODB_URI));
+
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
-    console.log("MongDB 연결 성공");
+    console.log("MongoDB 연결 성공");
 
-   app.listen(PORT, () => {
-    console.log(`서버 실행 중: http://localhost:${PORT}`);
-   });  
-
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`서버 실행 중: port ${PORT}`);
+    });
   })
   .catch((error) => {
-    console.error("MongoDB 연결 실패", error);
+    console.error("MongoDB 연결 실패:", error.message);
+    process.exit(1);
   });
-
