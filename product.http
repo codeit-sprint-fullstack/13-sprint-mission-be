@@ -1,0 +1,26 @@
+@baseUrl=http://localhost:3000
+### 생성
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+    "name":"권태현1",
+    "description":"안녕1",
+    "price":111111,
+    "tage":["a"]
+}
+
+### 조회
+GET {{baseUrl}}/products
+
+### 수정
+PATCH {{baseUrl}}/products/6a0071ab1c70dc806f8b7b4c
+Content-Type: application/json
+
+{
+    "descripion": "여자",
+    "price":999
+}
+
+### 삭제
+DELETE {{baseUrl}}/products/
