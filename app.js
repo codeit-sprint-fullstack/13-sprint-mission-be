@@ -2,15 +2,17 @@ import dotenv from "dotenv";
 import express from "express";
 import connectDB from "./connectDB.js";
 import Product from "./models/Product.js";
+import cors from "cors";
 
 //.env 파일 로드.
 dotenv.config();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 connectDB();
 
-app.get("/product", async (req, res) => {
+app.get("/products", async (req, res) => {
   try {
     const { page, pageSize, orderBy, keyword } = req.query;
     const offset = (page - 1) * pageSize;
@@ -28,6 +30,8 @@ app.get("/product", async (req, res) => {
       };
     }
 
+    const totalCnt = await Product.countDocuments(search);
+
     const productData = await Product.find(search)
       .sort({ createdAt: orderBy === "recent" ? -1 : 1 })
       .skip(offset)
@@ -35,7 +39,7 @@ app.get("/product", async (req, res) => {
 
     if (!productData)
       return res.status(500).json({ message: "데이터를 가져오지 못했습니다." });
-    res.json({ totalCnt: productData.length, list: productData });
+    res.json({ totalCnt: totalCnt, list: productData });
   } catch (error) {
     res.status(400).json(error.message);
   }
