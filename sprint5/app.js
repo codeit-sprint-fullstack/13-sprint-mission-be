@@ -20,10 +20,10 @@ connectDB();
 // 포트 번호 설정
 const PORT = 3000;
 
-// // 판다마켓 랜딩페이지 홈
-// app.get("/", (req, res) => {
-//   res.json("판다마켓 랜딩페이지 얍");
-// });
+// 판다마켓 랜딩페이지 홈
+app.get("/", (req, res) => {
+  res.json("판다마켓 랜딩페이지 얍");
+});
 
 //판다마켓 상품 목록 조회 API (검색, 정렬, 페이지네이션)
 app.get("/items", async (req, res) => {
