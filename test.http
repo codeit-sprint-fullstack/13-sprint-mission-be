@@ -1,0 +1,28 @@
+# @baseUrl = http://localhost:3000
+@baseUrl = https://sprint-mission-5.onrender.com
+
+### 상품 등록 API
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "맥북",
+  "description": "M3 모델",
+  "price": 2000000,
+  "tags": ["애플", "노트북"]
+}
+
+### 상품 상세 조회 API
+GET http://localhost:3000/products/6a0120c075decf2a068b11cf
+
+### 상품 수정 API
+PATCH http://localhost:3000/products/6a0120c075decf2a068b11cf
+Content-Type: application/json
+
+{
+  "name" : "맥북 수정"
+}
+
+### 상품 삭제 API
+DELETE http://localhost:3000/products/6a0120c075decf2a068b11cf
+
