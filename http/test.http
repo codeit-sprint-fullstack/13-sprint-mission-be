@@ -20,10 +20,10 @@ POST {{localUrl}}/product
 Content-Type: application/json
 
 {
-  "name": "김대영",
+  "name": "데스크탑",
   "price": 1000000000,
   "description": "이것은 테스트 설명 입니다. 하하하하하하",
-  "tags": ["#4팀", "#화이팅", "#김대영"]
+  "tags": ["#4팀", "#화123123이팅", "#김대영"]
 }
 
 

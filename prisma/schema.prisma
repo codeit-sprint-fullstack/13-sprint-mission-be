@@ -16,7 +16,7 @@ datasource db {
 model Product {
   id          String   @id
   name        String
-  price       Float
+  price       Int
   description String
   tags        String[]
   createdAt   DateTime @default(now())

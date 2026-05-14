@@ -1,14 +1,18 @@
-import Product from "../models/Products.js";
+import { asyncHandler } from "../utils/asycHandler.js";
+import prisma from "../lib/prisma.js";
+import { success } from "zod";
+import { nanoid } from "nanoid";
 
 //상품 등록
-export const createProduct = async (req, res) => {
-  try {
-    const product = await Product.create(req.body);
-    res.status(201).json(product);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
+export const createProduct = asyncHandler(async (req, res) => {
+  const product = await prisma.product.create({
+    data: {
+      id: nanoid(),
+      ...req.validatedData,
+    },
+  });
+  res.status(201).json({ success: true, data: product });
+});
 
 //상품 목록 조회
 export const getProducts = async (req, res) => {
