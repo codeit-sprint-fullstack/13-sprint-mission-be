@@ -12,7 +12,9 @@ import {
 import cors from "cors";
 
 // .env 파일 로드 (반드시 다른 코드보다 먼저!)
-dotenv.config();
+const envFile = `.env.${process.env.NODE_ENV || "development"}`;
+dotenv.config({ path: envFile });
+console.log(envFile);
 
 const app = express();
 app.use(cors());
@@ -26,7 +28,9 @@ app.post("/product", createProduct);
 app.patch("/product/:id", updateProduct);
 app.delete("/product/:id", deleteProduct);
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`서버가 http://localhost:${PORT} 에서 실행 중이에요! 🚀`);
+  console.log(
+    `[${process.env.NODE_ENV || "development"}] Server running on port ${PORT}`,
+  );
 });
