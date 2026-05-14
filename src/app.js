@@ -9,7 +9,10 @@ import {
   updateProduct,
   deleteProduct,
 } from "./controllers/productController.js";
-import { createProductSchema } from "./schemas/product.Schema.js";
+import {
+  createProductSchema,
+  getProductsSchema,
+} from "./schemas/product.Schema.js";
 
 const envFile = `.env.${process.env.NODE_ENV || "development"}`;
 dotenv.config({ path: envFile });
@@ -18,7 +21,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/product", getProducts);
+app.get("/product", validate(getProductsSchema, "query"), getProducts);
 app.get("/product/:id", getProductById);
 //create
 app.post("/product", validate(createProductSchema), createProduct);

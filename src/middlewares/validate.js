@@ -1,10 +1,9 @@
 import { z } from "zod";
 
-export const validate = (schema) => {
+export const validate = (schema, source = "body") => {
   return (req, res, next) => {
-    const result = schema.safeParse(req.body);
+    const result = schema.safeParse(req[source]);
 
-    console.log("result:", result);
     if (!result.success && result.error) {
       // result.error 존재 확인 추가
       return res.status(400).json({

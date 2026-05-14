@@ -22,3 +22,23 @@ export const createProductSchema = z.object({
     .array(z.string().max(OPTIONAL_SIZE.tag.max, "태그는 5자 이하여야 합니다."))
     .optional(),
 });
+
+export const getProductsSchema = z.object({
+  page: z.coerce
+    .number()
+    .min(1, "페이지는 1 이상이어야 합니다.")
+    .optional()
+    .default(1),
+  pageSize: z.coerce
+    .number()
+    .min(1, "페이지 사이즈는 1 이상이어야 합니다.")
+    .optional()
+    .default(10),
+  orderBy: z
+    .enum(["recent", "oldest"], {
+      invalid_type_error: "정렬 방식이 올바르지 않습니다.",
+    })
+    .optional()
+    .default("recent"),
+  keyword: z.string().optional().default(""),
+});

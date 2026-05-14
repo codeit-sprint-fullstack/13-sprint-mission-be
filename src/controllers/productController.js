@@ -1,7 +1,8 @@
 import { asyncHandler } from "../utils/asycHandler.js";
-import prisma from "../lib/prisma.js";
+import prisma, { Prisma } from "../lib/prisma.js";
 import { success } from "zod";
 import { nanoid } from "nanoid";
+import { skip } from "@prisma/client/runtime/library";
 
 //상품 등록
 export const createProduct = asyncHandler(async (req, res) => {
@@ -15,43 +16,61 @@ export const createProduct = asyncHandler(async (req, res) => {
 });
 
 //상품 목록 조회
-export const getProducts = async (req, res) => {
-  try {
-    const {
-      page = 1,
-      pageSize = 10,
-      orderBy = "recent",
-      keyword = "",
-    } = req.query;
+export const getProducts = asyncHandler(async (req, res) => {
+  const {
+    page = 1,
+    pageSize = 10,
+    orderBy = "recent",
+    keyword = "",
+  } = req.query;
 
-    const offset = (Number(page) - 1) * Number(pageSize);
+  const offset = (Number(page) - 1) * Number(pageSize);
+  const limit = Number(pageSize);
+  const orderDir = orderBy === "oldest" ? Prisma.sql`ASC` : Prisma.sql`DESC`;
 
-    //https://www.mongodb.com/ko-kr/docs/manual/reference/operator/query/or/
-    //regex : keyowrd를 포함한 모든것 , options i = 대소문자 구분 X
-    const searchFilter = keyword
-      ? {
-          $or: [
-            { name: { $regex: keyword, $options: "i" } },
-            { description: { $regex: keyword, $options: "i" } },
-          ],
-        }
-      : {};
+  if (keyword) {
+    const token = keyword.trim().replace(/\s+/g, ""); // 검색어 공백 제거
+    const wsPattern = "\\s+";
+    const like = `%${token}%`;
 
-    const sort = orderBy === "recent" ? { createdAt: -1 } : {};
+    const whereClause = Prisma.sql`(
+    regexp_replace(COALESCE(name, ''), ${wsPattern}, '', 'g') ILIKE ${like}
+    OR regexp_replace(COALESCE(description, ''), ${wsPattern}, '', 'g') ILIKE ${like}
+  )`;
 
-    const [totalCount, list] = await Promise.all([
-      Product.countDocuments(searchFilter),
-      Product.find(searchFilter, "name price createdAt")
-        .sort(sort)
-        .skip(offset)
-        .limit(Number(pageSize)),
+    const [list, totalCount] = await Promise.all([
+      prisma.$queryRaw`
+        SELECT * FROM products
+        WHERE ${whereClause}
+        ORDER BY "createdAt" ${orderDir}
+        LIMIT ${limit} OFFSET ${offset}
+      `,
+      prisma.$queryRaw`
+        SELECT COUNT(*)::int AS count FROM products
+        WHERE ${whereClause}
+      `,
     ]);
 
-    res.status(200).json({ list, totalCount });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+    return res.status(200).json({
+      list,
+      totalCount,
+    });
   }
-};
+
+  const order =
+    orderBy === "oldest" ? { createdAt: "asc" } : { createdAt: "desc" };
+
+  const [totalCount, list] = await Promise.all([
+    prisma.product.count(),
+    prisma.product.findMany({
+      orderBy: order,
+      skip: offset,
+      take: limit,
+    }),
+  ]);
+
+  res.status(200).json({ list, totalCount });
+});
 
 //상품 상세 조회
 export const getProductById = async (req, res) => {

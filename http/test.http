@@ -3,7 +3,9 @@
 
 
 ###상품 조회
-GET {{localUrl}}/product?keyword=김대영
+GET {{localUrl}}/product?keyword=삼성갤럭시
+
+
 
 
 ### 상품 목록 조회
@@ -20,10 +22,10 @@ POST {{localUrl}}/product
 Content-Type: application/json
 
 {
-  "name": "데스크탑",
-  "price": 1000000000,
-  "description": "이것은 테스트 설명 입니다. 하하하하하하",
-  "tags": ["#4팀", "#화123123이팅", "#김대영"]
+  "name": "축구공",
+  "price": "300000",
+  "description": "이것만 사면 나도 축구왕?????",
+  "tags": ["4팀", "축123123구", "스트라이커"]
 }
 
 
