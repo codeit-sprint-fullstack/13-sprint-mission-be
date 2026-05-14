@@ -19,4 +19,10 @@ app.use("/products", productRouter);
 
 // 포트번호
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => console.log(`서버 실행 중: ${PORT}`));
+
+// 헬스 체크
+app.get("/health", (req, res) => {
+  res.json({ status: "OK" });
+});
