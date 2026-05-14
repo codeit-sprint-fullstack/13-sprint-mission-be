@@ -3,7 +3,7 @@
 
 
 ###상품 조회
-GET {{localUrl}}/product?keyword=삼성갤럭시
+GET {{localUrl}}/product?keyword=닌텐도스위치
 
 
 
@@ -13,7 +13,7 @@ GET {{localUrl}}/product
 
 
 ###
-DELETE {{localUrl}}/product/69fc6147960a192a02277df5
+GET  {{localUrl}}/product/6AfDUUJ7J28rrCylzYrlq
 
 
 

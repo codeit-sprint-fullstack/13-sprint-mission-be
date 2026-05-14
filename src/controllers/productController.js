@@ -3,6 +3,7 @@ import prisma, { Prisma } from "../lib/prisma.js";
 import { success } from "zod";
 import { nanoid } from "nanoid";
 import { skip } from "@prisma/client/runtime/library";
+import { NotFoundError } from "../utils/errors.js";
 
 //상품 등록
 export const createProduct = asyncHandler(async (req, res) => {
@@ -73,19 +74,14 @@ export const getProducts = asyncHandler(async (req, res) => {
 });
 
 //상품 상세 조회
-export const getProductById = async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
+export const getProductById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const product = await prisma.product.findUnique({ where: { id } });
 
-    if (!product) {
-      res.status(400).json({ message: "존재하지 않는 ID 입니다." });
-    }
+  if (!product) throw new NotFoundError("상품 아이디를 찾을 수 없습니다.");
 
-    res.json(product);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
+  res.json(product);
+});
 
 export const updateProduct = async (req, res) => {
   try {
