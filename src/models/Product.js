@@ -14,11 +14,11 @@ const ProductSchema = new Schema(
     description: {
       type: String,
       required: [true, "상품 소개는 필수예요"],
-      min: [0, "가격은 0 이상이어야 해요."],
     },
     price: {
       type: Number,
       required: [true, "판매가격은 필수예요"],
+      min: [0, "가격은 0 이상이어야 해요."],
     },
     tags: {
       type: [String],

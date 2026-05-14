@@ -18,8 +18,8 @@ router.post("/", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const {
-      page = 1,
-      pageSize = 10,
+      page = Number(1),
+      pageSize = Number(10),
       orderBy = "recent",
       keyword = "",
     } = req.query;
@@ -27,7 +27,7 @@ router.get("/", async (req, res) => {
     const filter = keyword
       ? {
           $or: [
-            { name: { $regex: keyword } },
+            { name: { $regex: keyword, $options: "i" } },
             { description: { $regex: keyword } },
           ],
         }
