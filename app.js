@@ -21,15 +21,25 @@ app.use(
 // JSON 파싱
 app.use(express.json());
 
-// MongoDB 연결
-connectDB();
+// 비동기 서버 시작
+async function start() {
+  try {
+    // MongoDB 연결 (완료까지 대기)
+    await connectDB();
 
-// 라우터 연결
-app.use("/items", itemRouter);
+    // 라우터 등록 (DB 연결 후)
+    app.use("/items", itemRouter);
 
-// 서버 실행
-app.listen(PORT, () => {
-  console.log(`서버가 http://localhost:${PORT} 에서 실행 중이에요! 🚀`);
-});
+    // 서버 실행
+    app.listen(PORT, () => {
+      console.log(`🚀 서버가 http://localhost:${PORT} 에서 실행 중`);
+    });
+  } catch (error) {
+    console.error("❌ 서버 시작 실패:", error.message);
+    process.exit(1);
+  }
+}
+
+start();
 
 export default app;
