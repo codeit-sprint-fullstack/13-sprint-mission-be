@@ -1,9 +1,8 @@
 // seed.js
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import Product from "./models/Products.js";
+import { PrismaClient } from "@prisma/client";
+import { nanoid } from "nanoid";
 
-dotenv.config();
+const prisma = new PrismaClient();
 
 const seedData = [
   {
@@ -141,17 +140,23 @@ const seedData = [
 ];
 
 async function seed() {
-  await mongoose.connect(process.env.MONGO_DB_URI);
-  console.log("✅ DB 연결 성공");
+  await prisma.product.deleteMany();
+  console.log("🧹 기존 데이터 삭제 완료");
 
-  await Product.deleteMany({});
-  console.log("🗑️ 기존 데이터 삭제 완료");
-
-  await Product.insertMany(seedData);
+  await prisma.product.createMany({
+    data: seedData.map((item) => ({
+      id: nanoid(),
+      ...item,
+    })),
+  });
   console.log(`🌱 시드 데이터 ${seedData.length}개 삽입 완료`);
-
-  await mongoose.disconnect();
-  console.log("👋 DB 연결 종료");
 }
 
-seed();
+seed()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
