@@ -1,8 +1,7 @@
 // 상품 API 모음
 
-const express = require("express");
+import express from "express";
 const router = express.Router(); // 요청을 받을 app 대리인
-const Product = require("../models/Product");
 
 // 상품 등록
 router.post("/", async (req, res) => {

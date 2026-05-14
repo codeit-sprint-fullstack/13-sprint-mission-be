@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 모델 정의
+model User {
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  nickname String    @unique
+  password String
+  products Product[]
+  articles Article[]
+  comments Comment[]
+
+  @@map("users")
+}
+
+model Product {
+  id            Int      @id @default(autoincrement())
+  name          String
+  description   String
+  price         Int
+  favoriteCount Int      @default(0) @map("favorite_count")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  user   User  @relation(fields: [userId], references: [id])
+  userId Int
+  tags   Tag[]
+
+  @@index([id])
+  @@index([name, description])
+  @@map("products")
+}
+
+model Article {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user     User      @relation(fields: [userId], references: [id])
+  userId   Int
+  comments Comment[]
+
+  @@map("articls")
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+
+  @@map("tags")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user      User    @relation(fields: [userId], references: [id])
+  article   Article @relation(fields: [articleId], references: [id])
+  userId    Int
+  articleId Int
+
+  @@map("comments")
+}
