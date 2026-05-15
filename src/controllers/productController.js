@@ -4,6 +4,7 @@ import { success } from "zod";
 import { nanoid } from "nanoid";
 import { skip } from "@prisma/client/runtime/library";
 import { NotFoundError } from "../utils/errors.js";
+import { searchByKeyword } from "../utils/searchHandler.js";
 
 //상품 등록
 export const createProduct = asyncHandler(async (req, res) => {
@@ -27,39 +28,24 @@ export const getProducts = asyncHandler(async (req, res) => {
 
   const offset = (Number(page) - 1) * Number(pageSize);
   const limit = Number(pageSize);
-  const orderDir = orderBy === "oldest" ? Prisma.sql`ASC` : Prisma.sql`DESC`;
+  const order =
+    orderBy === "oldest" ? { createdAt: "asc" } : { createdAt: "desc" };
 
   if (keyword) {
-    const token = keyword.trim().replace(/\s+/g, ""); // 검색어 공백 제거
-    const wsPattern = "\\s+";
-    const like = `%${token}%`;
-
-    const whereClause = Prisma.sql`(
-    regexp_replace(COALESCE(name, ''), ${wsPattern}, '', 'g') ILIKE ${like}
-    OR regexp_replace(COALESCE(description, ''), ${wsPattern}, '', 'g') ILIKE ${like}
-  )`;
-
-    const [list, totalCount] = await Promise.all([
-      prisma.$queryRaw`
-        SELECT * FROM products
-        WHERE ${whereClause}
-        ORDER BY "createdAt" ${orderDir}
-        LIMIT ${limit} OFFSET ${offset}
-      `,
-      prisma.$queryRaw`
-        SELECT COUNT(*)::int AS count FROM products
-        WHERE ${whereClause}
-      `,
-    ]);
+    const { list, totalCount } = await searchByKeyword({
+      table: "products",
+      fields: ["name", "description"],
+      keyword,
+      order,
+      limit,
+      offset,
+    });
 
     return res.status(200).json({
       list,
       totalCount,
     });
   }
-
-  const order =
-    orderBy === "oldest" ? { createdAt: "asc" } : { createdAt: "desc" };
 
   const [totalCount, list] = await Promise.all([
     prisma.product.count(),
