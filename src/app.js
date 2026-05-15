@@ -14,8 +14,11 @@ import {
   getProductsSchema,
   updateProductSchema,
 } from "./schemas/product.Schema.js";
-import { createArticle } from "./controllers/aritcleController.js";
-import { createArticleSchema } from "./schemas/article.Schema.js";
+import { createArticle, getArticle } from "./controllers/aritcleController.js";
+import {
+  createArticleSchema,
+  getArticleSchema,
+} from "./schemas/article.Schema.js";
 
 const envFile = `.env.${process.env.NODE_ENV || "development"}`;
 dotenv.config({ path: envFile });
@@ -35,6 +38,9 @@ app.patch("/product/:id", validate(updateProductSchema), updateProduct);
 app.delete("/product/:id", deleteProduct);
 
 //Article
+
+//Read
+app.get("/article", validate(getArticleSchema, "query"), getArticle);
 
 //Create
 app.post("/article", validate(createArticleSchema), createArticle);

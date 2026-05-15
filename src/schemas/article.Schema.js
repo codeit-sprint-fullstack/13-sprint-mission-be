@@ -27,3 +27,24 @@ export const createArticleSchema = z.object({
       `내용은 ${OPTIONAL_SIZE.content.max}자 이상이어야 합니다.`,
     ),
 });
+
+//이것도 중복이라 훅으로 처리 가능 할 거 같긴한데 일단 하겠습니다 ㅎㅎ
+export const getArticleSchema = z.object({
+  page: z.coerce
+    .number()
+    .min(1, "페이지는 1 이상이어야 합니다.")
+    .optional()
+    .default(1),
+  pageSize: z.coerce
+    .number()
+    .min(1, "페이지 사이즈는 1 이상이어야 합니다.")
+    .optional()
+    .default(10),
+  orderBy: z
+    .enum(["recent", "oldest"], {
+      invalid_type_error: "정렬 방식이 올바르지 않습니다.",
+    })
+    .optional()
+    .default("recent"),
+  keyword: z.string().optional().default(""),
+});
