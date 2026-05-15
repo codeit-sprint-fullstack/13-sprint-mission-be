@@ -3,17 +3,54 @@ import { Prisma } from "@prisma/client";
 import { HttpError } from "./errors.js";
 import { z } from "zod";
 
-const asyncHandler = (fn) => {
+const asyncHandler = (handler) => {
   return async (req, res) => {
     try {
-      await fn(req, res);
+      await handler(req, res);
     } catch (err) {
+      // HttpError
       if (err instanceof HttpError) {
-        return res.status(error.statusCode).json({
+        return res.status(err.statusCode).json({
           success: false,
-          message: error.message,
+          message: err.message,
         });
       }
+
+      // PrismaError
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === "P2025") {
+          return res.status(404).json({
+            success: false,
+            message: "찾을 수 없는 리소스",
+          });
+        }
+        if (error.code === "P2002") {
+          return res.status(409).json({
+            success: false,
+            message: "이미 존재하는 데이터",
+            field: error.meta?.target,
+          });
+        }
+        if (error.code === "P2003") {
+          return res.status(400).json({
+            success: false,
+            message: "참조 무결성 제약 조건 위반",
+          });
+        }
+      }
+      if (error instanceof Prisma.PrismaClientValidationError) {
+        return res.status(400).json({
+          success: false,
+          message: "필수 관계 위반",
+        });
+      }
+
+      // 500
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: "서버 에러",
+      });
     }
   };
 };
