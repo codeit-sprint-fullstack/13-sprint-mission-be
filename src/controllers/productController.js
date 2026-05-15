@@ -97,16 +97,11 @@ export const updateProduct = asyncHandler(async (req, res) => {
 });
 
 //상품 삭제
-export const deleteProduct = async (req, res) => {
-  try {
-    const product = await Product.findByIdAndDelete(req.params.id);
+export const deleteProduct = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const product = await prisma.product.delete({ where: { id } });
 
-    if (!product) {
-      return res.status(404).json({ message: "존재하지 않는 ID 입니다." });
-    }
+  if (!product) throw new NotFoundError("존재하지 않는 상품 입니다.");
 
-    res.status(204).send();
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
+  res.status(204).send();
+});
