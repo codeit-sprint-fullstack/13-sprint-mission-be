@@ -1,0 +1,25 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Library Conceptual ERD">
+    <mxGraphModel dx="1186" dy="666" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="member" value="회원&#xa;PK id&#xa;이름&#xa;이메일&#xa;전화번호" style="swimlane;html=1;startSize=28;whiteSpace=wrap;rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="120" y="180" width="220" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="book" value="도서&#xa;PK id&#xa;제목&#xa;저자&#xa;ISBN&#xa;출판연도" style="swimlane;html=1;startSize=28;whiteSpace=wrap;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="820" y="180" width="220" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="loan" value="대출&#xa;PK id&#xa;FK 회원id&#xa;FK 도서id&#xa;대출일&#xa;반납예정일&#xa;실제반납일" style="swimlane;html=1;startSize=28;whiteSpace=wrap;rounded=0;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="470" y="160" width="240" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="member-loan" value="1 : N" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;fontStyle=1" edge="1" parent="1" source="member" target="loan">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="book-loan" value="1 : N" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;fontStyle=1" edge="1" parent="1" source="book" target="loan">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

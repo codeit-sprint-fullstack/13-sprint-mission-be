@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id              Int              @id @default(autoincrement())
+  email           String           @unique
+  nickname        String
+  password        String
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  products        Product[]
+  productComments ProductComment[]
+}
+
+model Product {
+  id          Int              @id @default(autoincrement())
+  name        String
+  description String
+  price       Int
+  tags        String[]
+  userId      Int
+  user        User             @relation(fields: [userId], references: [id])
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  comments    ProductComment[]
+}
+
+model ProductComment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  productId Int
+  userId    Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Article {
+  id        Int              @id @default(autoincrement())
+  title     String
+  content   String
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  comments  ArticleComment[]
+}
+
+model ArticleComment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  articleId Int
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

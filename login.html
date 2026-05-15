@@ -14,7 +14,7 @@
           <h1 class="card-logo-text">판다마켓</h1>
         </div>
 
-        <form class="auth-form" onsubmit="return false;">
+        <form class="auth-form" id="login-form">
           <div class="form-group">
             <label for="login-email">이메일</label>
             <input type="email" id="login-email" placeholder="이메일을 입력해 주세요"/>
@@ -69,6 +69,29 @@
           btn.textContent = "👁";
         }
       }
+
+      document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+
+        try {
+          const res = await fetch('/auth/signIn', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+          });
+          const data = await res.json();
+          if (!res.ok) return alert(data.message);
+
+          localStorage.setItem('accessToken', data.accessToken);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          alert(`환영합니다, ${data.user.nickname}님!`);
+          window.location.href = '/';
+        } catch {
+          alert('로그인 중 오류가 발생했습니다.');
+        }
+      });
     </script>
   </body>
 </html>
