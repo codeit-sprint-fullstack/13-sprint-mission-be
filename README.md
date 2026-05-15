@@ -1,3 +1,4 @@
+
 # 📦 Sprint Mission - Prisma + PostgreSQL API
 
 ## 📌 프로젝트 소개
@@ -40,9 +41,7 @@
 - Product ↔ ProductComment (1:N)
 - Article ↔ ArticleComment (1:N)
 - Cascade Delete 적용
-
 ---
-
 ## 🌱 Seed 데이터
 
 - Product 50개
