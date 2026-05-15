@@ -32,7 +32,7 @@ export const getAllArticle = async (req, res) => {
 
     const orderBy = {
       latest: { createdAt: "desc" },
-      oldest: { craetedAt: "asc" },
+      oldest: { createdAt: "asc" },
     }[sort] || { createdAt: "desc" };
 
     const pageNum = Number(page) || 1;

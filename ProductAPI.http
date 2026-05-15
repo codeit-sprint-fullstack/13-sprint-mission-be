@@ -36,3 +36,25 @@ Content-Type: application/json
 
 ###상품 삭제
 DELETE {{baseURL}}/products/51
+
+###댓글 등록
+POST {{baseURL}}/products/205/comments
+Content-Type: application/json
+
+{
+"content": "상품이 정말 좋아요"
+}
+
+###댓글 조회 
+GET {{baseURL}}/products/205/comments
+###댓글 수정
+PATCH {{baseURL}}/products/205/comments/54
+Content-Type:application/json
+
+{
+  "content": "네고 가능한가요?"
+}
+
+###댓글 삭제
+
+DELETE {{baseURL}}/products/205/comments/54

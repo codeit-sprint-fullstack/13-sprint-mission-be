@@ -99,7 +99,7 @@ export const updateProduct = async (req, res) => {
       where: { id: parseInt(id) },
       data: {
         name,
-        price,
+        price: Number(price),
         description,
         tags,
       },
