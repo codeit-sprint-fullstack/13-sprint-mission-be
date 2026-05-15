@@ -1,6 +1,7 @@
 // seed.js
 import { PrismaClient } from "@prisma/client";
 import { nanoid } from "nanoid";
+import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 
@@ -139,8 +140,24 @@ const seedData = [
   },
 ];
 
+const articles = Array.from({ length: 20 }, () => {
+  const createdAt = faker.date.between({
+    from: "2024-01-01",
+    to: new Date(),
+  });
+
+  return {
+    id: faker.string.nanoid(),
+    title: faker.lorem.sentence({ min: 4, max: 10 }),
+    content: faker.lorem.paragraphs({ min: 2, max: 5 }, "\n\n"),
+    createdAt,
+    updatedAt: faker.date.between({ from: createdAt, to: new Date() }),
+  };
+});
+
 async function seed() {
   await prisma.product.deleteMany();
+  await prisma.article.deleteMany();
   console.log("🧹 기존 데이터 삭제 완료");
 
   await prisma.product.createMany({
@@ -149,6 +166,9 @@ async function seed() {
       ...item,
     })),
   });
+
+  await prisma.article.createMany({ data: articles });
+
   console.log(`🌱 시드 데이터 ${seedData.length}개 삽입 완료`);
 }
 
