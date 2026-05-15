@@ -6,6 +6,7 @@ import { skip } from "@prisma/client/runtime/library";
 import { NotFoundError } from "../utils/errors.js";
 import { ar } from "@faker-js/faker";
 
+//게시물 등록
 export const createArticle = asyncHandler(async (req, res) => {
   const article = await prisma.article.create({
     data: {
@@ -16,9 +17,7 @@ export const createArticle = asyncHandler(async (req, res) => {
   res.status(201).json({ success: true, data: article });
 });
 
-// [ ] 게시글 조회 API를 만들어 주세요.
-// [ ] id, title, content, createdAt를 조회합니다.
-
+//게시물 목록 조회
 export const getArticle = asyncHandler(async (req, res) => {
   const {
     page = 1,
@@ -73,4 +72,17 @@ export const getArticle = asyncHandler(async (req, res) => {
   ]);
 
   res.status(200).json({ list, totalCount });
+});
+
+//상품 상세 조회
+export const getArticleById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const article = await prisma.article.findUnique({
+    select: { id: true, title: true, content: true, createdAt: true },
+    where: { id },
+  });
+
+  if (!article) throw new NotFoundError("상품 아이디를 찾을 수 없습니다.");
+
+  res.json(article);
 });

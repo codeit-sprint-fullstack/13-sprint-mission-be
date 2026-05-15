@@ -14,7 +14,11 @@ import {
   getProductsSchema,
   updateProductSchema,
 } from "./schemas/product.Schema.js";
-import { createArticle, getArticle } from "./controllers/aritcleController.js";
+import {
+  createArticle,
+  getArticle,
+  getArticleById,
+} from "./controllers/aritcleController.js";
 import {
   createArticleSchema,
   getArticleSchema,
@@ -41,6 +45,7 @@ app.delete("/product/:id", deleteProduct);
 
 //Read
 app.get("/article", validate(getArticleSchema, "query"), getArticle);
+app.get("/article/:id", getArticleById);
 
 //Create
 app.post("/article", validate(createArticleSchema), createArticle);
