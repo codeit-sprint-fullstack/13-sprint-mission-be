@@ -5,3 +5,5 @@ node_modules
 .claude/
 
 /generated/prisma
+
+docs/library-db/
