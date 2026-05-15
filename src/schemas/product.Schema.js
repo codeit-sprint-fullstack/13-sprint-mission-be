@@ -23,6 +23,8 @@ export const createProductSchema = z.object({
     .optional(),
 });
 
+export const updateProductSchema = createProductSchema.partial();
+
 export const getProductsSchema = z.object({
   page: z.coerce
     .number()

@@ -12,6 +12,7 @@ import {
 import {
   createProductSchema,
   getProductsSchema,
+  updateProductSchema,
 } from "./schemas/product.Schema.js";
 
 const envFile = `.env.${process.env.NODE_ENV || "development"}`;
@@ -26,7 +27,7 @@ app.get("/product/:id", getProductById);
 //create
 app.post("/product", validate(createProductSchema), createProduct);
 //update
-app.patch("/product/:id", updateProduct);
+app.patch("/product/:id", validate(updateProductSchema), updateProduct);
 //delete
 app.delete("/product/:id", deleteProduct);
 

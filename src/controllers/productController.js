@@ -83,22 +83,18 @@ export const getProductById = asyncHandler(async (req, res) => {
   res.json(product);
 });
 
-export const updateProduct = async (req, res) => {
-  try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+export const updateProduct = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const product = await prisma.product.update({
+    where: { id },
+    data: req.validatedData,
+  });
 
-    if (!product) {
-      res.status(400).json({ message: "존재하지 않는 ID 입니다." });
-    }
+  if (!product)
+    throw new NotFoundError({ message: "존재하지 않는 ID 입니다." });
 
-    res.json(product);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
+  res.json(product);
+});
 
 //상품 삭제
 export const deleteProduct = async (req, res) => {
