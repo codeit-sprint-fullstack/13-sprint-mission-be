@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import { createProduct } from "./controllers/product.controller.js";
-import productRouter from "./Routers/productRouters.js";
+import productRouter from "./Routers/productRouter.js";
 
 dotenv.config();
 
