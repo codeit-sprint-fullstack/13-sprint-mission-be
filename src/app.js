@@ -14,6 +14,8 @@ import {
   getProductsSchema,
   updateProductSchema,
 } from "./schemas/product.Schema.js";
+import { createArticle } from "./controllers/aritcleController.js";
+import { createArticleSchema } from "./schemas/article.Schema.js";
 
 const envFile = `.env.${process.env.NODE_ENV || "development"}`;
 dotenv.config({ path: envFile });
@@ -22,6 +24,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+//Product
 app.get("/product", validate(getProductsSchema, "query"), getProducts);
 app.get("/product/:id", getProductById);
 //create
@@ -30,6 +33,11 @@ app.post("/product", validate(createProductSchema), createProduct);
 app.patch("/product/:id", validate(updateProductSchema), updateProduct);
 //delete
 app.delete("/product/:id", deleteProduct);
+
+//Article
+
+//Create
+app.post("/article", validate(createArticleSchema), createArticle);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
