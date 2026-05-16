@@ -7,11 +7,34 @@ import {
   deleteComment,
 } from "../controllers/articleComment.controller.js";
 
+import validate from "../middlewares/validate.js";
+import {
+  createCommentSchema,
+  updateCommentSchema,
+} from "../validators/comment.schema.js";
+
+import {
+  articleIdParamSchema,
+  commentIdParamSchema,
+} from "../validators/common.schema.js";
+
 const router = express.Router({ mergeParams: true });
 
-router.post("/", createComment);
-router.get("/", getComments);
-router.patch("/:commentId", updateComment);
-router.delete("/:commentId", deleteComment);
+router.post(
+  "/",
+  validate({ params: articleIdParamSchema, body: createCommentSchema }),
+  createComment,
+);
+router.get("/", validate({ params: articleIdParamSchema }), getComments);
+router.patch(
+  "/:commentId",
+  validate({ params: commentIdParamSchema, body: updateCommentSchema }),
+  updateComment,
+);
+router.delete(
+  "/:commentId",
+  validate({ params: commentIdParamSchema }),
+  deleteComment,
+);
 
 export default router;
