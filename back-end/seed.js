@@ -24,7 +24,7 @@ async function main() {
     });
   }
 
-  console.log("댓글 시딩");
+  console.log("댓글 시딩 완료!");
 }
 
 main()
