@@ -1,0 +1,51 @@
+import dotenv from "dotenv";
+import express from "express";
+import cors from "cors";
+import articleRouter from "./routes/article.js";
+// import productRouter from "./routes/product.js";
+// import Product from "./sprint-mission-6/src/schemas/Product.js";
+// import {
+//   keywordFilter,
+//   productSort,
+//   getPagination,
+// } from "./sprint-mission-6/src/utils/findBy.js";
+
+// feedback: 라우터로 관리하면 각 도메인 별로 관리하기가 쉬워짐
+// import productRouter from "./routes/product.js";
+// app.use("/product", productRouter);
+
+dotenv.config(); // .env 파일 로드 (맨 먼저!)
+
+const app = express();
+// 개발할 때 (모든 도메인 허용 - 개발 편의상)
+app.use(cors());
+
+// 배포할 때 (특정 도메인만 허용 - 보안상 좋음)
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:5173", // 개발용 프론트엔드
+//       "https://sprint-mission-fe-5-xi.vercel.app", // 배포된 프론트엔드
+//     ],
+//   }),
+// );
+const PORT = process.env.PORT || 3000;
+app.use(express.json());
+// 라우터 등록
+app.use("/articles", articleRouter);
+// app.use("/products", productRouter);
+
+// middleware 등록 -> 필요없는것 같은데 왜 넣으라 함?
+// 따로 파일이 있잖아 바본가..
+// app.use((err, req, res, next) => {
+//   console.error(err);
+
+//   res.status(err.status || 500).json({
+//     success: false,
+//     message: err.message || "서버 에러",
+//   });
+// });
+
+app.listen(PORT, () => {
+  console.log(`서버가 http://localhost:${PORT} 에서 실행 중`);
+});
