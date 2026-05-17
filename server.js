@@ -11,9 +11,11 @@ const env = process.env.NODE_ENV || "development";
 // Render 환경에서는 .env 파일 사용 안 함 (Dashboard에서 설정)
 if (env === "development") {
   dotenv.config({ path: ".env.development" });
-} else {
-  // 프로덕션 환경: Render Dashboard에서 설정한 환경변수 사용
-  dotenv.config();
+} else if (env === "production") {
+  const result = dotenv.config({ path: ".env.production" });
+  if (result.error && result.error.code !== "ENOENT") {
+    console.warn("⚠️ .env.production 파일을 찾을 수 없습니다");
+  }
 }
 
 const PORT = process.env.PORT || 3000;
