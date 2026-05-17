@@ -1,4 +1,3 @@
-import React from "react";
 import { Prisma } from "@prisma/client";
 import { HttpError } from "./errors.js";
 import { z } from "zod";
@@ -14,6 +13,21 @@ const asyncHandler = (handler) => {
           success: false,
           message: err.message,
         });
+      }
+
+      // zodError
+      if (error.name === "ZodError") {
+        return res.status(400).json({
+          success: false,
+          message: "입력 데이터가 올바르지 않습니다",
+          error: error.errors.map((e) => ({
+            field: e.path.join("."),
+            message: e.message,
+          })),
+        });
+      }
+      if (error.name === "ZodError") {
+        return res.status(400).json({ success: false, errors: error.errors });
       }
 
       // PrismaError

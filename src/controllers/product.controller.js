@@ -1,11 +1,16 @@
 import prisma from "../lib/prisma.js";
+import createProductSchema, {
+  updateProductSchema,
+} from "../schemas/product.schema.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
 // 상품 등록
 export const createProduct = asyncHandler(async (req, res) => {
+  const validated = createProductSchema.parse(req.body);
+
   const { name, description, price, favoriteCount } = req.body;
   const product = await prisma.product.create({
-    data: { name, description, price, favoriteCount },
+    data: { validated, name, description, price, favoriteCount },
   });
   res.status(201).json({ success: true, data: product });
 });
@@ -45,6 +50,9 @@ export const getAllProducts = asyncHandler(async (req, res) => {
       orderBy,
       skip,
       take,
+      include: {
+        user: { select: { nickname: true } },
+      },
     }),
     prisma.product.count({ where }),
   ]);
@@ -66,22 +74,29 @@ export const getProduct = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const product = await prisma.product.findUnique({
     where: { id: parseInt(id) },
+    include: {
+      user: { select: { nickname: true } },
+      tags: true,
+    },
   });
 
-  if (!todo) {
+  if (!product) {
     return res
       .status(404)
       .json({ success: false, message: "찾을 수 없습니다" });
   }
 
-  res.status(200).json({ success: true, data: products });
+  res.status(200).json({ success: true, data: product });
 });
 
 // 상품 수정
 export const updateProduct = asyncHandler(async (req, res) => {
+  const validated = updateProductSchema.parse(req.body);
+
   const { id } = req.params;
   const product = await prisma.product.update({
     where: { id: parseInt(id) },
+    select: { validated: true, name: true, description: true, price: true },
     data: req.body,
   });
   res.json({ success: true, data: product });

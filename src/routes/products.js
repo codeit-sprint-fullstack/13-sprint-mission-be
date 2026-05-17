@@ -8,6 +8,12 @@ import {
   getProduct,
   updateProduct,
 } from "../controllers/product.controller.js";
+import {
+  createProductComment,
+  deleteComment,
+  getProductComments,
+  updateComment,
+} from "../controllers/comment.controller.js";
 
 const router = express.Router(); // 요청을 받을 app 대리인
 
@@ -24,5 +30,17 @@ router.patch("/:id", updateProduct);
 
 // 상품 삭제
 router.delete("/:id", deleteProduct);
+
+// 상품 댓글 등록
+router.post("/:id/comments", createProductComment);
+
+// 상품 댓글 목록 조회
+router.get("/:id/comments", getProductComments);
+
+// 댓글 수정
+router.patch("/:id/comments/:commentId", updateComment);
+
+// 댓글 삭제
+router.delete("/:id/comments/:commentId", deleteComment);
 
 export default router;
