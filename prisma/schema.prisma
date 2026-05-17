@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 1. 중고마켓 상품 (Product)
+model Product {
+  id          Int              @id @default(autoincrement())
+  name        String
+  description String
+  price       Int
+  tags        String[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  comments    ProductComment[] // 댓글과 연결 (1:N)
+}
+
+// 2. 중고마켓 댓글 (ProductComment)
+model ProductComment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade) // 요구사항: 부모 삭제시 같이 삭제
+}
+
+// 3. 자유게시판 게시글 (Article) - 요구사항 충족
+model Article {
+  id        Int              @id @default(autoincrement())
+  title     String
+  content   String
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  comments  ArticleComment[] // 댓글과 연결 (1:N)
+}
+
+// 4. 자유게시판 댓글 (ArticleComment)
+model ArticleComment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  articleId Int
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade) // 요구사항: 부모 삭제시 같이 삭제
+}
