@@ -1,5 +1,5 @@
 // utils/findBy.js
-// feedback: 수정 ㄱㄱㄱㄱㄱ 재사용할수있도록
+// todo: feedback: 수정 ㄱㄱㄱㄱㄱ 재사용할수있도록
 
 export const keywordFilter = (keyword, prices, tag) => {
   const filtered = {};

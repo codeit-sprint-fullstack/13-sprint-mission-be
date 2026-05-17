@@ -1,4 +1,4 @@
-// // routes/product.js
+// // routes/product.js (미완)
 // import { Router } from "express";
 // import {
 //  // ??

@@ -1,4 +1,4 @@
-// import mongoose from "mongoose";
+// import mongoose from "mongoose"; (refac 미완.... )
 
 // const ProductSchema = new mongoose.Schema(
 //   {

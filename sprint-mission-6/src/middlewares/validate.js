@@ -9,23 +9,6 @@
 import { z } from "zod";
 
 export const validate = (schema) => {
-  // return (req, res, next) => {
-  //   try {
-  //     req.validatedData = schema.parse(req.body);
-  //     next();
-  //   } catch (error) {
-  //     if (error instanceof z.ZodError) {
-  //       return res.status(400).json({
-  //         success: false,
-  //         errors: error.errors.map((err) => ({
-  //           field: err.path.join("."),
-  //           message: err.message,
-  //         })),
-  //       });
-  //     }
-  //     next(error);
-  //   }
-  // };
   return (req, res, next) => {
     const result = schema.safeParse(req.body);
     // safeParse()

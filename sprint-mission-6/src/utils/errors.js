@@ -1,10 +1,4 @@
-// ============================================
 // 커스텀 에러 클래스 (from 실습 자료)
-// ============================================
-//
-// "throw new NotFoundError('Todo를 찾을 수 없습니다')" 처럼
-// 의미가 분명한 에러를 던지면, asyncHandler 가 클래스에 담긴
-// status 값을 그대로 가져다 알맞은 상태코드로 응답해 줍니다.
 
 export class AppError extends Error {
   constructor(message, status) {

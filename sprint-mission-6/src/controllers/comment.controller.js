@@ -115,38 +115,8 @@ export const deleteComment = async (req, res) => {
   res.status(204).send();
 };
 
-// // feat: cascading 구현
-// export const deleteArticleWithComments = async (req, res, next) => {
-//   const { articleId } = req.params;
-//   const parsedArticleId = parseInt(articleId);
-
-//   if (isNaN(parsedArticleId)) {
-//     throw new ValidationError("articleId는 숫자여야 합니다");
-//   }
-
-//   const article = await prisma.article.findUnique({
-//     where: { id: parsedArticleId },
-//     include: { comments: { select: { id: true } } },
-//   });
-
-//   if (!article) {
-//     throw new NotFoundError("게시글을 찾을 수 없습니다");
-//   }
-
-//   const commentCount = article.comments.length;
-
-//   // 게시글 삭제 (댓글도 자동 삭제됨)
-//   await prisma.article.delete({
-//     where: { id: parsedArticleId },
-//   });
-
-//   res.json({
-//     success: true,
-//     message: `게시글이 삭제되었습니다 (${commentCount}개의 댓글도 자동 삭제됨)`,
-//     deletedArticleId: parsedArticleId,
-//     deletedCommentCount: commentCount,
-//   });
-// };
+// todo: cascading 구현?
+// 그냥 지워지던데 ?
 
 // - [ ]  댓글 목록 조회 API를 만들어 주세요.
 //     - [ ] `id`, `content`, `createdAt` 를 조회합니다.

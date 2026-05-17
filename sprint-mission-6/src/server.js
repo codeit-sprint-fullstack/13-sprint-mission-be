@@ -35,17 +35,6 @@ app.use(express.json());
 app.use("/articles", articleRouter);
 // app.use("/products", productRouter);
 
-// middleware 등록 -> 필요없는것 같은데 왜 넣으라 함?
-// 따로 파일이 있잖아 바본가..
-// app.use((err, req, res, next) => {
-//   console.error(err);
-
-//   res.status(err.status || 500).json({
-//     success: false,
-//     message: err.message || "서버 에러",
-//   });
-// });
-
 app.listen(PORT, () => {
   console.log(`서버가 http://localhost:${PORT} 에서 실행 중`);
 });

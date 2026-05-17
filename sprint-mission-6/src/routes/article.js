@@ -14,7 +14,7 @@ import {
   getComments,
 } from "../controllers/comment.controller.js";
 import { createArticleSchema } from "../schemas/article.schema.js";
-// import { createProductSchema } from "../schemas/Product.js" 아직 스키마 작성 안함
+// import { createProductSchema } from "../schemas/Product.js"
 import { createCommentSchema } from "../schemas/comment.schema.js";
 import { validate } from "../middlewares/validate.js";
 
