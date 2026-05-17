@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 
 const Product = require("./models/Product");
 const articlesRouter = require("./routes/articles");
+const articleCommentsRouter = require("./routes/articleComments");
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/articles", articlesRouter);
+app.use("/articles/:articleId/comments", articleCommentsRouter);
 app.get("/", (req, res) => {
   res.send("판다마켓 백엔드 서버가 무사히 켜졌습니다. 🐼");
 });
