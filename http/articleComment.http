@@ -1,0 +1,28 @@
+@localUrl = http://localhost:3000
+
+
+
+### 댓글 목록 조회
+GET {{localUrl}}/articles/6Nzr5pWn_4hV-kpd10TMf/comments
+
+
+### 댓글 삭제
+DELETE {{localUrl}}/articles/comments/XO0Vtg023-2k5g34BLR1p
+
+
+
+### 댓글 등록
+POST {{localUrl}}/articles/6Nzr5pWn_4hV-kpd10TMf/comments
+Content-Type: application/json
+
+{
+  "content": "이것은 내용입니다222만 무슨 문제라도?"
+}
+
+### 댓글 수정
+PATCH  {{localUrl}}/articles/comments/XO0Vtg023-2k5g34BLR1p
+Content-Type: application/json    
+
+{
+  "content" : "수정수저수정수저수정수저수정수저"
+}

@@ -26,6 +26,17 @@ import {
   getArticleSchema,
   updateArticleSchema,
 } from "./schemas/article.Schema.js";
+import {
+  createCommentSchema,
+  getCommentsSchema,
+  updateCommentSchema,
+} from "./schemas/articleCommet.Schema.js";
+import {
+  createArticleComment,
+  deleteArticleComment,
+  getArticleComments,
+  updateArticleComment,
+} from "./controllers/aritcleCommentController.js";
 
 const envFile = `.env.${process.env.NODE_ENV || "development"}`;
 dotenv.config({ path: envFile });
@@ -44,18 +55,38 @@ app.patch("/product/:id", validate(updateProductSchema), updateProduct);
 //delete
 app.delete("/product/:id", deleteProduct);
 
-//Article
+// Article
+// Create
+app.post("/articles", validate(createArticleSchema), createArticle);
+// Read
+app.get("/articles", validate(getArticleSchema, "query"), getArticle);
+app.get("/articles/:id", getArticleById);
+// Update
+app.patch("/articles/:id", validate(updateArticleSchema), updateArticle);
+// Delete
+app.delete("/articles/:id", deleteArticle);
 
-//Read
-app.get("/article", validate(getArticleSchema, "query"), getArticle);
-app.get("/article/:id", getArticleById);
-
-//Create
-app.post("/article", validate(createArticleSchema), createArticle);
-//update
-app.patch("/article/:id", validate(updateArticleSchema), updateArticle);
-//delete
-app.delete("/article/:id", deleteArticle);
+// Article Comment
+// Create
+app.post(
+  "/articles/:articleId/comments",
+  validate(createCommentSchema),
+  createArticleComment,
+);
+// Read
+app.get(
+  "/articles/:articleId/comments",
+  validate(getCommentsSchema, "query"),
+  getArticleComments,
+);
+// Update
+app.patch(
+  "/articles/comments/:id",
+  validate(updateCommentSchema),
+  updateArticleComment,
+);
+// Delete
+app.delete("/articles/comments/:id", deleteArticleComment);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

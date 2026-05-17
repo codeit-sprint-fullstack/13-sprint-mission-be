@@ -1,4 +1,3 @@
-@baseUrl = https://one3-sprint-mission-be-owah.onrender.com
 @localUrl = http://localhost:3000
 
 
@@ -15,7 +14,7 @@ GET  {{localUrl}}/product/ysHh31n_s9TTIOSwhwW2i
 
 
 ### 상품 삭제
-DELETE {{baseUrl}}/product/gACX8TyyT8VNRPGGXO0si
+DELETE {{localUrl}}/product/gACX8TyyT8VNRPGGXO0si
 
 ### 상품 등록
 POST {{localUrl}}/product
