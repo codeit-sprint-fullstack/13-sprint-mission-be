@@ -9,14 +9,14 @@ const articleCommentsRouter = require("./routes/articleComments");
 
 dotenv.config();
 
-mongoose
-  .connect(process.env.DATABASE_URL)
-  .then(() => {
-    console.log("MongoDB(데이터베이스)에 연결되었습니다.");
-  })
-  .catch((error) => {
-    console.log("MongoDB 연결 실패하였습니다.", error.message);
-  });
+// mongoose
+//   .connect(process.env.DATABASE_URL)
+//   .then(() => {
+//     console.log("MongoDB(데이터베이스)에 연결되었습니다.");
+//   })
+//   .catch((error) => {
+//     console.log("MongoDB 연결 실패하였습니다.", error.message);
+//   });
 
 const app = express();
 
@@ -24,6 +24,8 @@ app.use(cors());
 app.use(express.json());
 app.use("/articles", articlesRouter);
 app.use("/articles/:articleId/comments", articleCommentsRouter);
+app.use("/products", productsRouter);
+app.use("/products/:productId/comments", productCommentsRouter);
 app.get("/", (req, res) => {
   res.send("판다마켓 백엔드 서버가 무사히 켜졌습니다. 🐼");
 });

@@ -1,17 +1,16 @@
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
-
 const router = express.Router({ mergeParams: true });
 const prisma = new PrismaClient();
 
 router.get("/", async (req, res) => {
   try {
-    const articleId = parseInt(req.params.articleId);
+    const productId = parseInt(req.params.productId);
     const limit = parseInt(req.query.limit) || 10;
     const cursor = req.query.cursor ? parseInt(req.query.cursor) : null;
 
     const queryOptions = {
-      where: { articleId },
+      where: { productId },
       take: limit,
       orderBy: { createdAt: "desc" },
       select: { id: true, content: true, createdAt: true },
@@ -22,8 +21,7 @@ router.get("/", async (req, res) => {
       queryOptions.skip = 1;
     }
 
-    const comments = await prisma.articleComment.findMany(queryOptions);
-
+    const comments = await prisma.productComment.findMany(queryOptions);
     const nextCursor =
       comments.length > 0 ? comments[comments.length - 1].id : null;
 
@@ -35,14 +33,13 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const articleId = parseInt(req.params.articleId);
+    const productId = parseInt(req.params.productId);
     const { content } = req.body;
-
     if (!content)
       return res.status(400).json({ message: "댓글 내용을 입력해주세요." });
 
-    const newComment = await prisma.articleComment.create({
-      data: { content, articleId },
+    const newComment = await prisma.productComment.create({
+      data: { content, productId },
     });
     res.status(201).json(newComment);
   } catch (error) {
@@ -53,7 +50,7 @@ router.post("/", async (req, res) => {
 router.patch("/:commentId", async (req, res) => {
   try {
     const { content } = req.body;
-    const updatedComment = await prisma.articleComment.update({
+    const updatedComment = await prisma.productComment.update({
       where: { id: parseInt(req.params.commentId) },
       data: { content },
     });
@@ -65,10 +62,10 @@ router.patch("/:commentId", async (req, res) => {
 
 router.delete("/:commentId", async (req, res) => {
   try {
-    await prisma.articleComment.delete({
+    await prisma.productComment.delete({
       where: { id: parseInt(req.params.commentId) },
     });
-    res.status(204).send(); // 삭제 성공
+    res.status(204).send();
   } catch (error) {
     res.status(404).json({ message: "댓글 삭제 실패" });
   }

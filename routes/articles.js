@@ -4,7 +4,6 @@ const { PrismaClient } = require("@prisma/client");
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// 1. [목록 조회] 오프셋 페이지네이션, 최신순 정렬, 제목/내용 검색
 router.get("/", async (req, res) => {
   try {
     const offset = parseInt(req.query.offset) || 0;
@@ -30,7 +29,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// 2. [게시글 등록]
 router.post("/", async (req, res) => {
   try {
     const { title, content } = req.body;
@@ -46,7 +44,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-// 3. [게시글 상세 조회]
 router.get("/:id", async (req, res) => {
   try {
     const article = await prisma.article.findUnique({
@@ -62,7 +59,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// 4. [게시글 수정]
 router.patch("/:id", async (req, res) => {
   try {
     const { title, content } = req.body;
@@ -76,7 +72,6 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
-// 5. [게시글 삭제]
 router.delete("/:id", async (req, res) => {
   try {
     await prisma.article.delete({
