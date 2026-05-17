@@ -3,9 +3,11 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
-const Product = require("./models/Product");
 const articlesRouter = require("./routes/articles");
 const articleCommentsRouter = require("./routes/articleComments");
+const Product = require("./models/Product");
+const productsRouter = require("./routes/products");
+const productCommentsRouter = require("./routes/productComments");
 
 dotenv.config();
 
