@@ -155,6 +155,22 @@ const articles = Array.from({ length: 20 }, () => {
   };
 });
 
+const comments = Array.from({ length: 20 }, () => {
+  const createdAt = faker.date.between({
+    from: "2024-01-01",
+    to: new Date(),
+  });
+  const randomArticle = faker.helpers.arrayElement(articles);
+
+  return {
+    id: faker.string.nanoid(),
+    content: faker.lorem.paragraphs({ min: 2, max: 5 }, "\n\n"),
+    articleId: randomArticle.id,
+    createdAt,
+    updatedAt: faker.date.between({ from: createdAt, to: new Date() }),
+  };
+});
+
 async function seed() {
   await prisma.product.deleteMany();
   await prisma.article.deleteMany();
@@ -168,6 +184,7 @@ async function seed() {
   });
 
   await prisma.article.createMany({ data: articles });
+  await prisma.articleComment.createMany({ data: comments });
 
   console.log(`🌱 시드 데이터 ${seedData.length}개 삽입 완료`);
 }

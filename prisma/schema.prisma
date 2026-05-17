@@ -20,11 +20,23 @@ model Product {
 }
 
 model Article {
+  id              String           @id
+  title           String
+  content         String
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  articleComments ArticleComment[]
+
+  @@map("article")
+}
+
+model ArticleComment {
   id        String   @id
-  title     String
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId String
 
-  @@map("article")
+  @@map("article_comment")
 }

@@ -89,7 +89,7 @@ export const deleteArticle = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const article = await prisma.article.delete({ where: { id } });
 
-  if (!article) throw new NotFoundError("존재하지 않는 게식글 입니다.");
+  if (!article) throw new NotFoundError("존재하지 않는 게시글 입니다.");
 
   res.status(204).send();
 });
