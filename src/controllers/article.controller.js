@@ -3,9 +3,9 @@ import asyncHandler from "../utils/asyncHandler.js";
 
 // 게시글 등록
 export const postArticle = asyncHandler(async (req, res) => {
-  const { title, content } = req.body;
+  const { title, content, userId } = req.body;
   const article = await prisma.article.create({
-    data: { title, content },
+    data: { title, content, userId },
   });
   res.status(201).json({ success: true, data: article });
 });
@@ -35,10 +35,11 @@ export const getAllArticles = asyncHandler(async (req, res) => {
   const [articles, totalCount] = await Promise.all([
     prisma.article.findMany({
       where,
+      orderBy,
       skip,
       take,
       include: {
-        user: { select: { name: true } },
+        user: { select: { nickname: true } },
       },
     }),
     prisma.article.count({ where }),
@@ -55,7 +56,7 @@ export const getArticle = asyncHandler(async (req, res) => {
   const article = await prisma.article.findUnique({
     where: { id: parseInt(id) },
     include: {
-      user: { select: { name: true } },
+      user: { select: { nickname: true } },
     },
   });
 

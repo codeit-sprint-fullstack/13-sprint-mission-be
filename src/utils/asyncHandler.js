@@ -6,9 +6,9 @@ const asyncHandler = (handler) => {
   return async (req, res) => {
     try {
       await handler(req, res);
-    } catch (err) {
+    } catch (error) {
       // HttpError
-      if (err instanceof HttpError) {
+      if (error instanceof HttpError) {
         return res.status(err.statusCode).json({
           success: false,
           message: err.message,
