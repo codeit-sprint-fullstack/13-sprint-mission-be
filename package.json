@@ -1,35 +1,29 @@
 {
   "name": "13-sprint-mission-be",
   "version": "1.0.0",
-  "description": "Express + MongoDB 투두리스트 단계별 실습",
+  "description": "Express + PostgreSQL 중고마켓 API",
   "private": true,
   "main": "server.js",
   "type": "module",
   "scripts": {
     "dev": "dotenv -e .env.development -- nodemon server.js",
-    "start": "dotenv -e .env.production -- node server.js",
-
-    "build": "dotenv -e .env.production -- prisma generate",
+    "start": "node server.js",
+    "build": "prisma generate",
     "build:dev": "dotenv -e .env.development -- prisma generate",
-
     "prisma:dev": "dotenv -e .env.development -- prisma migrate dev",
-    "prisma:prod": "dotenv -e .env.production -- prisma migrate deploy",
-
+    "prisma:prod": "prisma migrate deploy",
     "prisma:reset:dev": "dotenv -e .env.development -- prisma migrate reset",
-    "prisma:status": "dotenv -e .env.production -- prisma migrate status",
-
+    "prisma:status": "prisma migrate status",
     "seed:dev": "dotenv -e .env.development -- node prisma/seed.js",
-    "seed:prod": "dotenv -e .env.production -- node prisma/seed-prod.js",
-
+    "seed:prod": "node prisma/seed.js",
     "db:push:dev": "dotenv -e .env.development -- prisma db push",
-    "db:push:prod": "dotenv -e .env.production -- prisma db push --skip-generate"
+    "db:push:prod": "prisma db push --skip-generate"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "mongoose": "^9.6.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {

@@ -6,7 +6,7 @@
 
 import prisma from "../lib/prisma.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { NotFoundError } from "../utils/errors.js";
+import { NotFoundError, ValidationError } from "../utils/errors.js";
 import {
   createCommentSchema,
   updateCommentSchema,
@@ -18,13 +18,13 @@ export const getAllArticleComments = asyncHandler(async (req, res) => {
   const { articleId } = req.params;
 
   // article 댓글만 가져오기
-  const parsedProductId = parseInt(articleId);
+  const parsedArticleId = parseInt(articleId);
   const whereCondition = {
-    productId: !isNaN(parsedProductId) ? parsedProductId : undefined,
-    articleId: null,
+    articleId: !isNaN(parsedArticleId) ? parsedArticleId : undefined,
+    productId: null,
   };
 
-  if (isNaN(parsedProductId)) {
+  if (isNaN(parsedArticleId)) {
     throw new ValidationError("유효한 게시글 ID가 아닙니다");
   }
 
@@ -35,7 +35,7 @@ export const getAllArticleComments = asyncHandler(async (req, res) => {
 
   if (commentCount === 0) {
     throw new NotFoundError(
-      `게시글 ID가 '${parsedProductId}'인 댓글을 찾을 수 없습니다`,
+      `게시글 ID가 '${parsedArticleId}'인 댓글을 찾을 수 없습니다`,
     );
   }
 
@@ -107,7 +107,7 @@ export const updateArticleComment = asyncHandler(async (req, res) => {
     throw new NotFoundError(`${commentId} 댓글을 찾을 수 없습니다`);
   }
 
-  // 해당 상품의 comment인지 확인
+  // 해당 게시글의 comment인지 확인
   if (comment.articleId !== parseInt(articleId)) {
     throw new ValidationError(`${articleId} 게시글의 댓글이 아닙니다`);
   }
