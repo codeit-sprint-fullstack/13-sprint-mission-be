@@ -2,7 +2,7 @@
 
 
 ### 게시물 조회
-GET {{localUrl}}/article
+GET {{localUrl}}/articles
 
 
 ### 게시물 목록 조회
@@ -13,10 +13,10 @@ GET {{localUrl}}/articles?keyword=Porro
 GET  {{localUrl}}/articles/3hUdYIywI-NWFIvaqL6oR
 
 
-### 상품 삭제
-DELETE {{localUrl}}/articles/gACX8TyyT8VNRPGGXO0si
+### 게시글 삭제
+DELETE {{localUrl}}/articles/6Nzr5pWn_4hV-kpd10TMf
 
-### 상품 등록
+### 게시글 등록
 POST {{localUrl}}/articles
 Content-Type: application/json
 
@@ -26,13 +26,11 @@ Content-Type: application/json
 }
 
 
-### 상품 수정
-PATCH  {{localUrl}}/articles/gACX8TyyT8VNRPGGXO0si
+### 게시글 수정
+PATCH  {{localUrl}}/articles/3hUdYIywI-NWFIvaqL6oR
 Content-Type: application/json    
 
 {
-  "name": "축구공3",
-  "price": 100000,
-  "description": "콘푸라이 차차차찿차차ㅏ 타잔이요",
-  "tags": ["#4팀", "#화이팅", "#김대영"]
+  "title": "축구공3",
+  "content": 100000,
 }

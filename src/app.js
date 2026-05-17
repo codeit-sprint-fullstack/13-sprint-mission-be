@@ -40,6 +40,7 @@ import {
 
 const envFile = `.env.${process.env.NODE_ENV || "development"}`;
 dotenv.config({ path: envFile });
+console.log(envFile);
 
 const app = express();
 app.use(cors());
