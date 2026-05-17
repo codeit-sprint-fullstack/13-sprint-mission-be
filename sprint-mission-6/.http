@@ -1,0 +1,81 @@
+### 기본 URL 설정
+@baseUrl = http://localhost:3000
+
+### 게시글 생성
+POST {{baseUrl}}/article
+Content-Type: application/json
+
+{
+  "title": "하하하 제목",
+  "content": "테스트 내용입니다."
+}
+
+### 게시글 삭제
+DELETE {{baseUrl}}/article/1
+
+
+### 게시물 검색
+GET {{baseUrl}}/article/2
+
+### 페이지네이션
+GET {{baseUrl}}/articles?page=1&limit=10&keyword=하하
+
+
+### 게시글 수정
+PATCH {{baseUrl}}/article/1
+Content-Type: application/json
+
+{
+  "title": "수정된 제목",
+  "content": "수정된 내용입니다."
+}
+
+### 제목만 수정
+PATCH {{baseUrl}}/article/2
+Content-Type: application/json
+
+{
+  "title": "제목만 수정"
+}
+
+### 내용만 수정
+PATCH {{baseUrl}}/article/2
+Content-Type: application/json
+
+{
+  "content": "내용만 수정"
+}
+
+### 존재하지 않는 게시글 수정 (404 테스트)
+PATCH {{baseUrl}}/article/9999
+Content-Type: application/json
+
+{
+  "title": "수정 시도"
+}
+
+
+### 댓글 생성
+POST {{baseUrl}}/article/2/reply
+Content-Type: application/json
+
+{
+  "content": "ssssssssssssssssssss"
+}
+
+### 댓글 수정
+PATCH {{baseUrl}}/article/2/reply/4
+Content-Type: application/json
+
+{
+  "content": "수정어어어어어엉"
+}
+
+###삭제
+DELETE {{baseUrl}}/article/2/reply/1
+
+### 1페이지
+GET {{baseUrl}}/articles/2/replies?limit=10
+
+### 2페이지
+GET {{baseUrl}}/articles/2/replies?limit=10&cursor=21
