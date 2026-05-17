@@ -12,7 +12,7 @@ export const postArticle = asyncHandler(async (req, res) => {
 
 // 게시글 목록 조회
 export const getAllArticles = asyncHandler(async (req, res) => {
-  const { page = 1, limit = 10, sort = "recent", search = "" } = req.query;
+  const { page = 1, limit = 10, search = "" } = req.query;
 
   // 검색
   const where = {};
@@ -24,7 +24,7 @@ export const getAllArticles = asyncHandler(async (req, res) => {
   }
 
   // 정렬
-  const sort = { recent: { createdAt: "desc" } };
+  const orderBy = { createdAt: "desc" };
 
   // 페이지네이션
   const pageNum = Number(page) || 1;
@@ -35,7 +35,6 @@ export const getAllArticles = asyncHandler(async (req, res) => {
   const [articles, totalCount] = await Promise.all([
     prisma.article.findMany({
       where,
-      orderBy,
       skip,
       take,
       include: {
