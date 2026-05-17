@@ -28,7 +28,8 @@ export const createArticleSchema = z.object({
     ),
 });
 
-//이것도 중복이라 훅으로 처리 가능 할 거 같긴한데 일단 하겠습니다 ㅎㅎ
+export const updateArticleSchema = createArticleSchema.partial();
+
 export const getArticleSchema = z.object({
   page: z.coerce
     .number()

@@ -58,7 +58,7 @@ export const getArticle = asyncHandler(async (req, res) => {
   res.status(200).json({ list, totalCount });
 });
 
-//상품 상세 조회
+//게시글 상세 조회
 export const getArticleById = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const article = await prisma.article.findUnique({
@@ -69,4 +69,27 @@ export const getArticleById = asyncHandler(async (req, res) => {
   if (!article) throw new NotFoundError("상품 아이디를 찾을 수 없습니다.");
 
   res.json(article);
+});
+
+export const updateArticle = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const article = await prisma.article.update({
+    where: { id },
+    data: req.validatedData,
+  });
+
+  if (!article)
+    throw new NotFoundError({ message: "존재하지 않는 ID 입니다." });
+
+  res.json(article);
+});
+
+//게시글 삭제
+export const deleteArticle = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const article = await prisma.article.delete({ where: { id } });
+
+  if (!article) throw new NotFoundError("존재하지 않는 게식글 입니다.");
+
+  res.status(204).send();
 });

@@ -3,7 +3,7 @@
 
 
 ###상품 조회
-GET {{localUrl}}/product?keyword=닌텐도스위치
+GET {{localUrl}}/product?keyword=성갤
 
 
 ### 상품 목록 조회

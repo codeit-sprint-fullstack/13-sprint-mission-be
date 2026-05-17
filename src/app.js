@@ -16,12 +16,15 @@ import {
 } from "./schemas/product.Schema.js";
 import {
   createArticle,
+  deleteArticle,
   getArticle,
   getArticleById,
+  updateArticle,
 } from "./controllers/aritcleController.js";
 import {
   createArticleSchema,
   getArticleSchema,
+  updateArticleSchema,
 } from "./schemas/article.Schema.js";
 
 const envFile = `.env.${process.env.NODE_ENV || "development"}`;
@@ -49,6 +52,10 @@ app.get("/article/:id", getArticleById);
 
 //Create
 app.post("/article", validate(createArticleSchema), createArticle);
+//update
+app.patch("/article/:id", validate(updateArticleSchema), updateArticle);
+//delete
+app.delete("/article/:id", deleteArticle);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
