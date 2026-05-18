@@ -1,8 +1,29 @@
 import dotenv from "dotenv";
 import express from "express";
-import connectDB from "./connectDB.js";
 import Product from "./models/Product.js";
 import cors from "cors";
+import {
+  DeleteProduct,
+  GetProduct,
+  GetProductDetail,
+  PatchProduct,
+  PostProduct,
+} from "./controllers/product.controller.js";
+import {
+  DeleteArticle,
+  GetArticle,
+  GetArticleDetail,
+  PatchArticle,
+  PostArticle,
+} from "./controllers/article.controller.js";
+import {
+  DeleteComment,
+  GetArticleComment,
+  GetProductComment,
+  PatchComment,
+  PostArticleComment,
+  PostProductComment,
+} from "./controllers/comment.controller.js";
 
 //.env 파일 로드.
 dotenv.config();
@@ -10,83 +31,37 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-connectDB();
 
-app.get("/products", async (req, res) => {
-  try {
-    const { page, pageSize, orderBy, keyword } = req.query;
-    const offset = (page - 1) * pageSize;
-    let search = {};
-    if (keyword) {
-      search = {
-        $or: [
-          {
-            name: { $regex: keyword },
-          },
-          {
-            description: { $regex: keyword },
-          },
-        ],
-      };
-    }
+//#region  products
+app.get("/products", GetProduct);
+app.get("/products/:id", GetProductDetail);
 
-    const totalCnt = await Product.countDocuments(search);
+app.post("/products", PostProduct);
 
-    const productData = await Product.find(search)
-      .sort({ createdAt: orderBy === "recent" ? -1 : 1 })
-      .skip(offset)
-      .limit(pageSize);
+app.patch("/products/:id", PatchProduct);
 
-    if (!productData)
-      return res.status(500).json({ message: "데이터를 가져오지 못했습니다." });
-    res.json({ totalCnt: totalCnt, list: productData });
-  } catch (error) {
-    res.status(400).json(error.message);
-  }
-});
+app.delete("/products/:id", DeleteProduct);
+//#endregion
 
-app.post("/product", async (req, res) => {
-  try {
-    const productData = await Product.create({ ...req.body });
-    if (!productData) {
-      return res.status(500).json(error.message);
-    }
-    res.json(productData);
-  } catch (error) {
-    res.status(400).json(error.message);
-  }
-});
+//#region  articles
+app.get("/articles", GetArticle);
+app.get("/articles/:id", GetArticleDetail);
 
-app.patch("/product/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
+app.post("/articles", PostArticle);
 
-    const productData = await Product.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    if (!productData) {
-      throw new Error("해당하는 데이터가 없습니다.");
-    }
+app.patch("/articles/:id", PatchArticle);
 
-    res.json(productData);
-  } catch (error) {
-    res.status(400).json(error.message);
-  }
-});
+app.delete("/articles/:id", DeleteArticle);
+//#endregion
 
-app.delete("/product/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const productData = await Product.findByIdAndDelete(id);
-    if (!productData) {
-      throw new Error("해당하는 ID가 없습니다.");
-    }
-    res.status(201).send();
-  } catch (error) {
-    res.status(400).json(error.message);
-  }
-});
+app.get("/products/:id/comments", GetProductComment);
+app.get("/articles/:id/comments", GetArticleComment);
+
+app.post("/products/:id/comments", PostProductComment);
+app.post("/articles/:id/comments", PostArticleComment);
+
+app.patch("/comments/:id", PatchComment);
+app.delete("/comments/:id", DeleteComment);
 
 app.listen(process.env.PORT, () => {
   console.log("서버가 실행중 입니다.");
