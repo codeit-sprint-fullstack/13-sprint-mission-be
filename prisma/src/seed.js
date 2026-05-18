@@ -5,12 +5,11 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("🌱 시딩 시작...");
 
-  // 기존 데이터 초기화
-  // 자식 테이블(Comment)을 먼저 삭제해야 외래 키 제약 조건 에러가 발생하지 않습니다.
+
   await prisma.comment.deleteMany();
   await prisma.article.deleteMany();
 
-  // 더미 게시글 및 댓글 생성
+
   for (let i = 1; i <= 10; i++) {
     await prisma.article.create({
       data: {
