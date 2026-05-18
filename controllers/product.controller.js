@@ -20,9 +20,9 @@ export const GetProduct = async (req, res) => {
     const totalCnt = await prisma.product.count({ where });
     const productData = await prisma.product.findMany({ where, skip, take });
 
-    if (!productData)
-      return res.status(500).json({ message: "데이터를 가져오지 못했습니다." });
-    res.json({ totalCnt: totalCnt, list: productData });
+    if (productData.length === 0)
+      return res.status(404).json({ message: "데이터가 없습니다." });
+    res.status(200).json({ totalCnt: totalCnt, list: productData });
   } catch (error) {
     res.status(400).json(error.message);
   }
@@ -35,9 +35,9 @@ export const GetProductDetail = async (req, res) => {
       where: { id: Number(id) },
     });
 
-    if (productData.length <= 0)
-      return res.status(500).json({ message: "데이터가 없습니다." });
-    res.json(productData);
+    if (productData.length === 0)
+      return res.status(404).json({ message: "데이터가 없습니다." });
+    res.status(200).json(productData);
   } catch (error) {
     res.status(400).json(error.message);
   }
@@ -64,9 +64,7 @@ export const PostProduct = async (req, res) => {
         tags: true,
       },
     });
-    if (!productData) {
-      return res.status(500).json(error.message);
-    }
+
     res.status(201).json(newData);
   } catch (error) {
     res.status(400).json(error.message);
@@ -81,11 +79,8 @@ export const PatchProduct = async (req, res) => {
       where: { id: Number(id) },
       data: req.body,
     });
-    if (!productData) {
-      throw new Error("해당하는 데이터가 없습니다.");
-    }
 
-    res.json(productData);
+    res.status(200).json(productData);
   } catch (error) {
     res.status(400).json(error.message);
   }

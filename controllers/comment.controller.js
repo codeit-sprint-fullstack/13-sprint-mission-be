@@ -20,9 +20,9 @@ export const GetArticleComment = async (req, res) => {
       take: 10,
     });
 
-    if (!commentData)
-      return res.status(500).json({ message: "데이터를 가져오지 못했습니다." });
-    res.json(commentData);
+    if (commentData.length === 0)
+      return res.status(404).json({ message: "데이터가 없습니다." });
+    res.status(200).json(commentData);
   } catch (error) {
     res.status(400).json(error.message);
   }
@@ -46,9 +46,9 @@ export const GetProductComment = async (req, res) => {
       take: 10,
     });
 
-    if (!commentData)
-      return res.status(500).json({ message: "데이터를 가져오지 못했습니다." });
-    res.json(commentData);
+    if (commentData.length === 0)
+      return res.status(404).json({ message: "데이터가 없습니다." });
+    res.status(200).json(commentData);
   } catch (error) {
     res.status(400).json(error.message);
   }
@@ -60,9 +60,8 @@ export const PostProductComment = async (req, res) => {
     const commentData = await prisma.comment.create({
       data: { ...req.body, productId: Number(id) },
     });
-    if (!commentData) {
-      return res.status(500).json(error.message);
-    }
+    if (!commentData)
+      return res.status(400).json({ message: "데이터가 없습니다." });
     res.status(201).json(commentData);
   } catch (error) {
     res.status(400).json(error.message);
@@ -75,9 +74,8 @@ export const PostArticleComment = async (req, res) => {
     const commentData = await prisma.comment.create({
       data: { ...req.body, articleId: Number(id) },
     });
-    if (!commentData) {
-      return res.status(500).json(error.message);
-    }
+    if (!commentData)
+      return res.status(400).json({ message: "데이터가 없습니다." });
     res.status(201).json(commentData);
   } catch (error) {
     res.status(400).json(error.message);
@@ -91,9 +89,8 @@ export const PatchComment = async (req, res) => {
       where: { id: Number(id) },
       data: { ...req.body },
     });
-    if (!commentData) {
-      return res.status(500).json(error.message);
-    }
+    if (!commentData)
+      return res.status(400).json({ message: "데이터가 없습니다." });
     res.status(201).json(commentData);
   } catch (error) {
     res.status(400).json(error.message);
@@ -103,13 +100,12 @@ export const PatchComment = async (req, res) => {
 export const DeleteComment = async (req, res) => {
   try {
     const { id } = req.params;
-    const articleData = await prisma.comment.delete({
+    const commentData = await prisma.comment.delete({
       where: { id: Number(id) },
     });
-    if (!articleData) {
-      throw new Error("해당하는 ID가 없습니다.");
-    }
-    res.status(204).send();
+    if (!commentData)
+      return res.status(400).json({ message: "데이터가 없습니다." });
+    res.status(504).send();
   } catch (error) {
     res.status(400).json(error.message);
   }

@@ -12,10 +12,10 @@ export const GetArticle = async (req, res) => {
     if (keyword) {
       where.OR = [
         {
-          title: { contains: search },
+          title: { contains: keyword },
         },
         {
-          content: { contains: search },
+          content: { contains: keyword },
         },
       ];
     }
@@ -28,9 +28,9 @@ export const GetArticle = async (req, res) => {
       take,
     });
 
-    if (!articleData)
-      return res.status(500).json({ message: "데이터를 가져오지 못했습니다." });
-    res.json({ totalCnt: totalCnt, list: articleData });
+    if (articleData.length === 0)
+      return res.status(404).json({ message: "데이터가 없습니다." });
+    res.status(200).json({ totalCnt: totalCnt, list: articleData });
   } catch (error) {
     res.status(400).json(error.message);
   }
@@ -43,9 +43,9 @@ export const GetArticleDetail = async (req, res) => {
       where: { id: Number(id) },
     });
 
-    if (articleData.length <= 0)
-      return res.status(500).json({ message: "데이터가 없습니다." });
-    res.json(articleData);
+    if (articleData.length === 0)
+      return res.status(404).json({ message: "데이터가 없습니다." });
+    res.status(200).json(articleData);
   } catch (error) {
     res.status(400).json(error.message);
   }
@@ -54,9 +54,7 @@ export const GetArticleDetail = async (req, res) => {
 export const PostArticle = async (req, res) => {
   try {
     const articleData = await prisma.article.create({ data: req.body });
-    if (!articleData) {
-      return res.status(500).json(error.message);
-    }
+
     res.status(201).json(articleData);
   } catch (error) {
     res.status(400).json(error.message);
@@ -71,11 +69,8 @@ export const PatchArticle = async (req, res) => {
       where: { id: Number(id) },
       data: req.body,
     });
-    if (!articleData) {
-      throw new Error("해당하는 데이터가 없습니다.");
-    }
 
-    res.json(articleData);
+    res.status(200).json(articleData);
   } catch (error) {
     res.status(400).json(error.message);
   }
@@ -87,9 +82,7 @@ export const DeleteArticle = async (req, res) => {
     const articleData = await prisma.article.delete({
       where: { id: Number(id) },
     });
-    if (!articleData) {
-      throw new Error("해당하는 ID가 없습니다.");
-    }
+
     res.status(204).send();
   } catch (error) {
     res.status(400).json(error.message);
