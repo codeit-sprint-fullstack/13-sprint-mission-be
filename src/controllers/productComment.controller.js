@@ -1,4 +1,4 @@
-import asyncHandler from "../utils/asyncHandler";
+import asyncHandler from "../utils/asyncHandler.js";
 import * as commentService from "../services/productComment.service.js";
 
 export const createComment = asyncHandler(async (req, res) => {
