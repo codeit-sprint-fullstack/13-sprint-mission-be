@@ -13,10 +13,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Product {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+  price       Int
+
+  tags     Tag[]
+  comments Comment[]
+
+  @@map("products")
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("tags")
+}
+
 model Article {
   id        Int       @id @default(autoincrement())
   title     String
-  // comment     Comment[]
   content   String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -26,11 +47,14 @@ model Article {
 }
 
 model Comment {
-  id        Int    @id @default(autoincrement())
-  content   String
-  articleId Int
+  id      Int    @id @default(autoincrement())
+  content String
 
-  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId Int?
+  productId Int?
+
+  article Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 

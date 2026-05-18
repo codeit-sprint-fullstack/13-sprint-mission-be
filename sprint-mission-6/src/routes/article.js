@@ -1,4 +1,4 @@
-// routes/product.js
+// routes/article.js
 import { Router } from "express";
 import {
   getArticle,
@@ -14,7 +14,6 @@ import {
   getComments,
 } from "../controllers/comment.controller.js";
 import { createArticleSchema } from "../schemas/article.schema.js";
-// import { createProductSchema } from "../schemas/Product.js"
 import { createCommentSchema } from "../schemas/comment.schema.js";
 import { validate } from "../middlewares/validate.js";
 

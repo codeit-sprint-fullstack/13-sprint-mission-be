@@ -1,7 +1,6 @@
 @baseUrl = http://localhost:3000
 
 ### MongoDB 기반 CRUD 테스트
-
 ### 
 POST {{baseUrl}}/product
 Content-Type: application/json
@@ -32,10 +31,10 @@ GET {{baseUrl}}/product?keyword=램&offset=0&limit=10
 ### postgres 테스트 (sprint mission 6) 
 ### Article 테스트 
 ### Article 목록
-GET http://localhost:3000/articles
+GET {{baseUrl}}/articles
 
 ### 
-POST http://localhost:3000/articles 
+POST {{baseUrl}}/articles 
 Content-Type: application/json
 
 {
@@ -44,7 +43,7 @@ Content-Type: application/json
 }
 
 ### 
-POST http://localhost:3000/articles/7/comments
+POST {{baseUrl}}/articles/7/comments
 Content-Type: application/json
 
 {
@@ -53,16 +52,16 @@ Content-Type: application/json
 }
 
 ### 댓글 목록
-GET http://localhost:3000/articles/7/comments
+GET {{baseUrl}}/articles/7/comments
 
 ### cursor page1
-GET http://localhost:3000/articles/6/comments?limit=2
+GET {{baseUrl}}/articles/6/comments?limit=2
 
 ### cursor page2
-GET http://localhost:3000/articles/6/comments?limit=2&cursor=5
+GET {{baseUrl}}/articles/6/comments?limit=2&cursor=5
 
 ### 댓글  
-PATCH http://localhost:3000/articles/7/comments/11
+PATCH {{baseUrl}}/articles/7/comments/11
 Content-Type: application/json
 
 {
@@ -71,13 +70,13 @@ Content-Type: application/json
 }
 
 ### 댓글 삭제
-DELETE http://localhost:3000/articles/6/comments/4
+DELETE {{baseUrl}}/articles/6/comments/4
 
 ### Article 단건 조회
-GET http://localhost:3000/articles/6
+GET {{baseUrl}}/articles/6
 
 ### Article 수정
-PATCH http://localhost:3000/articles/6
+PATCH {{baseUrl}}/articles/6
 Content-Type: application/json
 
 {
@@ -86,19 +85,19 @@ Content-Type: application/json
 }
 
 ### Article 삭제
-DELETE http://localhost:3000/articles/6
+DELETE {{baseUrl}}/articles/6
 
 ### page 1
-GET http://localhost:3000/articles?page=1&limit=2
+GET {{baseUrl}}/articles?page=1&limit=2
 
 ### page 2
-GET http://localhost:3000/articles?page=2&limit=2
+GET {{baseUrl}}/articles?page=2&limit=2
 
 ### recent 정렬
-GET http://localhost:3000/articles?sort=recent
+GET {{baseUrl}}/articles?sort=recent
 
 ###
-POST http://localhost:3000/articles/1/comments
+POST {{baseUrl}}/articles/1/comments
 Content-Type: application/json
 
 {
