@@ -1,0 +1,18 @@
+###기본 URL 설정
+@baseURl = http://localhost:3000
+
+### 게시글 조회
+GET {{baseURl}}/articles
+
+# ### 게시글 수정
+# PATCH {{baseURl}}/articles/1
+# Content-Type: application/json
+
+# {
+#     "content": "자유게시판 내용 수정정정정"
+# }
+### 테스트 완료 
+
+### 댓글 개별 조회
+# GET {{baseURl}}/articles/1/comments
+### 테스트 완료
