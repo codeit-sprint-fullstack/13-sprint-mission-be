@@ -1,0 +1,50 @@
+@baseURL = http://localhost:3000
+### 게시글 등록
+POST {{baseURL}}/article
+Content-Type: application/json
+
+{
+    "title": "맥북 에어 M1 가격 추천 받아요",
+    "content": "맥북 에어 구매하려 하는데 적당한 가격 추천해주세요" 
+}
+
+### 게시글 전체 조회
+GET {{baseURL}}/articles
+
+###게시글 검색
+GET {{baseURL}}/articles?keyword=맥북
+
+###게시글 상세 조회
+GET {{baseURL}}/articles/201
+###게시글 수정
+PATCH {{baseURL}}/articles/201
+Content-Type: application/json
+
+{
+    "title": "맥북 네오 가격 추천",
+    "content" : "맥북 네오는 얼마 하나요?"
+}
+###게시글 삭제
+DELETE {{baseURL}}/articles/200
+
+
+###댓글 등록
+POST {{baseURL}}/articles/201/comments
+Content-Type: application/json
+
+{
+"content": "맥북네오는 1,200,000원"
+}
+###댓글 조회
+GET {{baseURL}}/articles/201/comments
+###댓글 수정
+PATCH {{baseURL}}/articles/201/comments/101
+Content-Type:application/json
+
+{
+  "content": "나도 가지고 싶다"
+}
+
+###댓글 삭제
+
+DELETE {{baseURL}}/articles/205/comments/100

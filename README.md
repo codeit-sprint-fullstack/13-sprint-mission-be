@@ -1,63 +1,66 @@
-# 🛒 Backend REST API Server
 
-이 프로젝트는 Node.js 기반의 백엔드 서버로, REST API를 통해 상품 데이터를 관리할 수 있도록 구현되었습니다.
+# 📦 Sprint Mission - Prisma + PostgreSQL API
 
----
+## 📌 프로젝트 소개
 
-## 🚀 프로젝트 소개
-
-상품 생성, 조회, 수정 기능을 제공하는 REST API 서버입니다.  
-MongoDB를 데이터베이스로 사용하며, Render를 통해 배포되었습니다.
+중고마켓(Product)과 자유게시판(Article), 댓글 기능을 Prisma + PostgreSQL로 구현한 REST API 서버입니다.
 
 ---
 
-## 🛠️ 기술 스택
+## 🛠 기술 스택
 
 - Node.js
 - Express
-- MongoDB
-- Mongoose
-- REST API
-- dotenv
+- Prisma ORM
+- PostgreSQL
 
 ---
 
-## 📦 주요 기능
+## 📁 주요 기능
 
-- 상품 생성 API (POST)
-- 상품 전체 조회 API (GET)
-  - 검색 기능 (name, description)
-  - 정렬 기능 (최신순)
-  - 페이지네이션 (offset / limit)
-- 상품 상세 조회 API (GET)
-- 상품 수정 API (PATCH)
-- 상품 삭제 API (DELETE)
+### 📦 Product
+
+- 상품 등록 / 조회 / 수정 / 삭제
+- 검색 / 정렬 / 페이지네이션
+
+### 📝 Article
+
+- 게시글 등록 / 조회 / 수정 / 삭제
+- 검색 / 정렬 / 페이지네이션
+
+### 💬 Comment
+
+- Article 댓글 CRUD
+- Product 댓글 CRUD
+- 페이지네이션 지원
 
 ---
 
-## 🧪 API 테스트
+## 🗄 데이터 구조
 
-REST Client를 사용하여 API 테스트를 진행했습니다.
+- Product ↔ ProductComment (1:N)
+- Article ↔ ArticleComment (1:N)
+- Cascade Delete 적용
+---
+## 🌱 Seed 데이터
 
-예시:
+- Product 50개
+- Article 50개
+- 랜덤 Comment 생성 (관계 기반)
 
-```http
-GET /products?sort=recent&keyword=노트북&offset=0&limit=10
+---
+
+## 🚀 실행 방법
+
+```bash
+npm install
+npx prisma migrate dev
+npx prisma db seed
+npm run dev
 ```
 
-## 🗄️ 데이터베이스
-- MongoDB Atlas를 사용하여 데이터 저장
-- Mongoose를 통해 스키마 기반으로 데이터 관리
+## 🔥 핵심 기능
 
-## 🌐 배포
-- Render를 이용하여 서버 배포
-- 배포 환경에서도 MongoDB 연결하여 정상 동작 확인
-
-## 📁 프로젝트 구조
-```
-controllers/
-models/
-app.js
-db.js
-seed.js
-```
+- Pagination (offset 방식)
+- Search (title / content / name)
+- Sort (latest / oldest)
