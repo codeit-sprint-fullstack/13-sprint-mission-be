@@ -14,7 +14,8 @@ model Product {
     description String?
     price       Int
 
-    tags Tag[]
+    tags     Tag[]
+    comments comment[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -22,8 +23,33 @@ model Product {
     @@map("products")
 }
 
-model Tag {
+model Article {
     id Int @id @default(autoincrement())
 
+    title    String
+    content  String
+    comments comment[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("articles")
+}
+
+model comment {
+    id      Int    @id @default(autoincrement())
+    content String
+
+    product   Product? @relation(fields: [productId], references: [id])
+    productId Int?
+    article   Article? @relation(fields: [articleId], references: [id])
+    articleId Int?
+}
+
+model Tag {
+    id       Int       @id @default(autoincrement())
+    name     String    @unique
     products Product[]
+
+    @@map("tags")
 }

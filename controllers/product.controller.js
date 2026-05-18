@@ -28,13 +28,46 @@ export const GetProduct = async (req, res) => {
   }
 };
 
+export const GetProductDetail = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const productData = await prisma.product.findMany({
+      where: { id: Number(id) },
+    });
+
+    if (productData.length <= 0)
+      return res.status(500).json({ message: "데이터가 없습니다." });
+    res.json(productData);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
 export const PostProduct = async (req, res) => {
   try {
-    const productData = await prisma.product.create({ data: req.body });
+    const { tags, ...productData } = req.body;
+    const tagArr = tags || [];
+
+    const newTag = tagArr.map((tag) => {
+      return {
+        where: { name: tag },
+        create: { name: tag },
+      };
+    });
+
+    const newData = await prisma.product.create({
+      data: {
+        ...productData,
+        tags: { connectOrCreate: newTag },
+      },
+      include: {
+        tags: true,
+      },
+    });
     if (!productData) {
       return res.status(500).json(error.message);
     }
-    res.status(201).json(productData);
+    res.status(201).json(newData);
   } catch (error) {
     res.status(400).json(error.message);
   }
