@@ -16,6 +16,14 @@ import {
   PatchArticle,
   PostArticle,
 } from "./controllers/article.controller.js";
+import {
+  DeleteComment,
+  GetArticleComment,
+  GetProductComment,
+  PatchComment,
+  PostArticleComment,
+  PostProductComment,
+} from "./controllers/comment.controller.js";
 
 //.env 파일 로드.
 dotenv.config();
@@ -45,6 +53,15 @@ app.patch("/articles/:id", PatchArticle);
 
 app.delete("/articles/:id", DeleteArticle);
 //#endregion
+
+app.get("/products/:id/comments", GetProductComment);
+app.get("/articles/:id/comments", GetArticleComment);
+
+app.post("/products/:id/comments", PostProductComment);
+app.post("/articles/:id/comments", PostArticleComment);
+
+app.patch("/comments/:id", PatchComment);
+app.delete("/comments/:id", DeleteComment);
 
 app.listen(process.env.PORT, () => {
   console.log("서버가 실행중 입니다.");
