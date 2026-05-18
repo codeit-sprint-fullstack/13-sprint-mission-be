@@ -1,0 +1,74 @@
+import prisma from "../lib/prisma.js";
+
+export const GetProduct = async (req, res) => {
+  try {
+    const { page, pageSize, orderBy, keyword } = req.query;
+    const take = Number(pageSize);
+    const skip = (Number(page) - 1) * take;
+    let where = {};
+    if (keyword) {
+      where.OR = [
+        {
+          name: { contains: search },
+        },
+        {
+          description: { contains: search },
+        },
+      ];
+    }
+
+    const totalCnt = await prisma.product.count({ where });
+    const productData = await prisma.product.findMany({ where, skip, take });
+
+    if (!productData)
+      return res.status(500).json({ message: "데이터를 가져오지 못했습니다." });
+    res.json({ totalCnt: totalCnt, list: productData });
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
+export const PostProduct = async (req, res) => {
+  try {
+    const productData = await prisma.product.create({ data: req.body });
+    if (!productData) {
+      return res.status(500).json(error.message);
+    }
+    res.status(201).json(productData);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
+export const PatchProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const productData = await prisma.product.update({
+      where: { id: Number(id) },
+      data: req.body,
+    });
+    if (!productData) {
+      throw new Error("해당하는 데이터가 없습니다.");
+    }
+
+    res.json(productData);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
+export const DeleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const productData = await prisma.product.delete({
+      where: { id: Number(id) },
+    });
+    if (!productData) {
+      throw new Error("해당하는 ID가 없습니다.");
+    }
+    res.status(204).send();
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
