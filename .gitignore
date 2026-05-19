@@ -9,3 +9,10 @@
 .env.development.local
 .env.test.local
 .env.production.local
+/generated/prisma
+
+# 프론트엔드(client) 폴더 제외
+client/
+
+# VS Code 설정 폴더 제외
+.vscode/

@@ -3,54 +3,22 @@
  */
 const express = require("express");
 const router = express.Router();
-const Product = require("../models/Product");
+const ENDPOINTS = require("../constants/endpoints");
+const productController = require("../controllers/productController");
+
 // [상품 등록 API - POST 요청 처리]
-router.post("/items", async (req, res) => {
-  try {
-    const { name, title, price, description } = req.body;
-
-    if (!name && !title) {
-      return res.status(400).json({ message: "상품명은 필수입니다." });
-    }
-
-    const newProduct = new Product({
-      title: title || name,
-      price: Number(price),
-      description: description,
-    });
-
-    const savedProduct = await newProduct.save();
-
-    res.status(201).json({
-      message: "상품이 성공적으로 등록되었습니다.",
-      id: savedProduct._id,
-    });
-  } catch (err) {
-    console.error("상품 등록 중 에러:", err);
-    res.status(500).json({ message: "서버 내부 오류로 등록에 실패했습니다." });
-  }
-});
+router.post(ENDPOINTS.ITEMS, productController.createProduct);
 
 // [상품 목록 조회 API - GET 요청 처리]
+router.get(ENDPOINTS.ITEMS, productController.getProducts);
 
-router.get("/items", async (req, res) => {
-  try {
-    const page = parseInt(req.query.page) || 1;
-    const pageSize = parseInt(req.query.pageSize) || 10;
-    const skip = (page - 1) * pageSize;
+// [상품 상세 조회 API]
+router.get(ENDPOINTS.ITEM_BY_ID, productController.getProductById);
 
-    const totalCount = await Product.countDocuments();
-    const products = await Product.find()
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(pageSize);
+// [상품 삭제 API]
+router.delete(ENDPOINTS.ITEM_BY_ID, productController.deleteProduct);
 
-    res.status(200).json({ list: products, totalCount });
-  } catch (err) {
-    // 에러의 상세 내용을 출력
-    console.error("❌ [GET /api/items] 오류 발생:", err);
-    res.status(500).json({ message: "목록을 불러오는데 실패했습니다." });
-  }
-});
+// [상품 좋아요 증가 API]
+router.post(ENDPOINTS.ITEM_FAVORITE, productController.favoriteProduct);
 
 module.exports = router;

@@ -1,0 +1,105 @@
+@baseUrl = http://localhost:3000/api
+
+############################################################
+# 자유게시판 (Articles) CRUD 테스트
+############################################################
+
+### 1. 게시글 등록 (Create)
+# @name createArticle
+POST {{baseUrl}}/articles
+Content-Type: application/json
+
+{
+  "title": "CRUD 테스트 제목",
+  "content": "API를 테스트하고 있습니다."
+}
+
+### 2. 게시글 목록 조회 (Read List)
+GET {{baseUrl}}/articles?page=1&pageSize=10&orderBy=recent
+
+### 3. 게시글 상세 조회 (Read Detail)
+GET {{baseUrl}}/articles/{{createArticle.response.body.id}}
+
+### 4. 게시글 수정 (Update)
+PATCH {{baseUrl}}/articles/{{createArticle.response.body.id}}
+Content-Type: application/json
+
+{
+  "title": "수정된 테스트 제목",
+  "content": "내용이 성공적으로 수정되었는지 확인합니다."
+}
+
+### 5. 게시글 삭제 (Delete)
+DELETE {{baseUrl}}/articles/{{createArticle.response.body.id}}
+
+
+############################################################
+# 중고마켓 (Products) CRUD 테스트
+############################################################
+
+### 1. 상품 등록 (Create)
+# @name createItem
+POST {{baseUrl}}/items
+Content-Type: application/json
+
+{
+  "title": "맥북 프로 M3",
+  "price": 2500000,
+  "description": "상태 아주 좋은 풀박스 제품입니다."
+}
+
+### 2. 상품 목록 조회 (Read List)
+GET {{baseUrl}}/items?page=1&pageSize=10&orderBy=favorite&keyword=맥북
+
+### 3. 상품 상세 조회 (Read Detail)
+GET {{baseUrl}}/items/{{createItem.response.body.id}}
+
+### 4. 상품 삭제 (Delete)
+DELETE {{baseUrl}}/items/{{createItem.response.body.id}}
+
+### 5. 삭제 확인 (Read Detail - 404 예상)
+GET {{baseUrl}}/items/{{createItem.response.body.id}}
+
+
+############################################################
+# 자유게시판 댓글 (Comments) CRUD 테스트
+############################################################
+
+### 1. 댓글 테스트용 게시글 임시 생성
+# @name createCommentArticle
+POST {{baseUrl}}/articles
+Content-Type: application/json
+
+{
+  "title": "댓글 테스트를 위한 임시 게시글",
+  "content": "이 게시글에 댓글 API를 테스트합니다."
+}
+
+### 2. 댓글 등록 (Create)
+# @name createComment
+POST {{baseUrl}}/articles/{{createCommentArticle.response.body.id}}/comments
+Content-Type: application/json
+
+{
+  "content": "이것은 첫 번째 테스트 댓글입니다!"
+}
+
+### 3. 게시글의 댓글 목록 조회 (Read List)
+GET {{baseUrl}}/articles/{{createCommentArticle.response.body.id}}/comments?limit=10
+
+### 4. 댓글 수정 (Update)
+PATCH {{baseUrl}}/articles/{{createCommentArticle.response.body.id}}/comments/{{createComment.response.body.id}}
+Content-Type: application/json
+
+{
+  "content": "내용이 성공적으로 수정된 댓글입니다."
+}
+
+### 5. 댓글 삭제 (Delete)
+DELETE {{baseUrl}}/articles/{{createCommentArticle.response.body.id}}/comments/{{createComment.response.body.id}}
+
+### 6. 삭제 확인을 위한 댓글 목록 재조회 (빈 배열 리턴 예상)
+GET {{baseUrl}}/articles/{{createCommentArticle.response.body.id}}/comments?limit=10
+
+### 7. 테스트용 임시 게시글 삭제 (정리)
+DELETE {{baseUrl}}/articles/{{createCommentArticle.response.body.id}}
