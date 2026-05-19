@@ -1,0 +1,138 @@
+@BASE_URL = https://one3-sprint-mission-be-1.onrender.com
+
+### ===== GET /articles =====
+
+### 정상 - 기본
+GET {{BASE_URL}}/articles
+
+### 정상 - 쿼리 전체
+GET {{BASE_URL}}/articles?keyword=테스트&page=1&limit=5&sort=recent
+
+### 에러 - page 문자열
+GET {{BASE_URL}}/articles?page=abc
+
+### 에러 - page 음수
+GET {{BASE_URL}}/articles?page=-1
+
+### 에러 - limit 소수
+GET {{BASE_URL}}/articles?limit=1.5
+
+### 에러 - sort 잘못된 값
+GET {{BASE_URL}}/articles?sort=popular
+
+
+### ===== GET /articles/:id =====
+
+### 정상
+GET {{BASE_URL}}/articles/1
+
+### 에러 - 문자열 id
+GET {{BASE_URL}}/articles/abc
+
+### 에러 - 음수 id
+GET {{BASE_URL}}/articles/-1
+
+### 에러 - 존재하지 않는 id
+GET {{BASE_URL}}/articles/99999
+
+
+### ===== POST /articles =====
+
+### 정상
+POST {{BASE_URL}}/articles
+Content-Type: application/json
+
+{
+  "title": "테스트 게시글",
+  "content": "테스트 내용입니다 열글자이상"
+}
+
+### 에러 - body 없음
+POST {{BASE_URL}}/articles
+
+### 에러 - title 누락
+POST {{BASE_URL}}/articles
+Content-Type: application/json
+
+{
+  "content": "테스트 내용입니다 열글자이상"
+}
+
+### 에러 - content 누락
+POST {{BASE_URL}}/articles
+Content-Type: application/json
+
+{
+  "title": "테스트 게시글"
+}
+
+
+### ===== PATCH /articles/:id =====
+
+### 정상 - 부분 수정
+PATCH {{BASE_URL}}/articles/1
+Content-Type: application/json
+
+{
+  "title": "수정된 게시글"
+}
+
+### 에러 - body 완전히 비움
+PATCH {{BASE_URL}}/articles/1
+Content-Type: application/json
+
+{}
+
+### 에러 - 존재하지 않는 id (P2025)
+PATCH {{BASE_URL}}/articles/99999
+Content-Type: application/json
+
+{
+  "title": "수정된 게시글"
+}
+
+
+### ===== DELETE /articles/:id =====
+
+### 정상
+DELETE {{BASE_URL}}/articles/21
+
+### 에러 - 존재하지 않는 id (P2025)
+DELETE {{BASE_URL}}/articles/99999
+
+### 에러 - 문자열 id
+DELETE {{BASE_URL}}/articles/abc
+
+### 에러 - title 10자 초과
+POST {{BASE_URL}}/articles
+Content-Type: application/json
+
+{
+  "title": "열한글자제목이다진짜로",
+  "content": "테스트 내용입니다 열글자이상"
+}
+
+### 에러 - content 10자 미만
+POST {{BASE_URL}}/articles
+Content-Type: application/json
+
+{
+  "title": "테스트게시글",
+  "content": "짧음"
+}
+
+### 에러 - title 10자 초과 (PATCH)
+PATCH {{BASE_URL}}/articles/1
+Content-Type: application/json
+
+{
+  "title": "열한글자제목이다진짜로"
+}
+
+### 에러 - content 10자 미만 (PATCH)
+PATCH {{BASE_URL}}/articles/1
+Content-Type: application/json
+
+{
+  "content": "짧음"
+}

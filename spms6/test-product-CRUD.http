@@ -1,0 +1,186 @@
+@BASE_URL = https://one3-sprint-mission-be-1.onrender.com 
+
+### ===== GET / =====
+
+### 정상 - 기본
+GET https://one3-sprint-mission-be-1.onrender.com/products
+
+### 정상 - 쿼리 전체
+GET https://one3-sprint-mission-be-1.onrender.com/products?keyword=테스트&page=1&limit=5&sort=recent
+
+### 에러 - page 문자열
+GET https://one3-sprint-mission-be-1.onrender.com/products?page=abc
+
+### 에러 - page 음수
+GET https://one3-sprint-mission-be-1.onrender.com/products?page=-1
+
+### 에러 - limit 소수
+GET https://one3-sprint-mission-be-1.onrender.com/products?limit=1.5
+
+### 에러 - sort 잘못된 값
+GET https://one3-sprint-mission-be-1.onrender.com/products?sort=popular
+
+
+### ===== GET /:id =====
+
+### 정상
+GET https://one3-sprint-mission-be-1.onrender.com/products/62
+
+### 에러 - 문자열 id
+GET https://one3-sprint-mission-be-1.onrender.com/products/abc
+
+### 에러 - 음수 id
+GET https://one3-sprint-mission-be-1.onrender.com/products/-1
+
+### 에러 - 존재하지 않는 id
+GET https://one3-sprint-mission-be-1.onrender.com/products/99999
+
+
+### ===== POST / =====
+
+### 정상 - tags 포함
+POST https://one3-sprint-mission-be-1.onrender.com/products
+Content-Type: application/json
+
+{
+  "name": "테스트상품",
+  "description": "테스트 설명입니다 열글자이상",
+  "price": 10000,
+  "tags": ["태그1", "태그2"]
+}
+
+### 정상 - tags 없음
+POST https://one3-sprint-mission-be-1.onrender.com/products
+Content-Type: application/json
+
+{
+  "name": "테스트상품",
+  "description": "테스트 설명입니다 열글자이상",
+  "price": 10000
+}
+
+### 에러 - body 없음
+POST https://one3-sprint-mission-be-1.onrender.com/products
+
+### 에러 - name 누락
+POST https://one3-sprint-mission-be-1.onrender.com/products
+Content-Type: application/json
+
+{
+  "description": "테스트 설명입니다 열글자이상",
+  "price": 10000
+}
+
+### 에러 - name 10자 초과
+POST https://one3-sprint-mission-be-1.onrender.com/products
+Content-Type: application/json
+
+{
+  "name": "열한글자상품명이다진짜로",
+  "description": "테스트 설명입니다 열글자이상",
+  "price": 10000
+}
+
+### 에러 - description 10자 미만
+POST https://one3-sprint-mission-be-1.onrender.com/products
+Content-Type: application/json
+
+{
+  "name": "테스트상품",
+  "description": "짧음",
+  "price": 10000
+}
+
+### 에러 - price 음수
+POST https://one3-sprint-mission-be-1.onrender.com/products
+Content-Type: application/json
+
+{
+  "name": "테스트상품",
+  "description": "테스트 설명입니다 열글자이상",
+  "price": -1000
+}
+
+### 에러 - price 소수
+POST https://one3-sprint-mission-be-1.onrender.com/products
+Content-Type: application/json
+
+{
+  "name": "테스트상품",
+  "description": "테스트 설명입니다 열글자이상",
+  "price": 10000.5
+}
+
+### 에러 - price 문자열 (coerce 불가)
+POST https://one3-sprint-mission-be-1.onrender.com/products
+Content-Type: application/json
+
+{
+  "name": "테스트상품",
+  "description": "테스트 설명입니다 열글자이상",
+  "price": "비쌈"
+}
+
+### 에러 - tag 5자 초과
+POST https://one3-sprint-mission-be-1.onrender.com/products
+Content-Type: application/json
+
+{
+  "name": "테스트상품",
+  "description": "테스트 설명입니다 열글자이상",
+  "price": 10000,
+  "tags": ["여섯글자태그임"]
+}
+
+
+### ===== PATCH /:id =====
+
+### 정상 - 부분 수정
+PATCH https://one3-sprint-mission-be-1.onrender.com/products/63
+Content-Type: application/json
+
+{
+  "price": 20000
+}
+
+### 정상 - tags 교체
+PATCH https://one3-sprint-mission-be-1.onrender.com/products/63
+Content-Type: application/json
+
+{
+  "tags": ["새태그"]
+}
+
+### 에러 - body 완전히 비움 (refine 걸림)
+PATCH https://one3-sprint-mission-be-1.onrender.com/products/1
+Content-Type: application/json
+
+{}
+
+### 에러 - 존재하지 않는 id (P2025)
+PATCH https://one3-sprint-mission-be-1.onrender.com/products/99999
+Content-Type: application/json
+
+{
+  "price": 20000
+}
+
+### 에러 - price 잘못된 타입
+PATCH https://one3-sprint-mission-be-1.onrender.com/products/1
+Content-Type: application/json
+
+{
+  "price": "비쌈"
+}
+
+
+### ===== DELETE /:id =====
+
+### 정상
+DELETE https://one3-sprint-mission-be-1.onrender.com/products/63
+
+### 에러 - 존재하지 않는 id (P2025)
+DELETE https://one3-sprint-mission-be-1.onrender.com/products/99999
+
+### 에러 - 문자열 id
+DELETE https://one3-sprint-mission-be-1.onrender.com/products/abc

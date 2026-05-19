@@ -1,0 +1,118 @@
+@BASE_URL = https://one3-sprint-mission-be-1.onrender.com
+@articleId = 1
+@commentId = 1
+
+### ===== GET /:id/comments =====
+
+### 정상 - 기본
+GET {{BASE_URL}}/articles/{{articleId}}/comments
+
+### 정상 - cursor, limit
+GET {{BASE_URL}}/articles/{{articleId}}/comments?cursor=61&limit=5
+
+### 정상 - sort recent
+GET {{BASE_URL}}/articles/{{articleId}}/comments?sort=recent
+
+### 정상 - sort oldest
+GET {{BASE_URL}}/articles/{{articleId}}/comments?sort=oldest
+
+### 에러 - cursor 문자열
+GET {{BASE_URL}}/articles/{{articleId}}/comments?cursor=abc
+
+### 에러 - cursor 음수
+GET {{BASE_URL}}/articles/{{articleId}}/comments?cursor=-1
+
+### 에러 - limit 소수
+GET {{BASE_URL}}/articles/{{articleId}}/comments?limit=1.5
+
+### 에러 - sort 잘못된 값
+GET {{BASE_URL}}/articles/{{articleId}}/comments?sort=popular
+
+### 에러 - 문자열 articleId
+GET {{BASE_URL}}/articles/abc/comments
+
+
+### ===== POST /:id/comments =====
+
+### 정상
+POST {{BASE_URL}}/articles/{{articleId}}/comments
+Content-Type: application/json
+
+{
+  "content": "테스트 댓글입니다"
+}
+
+### 에러 - body 없음
+POST {{BASE_URL}}/articles/{{articleId}}/comments
+
+### 에러 - content 누락
+POST {{BASE_URL}}/articles/{{articleId}}/comments
+Content-Type: application/json
+
+{}
+
+### 에러 - 존재하지 않는 articleId
+POST {{BASE_URL}}/articles/99999/comments
+Content-Type: application/json
+
+{
+  "content": "테스트 댓글입니다"
+}
+
+
+### ===== PATCH /:id/comments/:commentId =====
+
+### 정상
+PATCH {{BASE_URL}}/articles/{{articleId}}/comments/{{commentId}}
+Content-Type: application/json
+
+{
+  "content": "수정된 댓글입니다"
+}
+
+### 에러 - body 없음
+PATCH {{BASE_URL}}/articles/{{articleId}}/comments/{{commentId}}
+
+### 에러 - 존재하지 않는 commentId (P2025)
+PATCH {{BASE_URL}}/articles/{{articleId}}/comments/99999
+Content-Type: application/json
+
+{
+  "content": "수정된 댓글입니다"
+}
+
+### 에러 - 문자열 commentId
+PATCH {{BASE_URL}}/articles/{{articleId}}/comments/abc
+Content-Type: application/json
+
+{
+  "content": "수정된 댓글입니다"
+}
+
+
+### ===== DELETE /:id/comments/:commentId =====
+
+### 정상
+DELETE {{BASE_URL}}/articles/{{articleId}}/comments/{{commentId}}
+
+### 에러 - 존재하지 않는 commentId (P2025)
+DELETE {{BASE_URL}}/articles/{{articleId}}/comments/99999
+
+### 에러 - 문자열 commentId
+DELETE {{BASE_URL}}/articles/{{articleId}}/comments/abc
+
+### 에러 - content 빈 문자열
+POST {{BASE_URL}}/articles/{{articleId}}/comments
+Content-Type: application/json
+
+{
+  "content": ""
+}
+
+### 에러 - content 빈 문자열 (PATCH)
+PATCH {{BASE_URL}}/articles/{{articleId}}/comments/{{commentId}}
+Content-Type: application/json
+
+{
+  "content": ""
+}

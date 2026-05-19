@@ -11,8 +11,8 @@ POST {{baseUrl}}/products/
 Content-Type: application/json
 
 {
-  "name": "앱코무선마우스",
-  "description": "시드데이터50개보다더만들걸",
+  "name": "무선헤드셋",
+  "description": "검색기능테스트입니다입니다",
   "price": 90000
 }
 
