@@ -1,29 +1,62 @@
-###전체 상품 조회
-@baseUrl=https://sprint5-api.onrender.com
+@BASE_URL=http://localhost:3000
 
-GET {{baseUrl}}/products
+###
+GET {{BASE_URL}}/products?limit=5
 
-###상세 상품 조회
-GET {{baseUrl}}/products/69fc1654dd4742b17fb9d5c4
+###상품 댓글 조회
+GET {{BASE_URL}}/articles/87/comments
 
-### 상품 추가
-POST {{baseUrl}}/products
+###
+POST {{BASE_URL}}/products
+Content-Type:application/json
+
+{
+  "name":"a",
+  "price":2000000,
+  "description":"무의식적으로 내이름 넣음",
+  "tags":["사람"]
+}
+
+###article post
+POST {{BASE_URL}}/articles
 Content-Type: application/json
 
 {
-  "name":"뭘보노",
-  "description":"뭐요",
-  "price":100,
-  "tags":["아아","으아아"]
+  "title":"게시글 추가 테스트",
+  "content":"테스트 게시글 내용"
 }
 
-###상품업데이트
-PATCH {{baseUrl}}/products/69fc1654dd4742b17fb9d5c4
+###상품 댓글 추가
+POST {{BASE_URL}}/articles/143/comments
 Content-Type: application/json
 
 {
-  "name":"이름 업데이또"
+  "content":"상품에 댓글 추추추가"
 }
 
-###상품삭제
-DELETE {{baseUrl}}/products/69fc0f7fa06654e87cc546c4
+###
+
+PATCH {{BASE_URL}}/articles/87/comments/1
+Content-Type: application/json
+
+{
+  "content":"첫 게시글 댓글 수정"
+}
+
+###article patch
+PATCH {{BASE_URL}}/articles/1
+Content-Type: application/json
+
+{
+  "title":"첫번째 게시글 제목 수정",
+  "content":"첫번째 게시글 내용 수정"
+}
+
+###
+DELETE {{BASE_URL}}/products/42
+
+###delete article
+DELETE  {{BASE_URL}}/articles/2
+
+###댓글 삭제
+DELETE {{BASE_URL}}/articles/87/comments/1
