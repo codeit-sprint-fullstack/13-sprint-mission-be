@@ -1,2 +1,7 @@
 node_modules/
 .env
+<<<<<<< HEAD
+
+/generated/prisma
+=======
+>>>>>>> upstream/node-송현규
