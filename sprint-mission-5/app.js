@@ -6,6 +6,10 @@ import Product from "./models/Product.js";
 import { asyncHandler } from "./utils/asyncHandler.js";
 import { keywordFilter, productSort, getPagination } from "./utils/findBy.js";
 
+// feedback: 라우터로 관리하면 각 도메인 별로 관리하기가 쉬워짐
+// import productRouter from "./routes/product.js";
+// app.use("/product", productRouter);
+
 dotenv.config(); // .env 파일 로드 (맨 먼저!)
 
 const app = express();
