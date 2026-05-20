@@ -1,6 +1,7 @@
-@baceUrl = https://one3-sprint-mission-be.onrender.com
+@baceUrl = http://localhost:3000
+# 이전 배포 URL https://one3-sprint-mission-be.onrender.com
 
-### 상품 추가 1
+### 상품 등록
 POST {{baceUrl}}/products
 Content-Type: application/json
 
@@ -30,6 +31,55 @@ GET {{baceUrl}}/products?page=1&pageSize=5&orderBy=recent
 GET {{baceUrl}}/products?page=1&pageSize=5&orderBy=recent&keyword=튼
 
 ### 상품 삭제
-DELETE {{baceUrl}}/products/69fb358702d8966426e3f55d
-###
-GET {{baceUrl}}/products/69fbe75d84a38ced7745a87f
+DELETE {{baceUrl}}/products/32
+
+### 게시글 등록
+POST {{baceUrl}}/articles
+Content-Type: application/json
+
+{
+  "title": "맥북 16인치 16기가 1테라 정도 사양이면 얼마에 팔아야하나요?",
+  "content": "맥북 16인치 16기가 1테라 정도 사양이면 얼마에 팔아야하나요?",
+  "userId": 1
+}
+
+### 게시글 조회
+GET {{baceUrl}}/articles
+
+### 게시글 상세 페이지 조회
+GET {{baceUrl}}/articles/1
+
+### 게시글 수정
+PATCH {{baceUrl}}/articles/1
+Content-Type: application/json
+
+{
+  "title": "수정 맥북 16인치 16기가 1테라 정도 사양이면 얼마에 팔아야하나요?",
+  "content": "수정수정 맥북 16인치 16기가 1테라 정도 사양이면 얼마에 팔아야하나요?",
+  "userId": 1
+}
+
+### 게시글 댓글 등록
+POST {{baceUrl}}/articles/1/comments
+Content-Type: application/json
+
+{
+  "content": "혹시 사용기간이 어떻게 되실까요?",
+  "type": "article",
+  "articleId": 1,
+  "userId": 1
+}
+
+### 게시글 댓글 목록 조회
+GET {{baceUrl}}/articles/1/comments
+
+### 댓글 수정
+PATCH {{baceUrl}}/articles/1/comments/1
+Content-Type: application/json
+
+{
+  "content": "수정 혹시 사용기간이 어떻게 되실까요?",
+  "type": "article",
+  "articleId": 1,
+  "userId": 1
+}

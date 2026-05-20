@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 모델 정의
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  nickname String @unique
+  password String
+
+  products Product[]
+  articles Article[]
+  comments Comment[]
+
+  @@map("users")
+}
+
+model Product {
+  id            Int    @id @default(autoincrement())
+  name          String
+  description   String
+  price         Int
+  favoriteCount Int?   @default(0) @map("favorite_count")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tags Tag[]
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   Int
+  comments Comment[]
+
+  @@index([id])
+  @@index([name, description])
+  @@map("products")
+}
+
+model Article {
+  id            Int    @id @default(autoincrement())
+  title         String
+  content       String
+  favoriteCount Int?   @default(0) @map("favorite_count")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  comments Comment[]
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+
+  @@map("articles")
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+
+  @@map("tags")
+}
+
+model Comment {
+  id      Int    @id @default(autoincrement())
+  content String
+  type    String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  article   Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  userId    Int
+  productId Int?
+  articleId Int?
+
+  @@map("comments")
+}
