@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 모델 정의 table
+
+// user table
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  articles  Article[] // 유저가 쓴 게시글들 (1:N 의 관계)
+  comments  Comment[] // 유저가 쓴 댓글들 (1:N 의 관계)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("users")
+}
+
+// Article table
+model Article {
+  id        Int       @id @default(autoincrement())
+  title     String
+  content   String
+  comments  Comment[] // 게시글에 달린 댓글들 (1:N 의 관계)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade) // 
+  userId    Int
+
+  @@map("articles")
+}
+
+// Comment table
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  articles  Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId Int
+  users     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+
+  @@map("comments")
+}

@@ -6,7 +6,7 @@ dotenv.config();
 import express from "express";
 import connectDB from "./db.js";
 import Product from "./models/Product.js";
-import mongoose from "mongoose";
+// import mongoose from "mongoose";// db.js 로 연결 하였기때문에 직접 연결 필요 xxx
 import cors from "cors";
 
 // express 세팅 하기
@@ -18,12 +18,12 @@ app.use(express.json());
 connectDB();
 
 // 포트 번호 설정
-const PORT = 3000;
+const PORT = process.env.PORT || 3000; // 환경변수로 포트번호 설정하기
 
-// // 판다마켓 랜딩페이지 홈
-// app.get("/", (req, res) => {
-//   res.json("판다마켓 랜딩페이지 얍");
-// });
+// 판다마켓 랜딩페이지 홈
+app.get("/", (req, res) => {
+  res.json("판다마켓 랜딩페이지 얍");
+});
 
 //판다마켓 상품 목록 조회 API (검색, 정렬, 페이지네이션)
 app.get("/items", async (req, res) => {
@@ -54,7 +54,7 @@ app.get("/items", async (req, res) => {
 
     const totalCount = await Product.countDocuments(filter);
     res.json({ totalCount, items });
-    console.log("상품 목록 데이터 받기 얍!!!");
+    // console.log("상품 목록 데이터 받기 얍!!!"); // 개발모드에서 확인 후 제거 필수 모니터링 어려워짐
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -101,7 +101,7 @@ app.post("/items", async (req, res) => {
     await newItem.save();
 
     res.status(201).json(newItem);
-    console.log(req.body);
+    // console.log(req.body);// 디버그 완료후에는 제거 필수 민감한 데이터가 서버 로그에 남을 수 있음
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

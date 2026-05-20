@@ -1,15 +1,17 @@
+@baseUrl = https://one3-sprint-mission-be-xody.onrender.com
+
 ### 랜딩 페이지 
-GET  http://localhost:3000
+GET  {{baseUrl}}
 
 ### 판다마켓 상품 조회
-GET http://localhost:3000/items
+GET {{baseUrl}}/items
 
 ### 판다마켓 상품 상세 조회
-GET http://localhost:3000/items/
+GET {{baseUrl}}/items
 ### 테스트 완료 
 
 ### 판다마켓 상품 등록
-POST http://localhost:3000/items
+POST {{baseUrl}}/items
 Content-Type: application/json
 ### 테스트 완료
 # {
@@ -20,15 +22,15 @@ Content-Type: application/json
 # }
 
 ### 판다마켓 상품 수정
-PATCH http://localhost:3000/items/
+PATCH {{baseUrl}}/items/
 Content-Type: application/json
 ///테스트완료
 
 # {
 # "name": "imac",
-# "price": "5000000"
+# "price": 5000000
 # }
 
 ### 판다마켓 상품 삭제
-DELETE  http://localhost:3000/items/69fd7c64ccda368b4ad32702
+DELETE  {{baseUrl}}/items/69fd7c64ccda368b4ad32702
 ###테스트 완료
