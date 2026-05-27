@@ -1,0 +1,36 @@
+@localUrl = http://localhost:3000
+
+
+### 게시물 조회
+GET {{localUrl}}/articles
+
+
+### 게시물 목록 조회
+GET {{localUrl}}/articles?keyword=Porro 
+
+
+### 
+GET  {{localUrl}}/articles/3hUdYIywI-NWFIvaqL6oR
+
+
+### 게시글 삭제
+DELETE {{localUrl}}/articles/6Nzr5pWn_4hV-kpd10TMf
+
+### 게시글 등록
+POST {{localUrl}}/articles
+Content-Type: application/json
+
+{
+  "title": "한글로된 타이틀",
+  "content": "이것은 내용입니다만 무슨 문제라도?"
+}
+
+
+### 게시글 수정
+PATCH  {{localUrl}}/articles/3hUdYIywI-NWFIvaqL6oR
+Content-Type: application/json    
+
+{
+  "title": "축구공3",
+  "content": 100000,
+}

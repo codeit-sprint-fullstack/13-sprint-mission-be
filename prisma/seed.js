@@ -1,9 +1,9 @@
 // seed.js
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import Product from "./models/Products.js";
+import { PrismaClient } from "@prisma/client";
+import { nanoid } from "nanoid";
+import { faker } from "@faker-js/faker";
 
-dotenv.config();
+const prisma = new PrismaClient();
 
 const seedData = [
   {
@@ -140,18 +140,60 @@ const seedData = [
   },
 ];
 
+const articles = Array.from({ length: 20 }, () => {
+  const createdAt = faker.date.between({
+    from: "2024-01-01",
+    to: new Date(),
+  });
+
+  return {
+    id: faker.string.nanoid(),
+    title: faker.lorem.sentence({ min: 4, max: 10 }),
+    content: faker.lorem.paragraphs({ min: 2, max: 5 }, "\n\n"),
+    createdAt,
+    updatedAt: faker.date.between({ from: createdAt, to: new Date() }),
+  };
+});
+
+const comments = Array.from({ length: 20 }, () => {
+  const createdAt = faker.date.between({
+    from: "2024-01-01",
+    to: new Date(),
+  });
+  const randomArticle = faker.helpers.arrayElement(articles);
+
+  return {
+    id: faker.string.nanoid(),
+    content: faker.lorem.paragraphs({ min: 2, max: 5 }, "\n\n"),
+    articleId: randomArticle.id,
+    createdAt,
+    updatedAt: faker.date.between({ from: createdAt, to: new Date() }),
+  };
+});
+
 async function seed() {
-  await mongoose.connect(process.env.MONGO_DB_URI);
-  console.log("✅ DB 연결 성공");
+  await prisma.product.deleteMany();
+  await prisma.article.deleteMany();
+  console.log("🧹 기존 데이터 삭제 완료");
 
-  await Product.deleteMany({});
-  console.log("🗑️ 기존 데이터 삭제 완료");
+  await prisma.product.createMany({
+    data: seedData.map((item) => ({
+      id: nanoid(),
+      ...item,
+    })),
+  });
 
-  await Product.insertMany(seedData);
+  await prisma.article.createMany({ data: articles });
+  await prisma.articleComment.createMany({ data: comments });
+
   console.log(`🌱 시드 데이터 ${seedData.length}개 삽입 완료`);
-
-  await mongoose.disconnect();
-  console.log("👋 DB 연결 종료");
 }
 
-seed();
+seed()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

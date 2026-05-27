@@ -1,0 +1,40 @@
+@localUrl = http://localhost:3000
+
+
+###상품 조회
+GET {{localUrl}}/product?keyword=성갤
+
+
+### 상품 목록 조회
+GET {{localUrl}}/product
+
+
+### 
+GET  {{localUrl}}/product/ysHh31n_s9TTIOSwhwW2i
+
+
+### 상품 삭제
+DELETE {{localUrl}}/product/gACX8TyyT8VNRPGGXO0si
+
+### 상품 등록
+POST {{localUrl}}/product
+Content-Type: application/json
+
+{
+  "name": "축구공2",
+  "price": 30000,
+  "description": "이것만 사면 나도 축구왕?????",
+  "tags": ["4팀", "123", "스트라이커"]
+}
+
+
+### 상품 수정
+PATCH  {{localUrl}}/product/gACX8TyyT8VNRPGGXO0si
+Content-Type: application/json    
+
+{
+  "name": "축구공3",
+  "price": 100000,
+  "description": "콘푸라이 차차차찿차차ㅏ 타잔이요",
+  "tags": ["#4팀", "#화이팅", "#김대영"]
+}
