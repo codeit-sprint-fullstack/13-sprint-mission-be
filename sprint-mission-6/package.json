@@ -6,7 +6,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "build": "babel src -d lib",
+    "test": "jest"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
