@@ -12,7 +12,7 @@ import {
   updateComment,
   deleteComment,
   getComments,
-} from "../controllers/commentController.js";
+} from "../controllers/comment.controller.js";
 import { createProductSchema } from "../schemas/product.schema.js";
 import { createCommentSchema } from "../schemas/comment.schema.js";
 import { validate } from "../middlewares/validate.js";

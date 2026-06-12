@@ -22,4 +22,6 @@ export const createCommentSchema = z
     message: "articleId 또는 productId 중 하나는 반드시 필요합니다",
   });
 
-export const updateCommentSchema = createCommentSchema.partial();
+export const updateCommentSchema = z.object({
+  content: z.string().max(1000, "content는 1000자 이하여야 합니다"),
+});
