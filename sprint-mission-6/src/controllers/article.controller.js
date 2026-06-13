@@ -6,6 +6,13 @@ import { NotFoundError } from "../utils/errors.js";
 // [ ]  게시글 조회 API를 만들어 주세요.
 // [ ] `id`, `title`, `content`, `createdAt`를 조회합니다.
 export const getArticle = async (req, res) => {
+  console.log("getArticles 호출됨");
+
+  res.json({
+    success: true,
+    data: [],
+  });
+
   const { articleId } = req.params;
   const article = await prisma.article.findUnique({
     where: { id: parseInt(articleId) },
