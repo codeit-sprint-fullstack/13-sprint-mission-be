@@ -13,7 +13,9 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "sprint-mission-fe-git-next-sgwag6799s-projects.vercel.app", // 배포된 프론트엔드
+      "https://sprint-mission-fe-git-next-sgwag6799s-projects.vercel.app", // 배포된 프론트엔드
+      "http://localhost:3000",
+      "http://localhost:3001",
     ],
   }),
 );
