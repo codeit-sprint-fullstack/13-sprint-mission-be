@@ -5,7 +5,8 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("seeding start!");
 
-  await prisma.comment.deleteMany({});
+  await prisma.articleComment.deleteMany({});
+  await prisma.productComment.deleteMany({});
   await prisma.tag.deleteMany({});
   await prisma.product.deleteMany({});
   await prisma.article.deleteMany({});
@@ -91,7 +92,7 @@ async function main() {
     },
   });
 
-  await prisma.comment.createMany({
+  await prisma.articleComment.createMany({
     data: [
       { content: "가격 괜찮네요", articleId: a1.id },
       { content: "네고 가능할까요?", articleId: a1.id },
@@ -103,7 +104,7 @@ async function main() {
     ],
   });
 
-  await prisma.comment.createMany({
+  await prisma.productComment.createMany({
     data: [
       { content: "이거 상태 진짜 좋네요", productId: p1.id },
       { content: "사이즈 있나요?", productId: p1.id },

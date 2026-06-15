@@ -8,16 +8,20 @@ import {
   getArticles,
 } from "../controllers/article.controller.js";
 import {
-  createComment,
-  updateComment,
-  deleteComment,
-  getComments,
+  createArticleComment,
+  updateArticleComment,
+  deleteArticleComment,
+  getArticleComments,
 } from "../controllers/comment.controller.js";
 import { createArticleSchema } from "../schemas/article.schema.js";
-import { createCommentSchema } from "../schemas/comment.schema.js";
+import {
+  createArticleCommentSchema,
+  updateArticleCommentSchema,
+} from "../schemas/comment.schema.js";
 import { validate } from "../middlewares/validate.js";
 
 const router = Router();
+
 // 게시물 관련 API
 router.get("/", getArticles);
 router.get("/:articleId", getArticle);
@@ -26,17 +30,17 @@ router.patch("/:articleId", validate(createArticleSchema), updateArticle);
 router.delete("/:articleId", deleteArticle);
 
 // 게시물 댓글 관련 API
-router.get("/:articleId/comments", getComments);
+router.get("/:articleId/comments", getArticleComments);
 router.post(
   "/:articleId/comments",
-  validate(createCommentSchema),
-  createComment,
+  validate(createArticleCommentSchema),
+  createArticleComment,
 );
 router.patch(
   "/:articleId/comments/:commentId",
-  validate(createCommentSchema),
-  updateComment,
+  validate(updateArticleCommentSchema),
+  updateArticleComment,
 );
-router.delete("/:articleId/comments/:commentId", deleteComment);
+router.delete("/:articleId/comments/:commentId", deleteArticleComment);
 
 export default router;
