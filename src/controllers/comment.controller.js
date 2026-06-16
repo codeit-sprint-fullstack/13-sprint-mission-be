@@ -11,9 +11,10 @@ export const createProductComment = asyncHandler(async (req, res) => {
 });
 // 게시글 댓글 등록
 export const createArticleComment = asyncHandler(async (req, res) => {
-  const { content, type, userId } = req.body;
+  const { id } = req.params;
+  const { content, userId } = req.body;
   const comment = await prisma.comment.create({
-    data: { content, type: "article", userId },
+    data: { content, type: "article", userId, articleId: parseInt(id) },
   });
   res.status(201).json({ success: true, data: comment });
 });
@@ -41,9 +42,8 @@ export const getArticleComments = asyncHandler(async (req, res) => {
   const { id, type, userId } = req.params;
   const comments = await prisma.comment.findMany({
     where: {
-      id: parseInt(commentId),
+      articleId: parseInt(id),
       type: "article",
-      userId,
     },
     include: {
       user: { select: { nickname: true } },
@@ -57,9 +57,9 @@ export const getArticleComments = asyncHandler(async (req, res) => {
 
 // 댓글 수정
 export const updateComment = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { commentId } = req.params;
   const comment = await prisma.comment.update({
-    where: { id: parseInt(id) },
+    where: { id: parseInt(commentId) },
     data: req.body,
   });
   res.json({ success: true, data: comment });

@@ -63,7 +63,7 @@ export const getArticle = asyncHandler(async (req, res) => {
   if (!article) {
     return res.status(404).json({
       success: false,
-      message: err.message,
+      message: "게시글을 찾을 수 없습니다",
     });
   }
   res.status(200).json({
@@ -75,8 +75,14 @@ export const getArticle = asyncHandler(async (req, res) => {
 // 게시글 수정
 export const updateArticle = asyncHandler(async (req, res) => {
   const { id } = req.params;
+  const parsedId = parseInt(id);
+
+  if (isNaN(parsedId)) {
+    return res.status(400).json({ message: "id가 숫자가 아닙니다" });
+  }
+
   const article = await prisma.article.update({
-    where: { id: parseInt(id) },
+    where: { id: parsedId },
     select: { title: true, content: true },
     data: req.body,
   });
