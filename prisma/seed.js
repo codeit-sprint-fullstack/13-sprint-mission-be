@@ -3,6 +3,9 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
+  //seeding 시작
+  console.log("✅ seedinig 시작");
+
   // 기존 데이터 삭제
   await prisma.product.deleteMany();
   await prisma.user.deleteMany();

@@ -7,7 +7,7 @@ Content-Type: application/json
 {
     "title": "힐러 개수",
     "content": "힐러 개수 너무 적지 않아? 맨날 똑같은 캐릭터만 하게 됨",
-    "userId": 4
+    "userId": 1
 }
 
 POST {{baseUrl}}
@@ -16,7 +16,7 @@ Content-Type: application/json
 {
     "title": "오리사 궁극기 낙사",
     "content": "일리오스 우물에서 당했는데 분하지도 않고 그냥 신기하기만 했음",
-    "userId": 3
+    "userId": 2
 }
 
 ### GET Article 테스트

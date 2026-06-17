@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite" //원래 "postgresql"였다
   url      = env("DB_URL")
 }
 
