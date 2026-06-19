@@ -4,9 +4,10 @@ const prisma = new PrismaClient();
 
 async function main() {
   //seeding 시작
-  console.log("✅ seedinig 시작");
+  console.log("✅ seeding 시작");
 
   // 기존 데이터 삭제
+  await prisma.article.deleteMany();
   await prisma.product.deleteMany();
   await prisma.user.deleteMany();
 
@@ -26,6 +27,22 @@ async function main() {
       name: "user2",
       email: "user2@test.com",
       username: "user2",
+      password: "1234",
+    },
+  });
+  const user3 = await prisma.user.create({
+    data: {
+      name: "user3",
+      email: "user3@test.com",
+      username: "user3",
+      password: "1234",
+    },
+  });
+  const user4 = await prisma.user.create({
+    data: {
+      name: "user4",
+      email: "user4@test.com",
+      username: "user4",
       password: "1234",
     },
   });
@@ -168,7 +185,60 @@ async function main() {
       }),
     ),
   );
-  console.log(`${products.length}개 상품 생성`);
+  console.log(`📝 ${products.length}개 상품 생성`);
+
+  // article 생성
+  const articles = [
+    {
+      title: "오늘 점심 추천 받습니다. 일찍 일어났더니 배가 고프네요!!",
+      content:
+        "오늘 아침부터 배가 고파서 점심 메뉴를 고민하고 있습니다. 회사 근처에서 먹을 만한 음식이 있을까요? 너무 무겁지 않으면서도 든든하게 먹을 수 있는 메뉴 추천 부탁드립니다.",
+      favoriteCount: 24,
+      image: "https://picsum.photos/id/1011/600/400",
+      createdAt: new Date("2026-06-13T09:12:00"),
+      userId: user1.id,
+    },
+    {
+      title: "요즘 재미있는 게임 있나요?",
+      content:
+        "최근에 즐길 만한 게임을 찾고 있습니다. 장르 상관없이 재미있게 플레이한 게임이 있다면 추천해주세요. PC 게임도 좋고 콘솔 게임도 좋습니다.",
+      favoriteCount: 135,
+      image: "https://picsum.photos/id/1025/600/400",
+      createdAt: new Date("2026-06-12T18:42:00"),
+      userId: user2.id,
+    },
+    {
+      title: "출근길 지하철 사람이 너무 많네요",
+      content:
+        "출근길 지하철이 너무 혼잡해서 한 정거장 가는 것도 쉽지 않네요. 다들 출퇴근 시간에는 어떤 방법으로 시간을 보내시나요?",
+      favoriteCount: 57,
+      image: "https://picsum.photos/id/1043/600/400",
+      createdAt: new Date("2026-06-12T08:15:00"),
+      userId: user3.id,
+    },
+    {
+      title: "주말에 한강 다녀왔습니다",
+      content:
+        "주말에 한강에 다녀왔는데 날씨도 좋고 사람들도 많았습니다. 오랜만에 여유를 즐기고 왔는데 여러분은 주말에 주로 어떤 활동을 하시나요?",
+      favoriteCount: 312,
+      image: "https://picsum.photos/id/1056/600/400",
+      createdAt: new Date("2026-06-11T21:05:00"),
+      userId: user4.id,
+    },
+    {
+      title: "드디어 자격증 시험 합격했습니다",
+      content:
+        "몇 달 동안 준비했던 자격증 시험에 드디어 합격했습니다. 공부하는 동안 힘들었지만 결과가 좋아서 정말 기쁩니다. 비슷한 시험 준비 중인 분들도 응원합니다.",
+      favoriteCount: 1289,
+      image: "https://picsum.photos/id/1069/600/400",
+      createdAt: new Date("2026-06-11T14:22:00"),
+      userId: user1.id,
+    },
+  ];
+  await Promise.all(
+    articles.map((article) => prisma.article.create({ data: article })),
+  );
+  console.log(`📝 ${articles.length}개 글 생성`);
 }
 
 main()
