@@ -39,6 +39,14 @@ export const getArticle = asyncHandler(async (req, res) => {
   res.status(200).json({ totalCount, list: articles });
 });
 
+export const getBestArticles = asyncHandler(async (req, res) => {
+  const best3 = await prisma.article.findMany({
+    orderBy: { favoriteCount: "desc" },
+    take: 3,
+  });
+  res.status(200).json(best3);
+});
+
 export const getArticleDetail = asyncHandler(async (req, res) => {
   const { articleId } = req.params;
   const result = await prisma.article.findUnique({
