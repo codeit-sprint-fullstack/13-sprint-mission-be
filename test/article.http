@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:3000/articles
+@baseUrl = http://localhost:3002/articles
 
 ### POST Article 테스트
 POST {{baseUrl}}

@@ -26,6 +26,8 @@ app.use("/articles", articleRouter);
 app.use("/articles/:articleId/comments", commentRouter);
 app.use("/products", productRouter);
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log("서버 실행 중");
+const PORT = process.env.PORT || 300;
+
+app.listen(PORT, () => {
+  console.log(`포트번호 ${PORT}에서 서버 실행 중`);
 });
