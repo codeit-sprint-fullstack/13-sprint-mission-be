@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:3002/articles
+@baseUrl = http://localhost:3000/articles
 
 ### POST Article 테스트
 POST {{baseUrl}}
@@ -22,6 +22,9 @@ Content-Type: application/json
 ### GET Article 테스트
 GET {{baseUrl}}/17
 GET {{baseUrl}}/1
+
+### GET Best 3 Article 테스트
+GET {{baseUrl}}/best
 
 ### GET Article List 테스트
 GET {{baseUrl}}
