@@ -25,16 +25,28 @@ export const getArticle = asyncHandler(async (req, res) => {
   const queryOptions = {
     where,
     orderBy: { [orderField]: "desc" },
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
   };
   if (page && pageSize) {
     queryOptions.skip = (Number(page) - 1) * Number(pageSize);
     queryOptions.take = Number(pageSize);
   }
 
-  const [articles, totalCount] = await Promise.all([
+  const [data, totalCount] = await Promise.all([
     prisma.article.findMany(queryOptions),
     prisma.article.count({ where }),
   ]);
+
+  const articles = data.map(({ user, ...article }) => ({
+    author: user.name,
+    ...article,
+  }));
 
   res.status(200).json({ totalCount, list: articles });
 });
