@@ -40,7 +40,6 @@ import {
 
 const envFile = `.env.${process.env.NODE_ENV || "development"}`;
 dotenv.config({ path: envFile });
-console.log(envFile);
 
 const app = express();
 app.use(cors());
@@ -89,7 +88,7 @@ app.patch(
 // Delete
 app.delete("/articles/comments/:id", deleteArticleComment);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
   console.log(
     `[${process.env.NODE_ENV || "development"}] Server running on port ${PORT}`,

@@ -1,18 +1,18 @@
 @localUrl = http://localhost:3000
-
+@baseUrl = {{$processEnv process environment variable name}}
 
 
 ### 댓글 목록 조회
-GET {{localUrl}}/articles/6Nzr5pWn_4hV-kpd10TMf/comments
+GET {{localUrl}}/articles/y94tpXHgiR8U-IeTTvHeP/comments
 
 
 ### 댓글 삭제
-DELETE {{localUrl}}/articles/comments/XO0Vtg023-2k5g34BLR1p
+DELETE {{localUrl}}/articles/comments/kxr_PSTsxBYcrq6eh1imZ
 
 
 
 ### 댓글 등록
-POST {{localUrl}}/articles/6Nzr5pWn_4hV-kpd10TMf/comments
+POST {{localUrl}}/articles/y94tpXHgiR8U-IeTTvHeP/comments
 Content-Type: application/json
 
 {
@@ -20,9 +20,9 @@ Content-Type: application/json
 }
 
 ### 댓글 수정
-PATCH  {{localUrl}}/articles/comments/XO0Vtg023-2k5g34BLR1p
+PATCH  {{localUrl}}/articles/comments/rEfGGSmFX0yB1snUZvu08
 Content-Type: application/json    
 
 {
-  "content" : "수정수저수정수저수정수저수정수저"
+  "content" : "12312312412asedwdasfd12312123124"
 }

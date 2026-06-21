@@ -42,7 +42,7 @@ export const getArticleSchema = z.object({
     .optional()
     .default(10),
   orderBy: z
-    .enum(["recent", "oldest"], {
+    .enum(["recent", "oldest", "favorite"], {
       invalid_type_error: "정렬 방식이 올바르지 않습니다.",
     })
     .optional()
