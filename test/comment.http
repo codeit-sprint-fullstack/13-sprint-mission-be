@@ -5,7 +5,7 @@ POST {{baseUrl}}
 Content-Type: application/json
 
 {
-    "content": "개수 너무 적긴 해~",
+    "content": "라면 먹었나요",
     "userId": 3
 }
 
@@ -13,7 +13,7 @@ POST {{baseUrl}}
 Content-Type: application/json
 
 {
-    "content": "아나 키리 우양 일리 브리 미즈키 6개 돌려막기",
+    "content": "아 한강 간지 오래 됐는데 가고 싶다",
     "userId": 4
 }
 

@@ -43,15 +43,37 @@ export const getBestArticles = asyncHandler(async (req, res) => {
   const best3 = await prisma.article.findMany({
     orderBy: { favoriteCount: "desc" },
     take: 3,
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
-  res.status(200).json(best3);
+  const result = best3.map(({ user, ...article }) => ({
+    ...article,
+    author: user.name,
+  }));
+  res.status(200).json(result);
 });
 
 export const getArticleDetail = asyncHandler(async (req, res) => {
   const { articleId } = req.params;
-  const result = await prisma.article.findUnique({
+  const { user, ...article } = await prisma.article.findUnique({
     where: { id: Number(articleId) },
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
+  const comments = await prisma.comment.findMany({
+    where: { articleId: Number(articleId) },
+  });
+  const result = { ...article, author: user.name, comments };
   return res.status(200).json(result);
 });
 
