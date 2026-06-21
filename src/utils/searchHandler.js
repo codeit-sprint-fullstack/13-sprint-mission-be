@@ -6,6 +6,7 @@ export async function searchByKeyword({
   fields,
   keyword,
   order = "desc",
+  orderField = "createdAt",
   limit = 10,
   offset = 0,
 }) {
@@ -13,6 +14,7 @@ export async function searchByKeyword({
   const wsPattern = "\\s+";
   const like = `%${token}%`;
   const orderDir = order === "asc" ? Prisma.sql`ASC` : Prisma.sql`DESC`;
+  const orderFieldRef = Prisma.raw(`"${orderField}"`);
 
   const conditions = fields.map(
     (field) =>
@@ -29,7 +31,7 @@ export async function searchByKeyword({
     prisma.$queryRaw`
       SELECT * FROM ${tableRef}
       WHERE (${whereClause})
-      ORDER BY "createdAt" ${orderDir}
+      ORDER BY ${orderFieldRef} ${orderDir}
       LIMIT ${limit} OFFSET ${offset}
     `,
     prisma.$queryRaw`

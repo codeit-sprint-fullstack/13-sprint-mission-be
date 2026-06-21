@@ -1,4 +1,4 @@
-@localUrl = http://localhost:3000
+@localUrl = http://localhost:3002
 
 
 ### 게시물 조회
@@ -10,11 +10,11 @@ GET {{localUrl}}/articles?keyword=Porro
 
 
 ### 
-GET  {{localUrl}}/articles/CeNq1k6-5oARIy9VAB5y0
+GET  {{localUrl}}/articles/Zr8og4kNVjuVVY99RohMY
 
 
 ### 게시글 삭제
-DELETE {{localUrl}}/articles/8-6EP3BzYf6cc3gYIajgk
+DELETE {{localUrl}}/articles/h1dfzXJJLBvUmMLGZ2O7w
 
 ### 게시글 등록
 POST {{localUrl}}/articles
@@ -27,7 +27,7 @@ Content-Type: application/json
 
 
 ### 게시글 수정
-PATCH  {{localUrl}}/articles/CeNq1k6-5oARIy9VAB5y0
+PATCH  {{localUrl}}/articles/Zr8og4kNVjuVVY99RohMY
 Content-Type: application/json    
 
 {

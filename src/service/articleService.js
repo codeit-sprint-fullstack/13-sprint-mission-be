@@ -23,15 +23,20 @@ export const getArticleService = async ({
 }) => {
   const offset = (Number(page) - 1) * Number(pageSize);
   const limit = Number(pageSize);
-  const order =
-    orderBy === "oldest" ? { createdAt: "asc" } : { createdAt: "desc" };
+  const orderMap = {
+    oldest: { createdAt: "asc" },
+    favorite: { favorite: "desc" },
+    recent: { createdAt: "desc" },
+  };
+  const order = orderMap[orderBy] ?? orderMap.recent;
 
   if (keyword) {
     return await searchByKeyword({
       table: "article",
       fields: ["title", "content"],
       keyword,
-      order: orderBy === "oldest" ? "asc" : "desc", // ✅ 문자열로 전달
+      order: orderBy === "oldest" ? "asc" : "desc",
+      orderField: orderBy === "favorite" ? "favorite" : "createdAt",
       limit,
       offset,
     });
