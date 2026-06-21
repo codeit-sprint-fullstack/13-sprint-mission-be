@@ -15,7 +15,7 @@ export const createArticle = asyncHandler(async (req, res) => {
 
 // 게시물 목록 조회
 export const getArticle = asyncHandler(async (req, res) => {
-  const { page, pageSize, orderBy, keyword = "" } = req.query;
+  const { page = 1, pageSize = 10, orderBy = "recent", keyword = "" } = req.query;
 
   const { list, totalCount } = await getArticleService({
     page,
