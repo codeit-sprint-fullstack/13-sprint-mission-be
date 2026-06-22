@@ -28,10 +28,14 @@ GET {{baseUrl}}/best
 
 ### GET Article List 테스트
 GET {{baseUrl}}
-GET {{baseUrl}}?orderBy=recent
-GET {{baseUrl}}?orderBy=recent&pageSize=2&page=1
-GET {{baseUrl}}?orderBy=recent&pageSize=2&page=2
-GET {{baseUrl}}?orderBy=recent&pageSize=2&page=1&keyword=힐
+GET {{baseUrl}}?orderBy=createdAt
+GET {{baseUrl}}?orderBy=createdAt&pageSize=2&page=1
+GET {{baseUrl}}?orderBy=createdAt&pageSize=2&page=2
+GET {{baseUrl}}?orderBy=createdAt&pageSize=2&page=1&keyword=오늘
+GET {{baseUrl}}?orderBy=favoriteCount
+GET {{baseUrl}}?orderBy=favoriteCount&pageSize=2&page=1
+GET {{baseUrl}}?orderBy=favoriteCount&pageSize=2&page=1
+GET {{baseUrl}}?orderBy=favoriteCount&pageSize=2&page=1&keyword=오늘
 
 ### PATCH Article 테스트
 PATCH {{baseUrl}}/17

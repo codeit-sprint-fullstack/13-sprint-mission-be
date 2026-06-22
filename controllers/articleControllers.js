@@ -9,22 +9,21 @@ export const postArticle = asyncHandler(async (req, res) => {
 });
 
 export const getArticle = asyncHandler(async (req, res) => {
-  const { page, pageSize, orderBy = "recent", keyword } = req.query;
-  const orderField = "createdAt";
+  const { page, pageSize, orderBy = "createdAt", keyword } = req.query;
   const skip = (Number(page) - 1) * Number(pageSize);
   const where = {};
 
   if (keyword) {
     where.OR = [
-      { title: { contains: keyword, mode: "insensitive" } },
-      { content: { contains: keyword, mode: "insensitive" } },
+      { title: { contains: keyword } },
+      { content: { contains: keyword } },
     ];
   }
 
   //데이터 조회, page와 pageSize 둘 다 있을 때만 pagination 적용
   const queryOptions = {
     where,
-    orderBy: { [orderField]: "desc" },
+    orderBy: { [orderBy]: "desc" },
     include: {
       user: {
         select: {
