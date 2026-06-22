@@ -84,8 +84,20 @@ export const getArticleDetail = asyncHandler(async (req, res) => {
   });
   const comments = await prisma.comment.findMany({
     where: { articleId: Number(articleId) },
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
-  const result = { ...article, author: user.name, comments };
+  const mappedComments = comments.map(({ user, ...comment }) => ({
+    author: user.name,
+    ...comment,
+  }));
+
+  const result = { ...article, author: user.name, comments: mappedComments };
   return res.status(200).json(result);
 });
 
