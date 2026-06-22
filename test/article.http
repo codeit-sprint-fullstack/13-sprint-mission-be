@@ -37,29 +37,21 @@ GET {{baseUrl}}?orderBy=favoriteCount&pageSize=2&page=1
 GET {{baseUrl}}?orderBy=favoriteCount&pageSize=2&page=1
 GET {{baseUrl}}?orderBy=favoriteCount&pageSize=2&page=1&keyword=오늘
 
+
 ### PATCH Article 테스트
-PATCH {{baseUrl}}/17
+PATCH {{baseUrl}}/1
 Content-Type: application/json
 
 {
     "title": "일리오스 궁극기 낙사 당함",
-    "content": "일리오스 우물에서 우리 팀 셋이서 당했는데 분하지도 않고 그냥 신기해서 전챗으로 인정 날렸음",
-    "userId": 3
+    "content": "일리오스 우물에서 우리 팀 셋이서 당했는데 분하지도 않고 그냥 신기해서 전챗으로 인정 날렸음"
 }
 
-PATCH {{baseUrl}}/17
+PATCH {{baseUrl}}/1
 Content-Type: application/json
 
 {
     "title": "일리오스 오리사 궁극기 낙사"
-}
-
-PATCH {{baseUrl}}/17
-Content-Type: application/json
-
-{
-    "content": "일리오스 우물에서 우리 팀 셋이서 당했는데 분하지도 않고 그냥 신기했음. 울팀 라인은 그냥 인정 날림",
-    "userId": 4
 }
 
 ### DELETE Article 테스트

@@ -102,9 +102,15 @@ export const getArticleDetail = asyncHandler(async (req, res) => {
 
 export const patchArticle = asyncHandler(async (req, res) => {
   const { articleId } = req.params;
+  const userId = await prisma.article.findUnique({
+    where: { id: Number(articleId) },
+    select: {
+      userId: true,
+    },
+  });
   const result = await prisma.article.update({
     where: { id: Number(articleId) },
-    data: req.body,
+    data: { ...req.body, userId: userId.userId },
   });
   res.status(200).json(result);
 });
