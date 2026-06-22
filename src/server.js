@@ -10,7 +10,9 @@ const app = express();
 // 개발할 때 (모든 도메인 허용 - 개발 편의상)
 // app.use(cors());
 // 배포할 때 (특정 도메인만 허용 - 보안상 좋음)
-const corsOptions = { origin: process.env.CLIENT_URL };
+const corsOptions = {
+  origin: ["http://localhost:3000", process.env.CLIENT_URL],
+};
 app.use(cors(corsOptions));
 
 const PORT = process.env.PORT || 3000;
