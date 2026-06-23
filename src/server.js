@@ -12,6 +12,7 @@ const app = express();
 // 배포할 때 (특정 도메인만 허용 - 보안상 좋음)
 const corsOptions = {
   origin: ["http://localhost:3000", process.env.CLIENT_URL],
+  credentials: true,
 };
 app.use(cors(corsOptions));
 
