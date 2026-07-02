@@ -5,9 +5,9 @@ POST {{baseUrl}}
 Content-Type: application/json
 
 {
-    "title": "힐러 개수",
-    "content": "힐러 개수 너무 적지 않아? 맨날 똑같은 캐릭터만 하게 됨",
-    "userId": 1
+    "title": "잠자고 싶다",
+    "content": "나는야 잠꾸러기",
+    "userId": 3
 }
 
 POST {{baseUrl}}
@@ -20,11 +20,8 @@ Content-Type: application/json
 }
 
 ### GET Article 테스트
-GET {{baseUrl}}/17
 GET {{baseUrl}}/1
-
-### GET Best 3 Article 테스트
-GET {{baseUrl}}/best
+GET {{baseUrl}}/7
 
 ### GET Article List 테스트
 GET {{baseUrl}}
@@ -34,17 +31,18 @@ GET {{baseUrl}}?orderBy=createdAt&pageSize=2&page=2
 GET {{baseUrl}}?orderBy=createdAt&pageSize=2&page=1&keyword=오늘
 GET {{baseUrl}}?orderBy=favoriteCount
 GET {{baseUrl}}?orderBy=favoriteCount&pageSize=2&page=1
-GET {{baseUrl}}?orderBy=favoriteCount&pageSize=2&page=1
 GET {{baseUrl}}?orderBy=favoriteCount&pageSize=2&page=1&keyword=오늘
 
+### GET Best 3
+GET {{baseUrl}}?orderBy=favoriteCount&pageSize=3&page=1 
 
 ### PATCH Article 테스트
-PATCH {{baseUrl}}/1
+PATCH {{baseUrl}}/14
 Content-Type: application/json
 
 {
-    "title": "일리오스 궁극기 낙사 당함",
-    "content": "일리오스 우물에서 우리 팀 셋이서 당했는데 분하지도 않고 그냥 신기해서 전챗으로 인정 날렸음"
+    "title": "얼렁 끝내야하는데!!!!!",
+    "content": "잠오고 바쁘네 큰일이다"
 }
 
 PATCH {{baseUrl}}/1
@@ -55,4 +53,4 @@ Content-Type: application/json
 }
 
 ### DELETE Article 테스트
-DELETE {{baseUrl}}/8
+DELETE {{baseUrl}}/12
