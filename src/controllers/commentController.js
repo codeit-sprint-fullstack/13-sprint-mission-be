@@ -1,50 +1,47 @@
 import prisma from "../config/prisma.js";
 import { asyncHandler } from "./asyncHandler.js";
+import commentService from "../services/commentService.js";
 
 const postComment = asyncHandler(async (req, res) => {
   const { articleId } = req.params;
-  const result = await prisma.comment.create({
-    data: {
-      articleId: Number(articleId),
-      ...req.body,
-    },
-  });
-  return res.status(201).json(result);
+
+  const comment = await commentService.createComment(articleId, req.body);
+
+  return res.status(201).json(comment);
 });
 
 const getComment = asyncHandler(async (req, res) => {
   const { articleId } = req.params;
   const { cursor } = req.query;
-  const result = await prisma.comment.findMany({
-    take: 10,
-    cursor: cursor ? { id: Number(cursor) } : undefined,
-    skip: cursor ? 1 : 0,
-    orderBy: {
-      id: "asc",
-    },
-    where: { articleId: Number(articleId) },
-  });
-  return res.status(200).json(result);
+
+  const comments = await commentService.getComments(articleId, cursor);
+
+  return res.status(200).json(comments);
 });
 
 const patchComment = asyncHandler(async (req, res) => {
   const { articleId, commentId } = req.params;
-  const result = await prisma.comment.update({
-    where: { id: Number(commentId) },
-    data: {
-      articleId: Number(articleId),
-      ...req.body,
-    },
-  });
-  return res.status(200).json(result);
+
+  const comment = await commentService.updateComment(
+    articleId,
+    commentId,
+    req.body,
+  );
+
+  return res.status(200).json(comment);
 });
 
 const deleteComment = asyncHandler(async (req, res) => {
   const { commentId } = req.params;
-  const result = await prisma.comment.delete({
-    where: { id: Number(commentId) },
-  });
-  return res.status(200).json(result);
+
+  const comment = await commentService.deleteComment(commentId);
+
+  return res.status(200).json(comment);
 });
 
-export default { postComment, getComment, patchComment, deleteComment };
+export default {
+  postComment,
+  getComment,
+  patchComment,
+  deleteComment,
+};
