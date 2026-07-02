@@ -9,9 +9,9 @@ GET {{baseUrl}}?orderBy=favorite&pageSize=2&page=1
 
 GET {{baseUrl}}?orderBy=favorite&pageSize=2&page=2
 
-GET {{baseUrl}}?orderBy=favorite&pageSize=2&page=1&keyword=힐
+GET {{baseUrl}}?orderBy=favorite&pageSize=2&page=1&keyword=브
 
-GET {{baseUrl}}?orderBy=favorite&pageSize=2&page=1&keyword=고
+GET {{baseUrl}}?orderBy=favorite&pageSize=2&page=1&keyword=힐
 
 ### GET Product Detail 테스트
 GET {{baseUrl}}/1
@@ -53,7 +53,7 @@ Content-Type: application/json
 }
 
 ### PATCH Product 테스트
-PATCH {{baseUrl}}/18
+PATCH {{baseUrl}}/6
 Content-Type: application/json
 
 {
@@ -65,4 +65,4 @@ Content-Type: application/json
 }
 
 ### DELETE Product 테스트
-DELETE {{baseUrl}}/33
+DELETE {{baseUrl}}/16
