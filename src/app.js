@@ -22,9 +22,9 @@ app.use(
 app.get("/", (req, res) => {
   res.send("서버 잘 작동중!");
 });
+app.use("/products", productRouter);
 app.use("/articles", articleRouter);
 app.use("/articles/:articleId/comments", commentRouter);
-app.use("/products", productRouter);
 
 const PORT = process.env.PORT || 300;
 
