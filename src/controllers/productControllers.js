@@ -1,4 +1,4 @@
-import prisma from "../prisma/index.js";
+import prisma from "../config/prisma.js";
 import { asyncHandler } from "./asyncHandler.js";
 
 export const getProduct = asyncHandler(async (req, res) => {

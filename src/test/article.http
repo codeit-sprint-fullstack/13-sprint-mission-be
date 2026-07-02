@@ -5,8 +5,8 @@ POST {{baseUrl}}
 Content-Type: application/json
 
 {
-    "title": "힐러 개수",
-    "content": "힐러 개수 너무 적지 않아? 맨날 똑같은 캐릭터만 하게 됨",
+    "title": "본가 내려왔어요",
+    "content": "배불리 맛있는거 많이 먹는중 희희",
     "userId": 1
 }
 
@@ -20,8 +20,9 @@ Content-Type: application/json
 }
 
 ### GET Article 테스트
-GET {{baseUrl}}/17
 GET {{baseUrl}}/1
+GET {{baseUrl}}/2
+
 
 ### GET Best 3 Article 테스트
 GET {{baseUrl}}/best
@@ -34,9 +35,10 @@ GET {{baseUrl}}?orderBy=createdAt&pageSize=2&page=2
 GET {{baseUrl}}?orderBy=createdAt&pageSize=2&page=1&keyword=오늘
 GET {{baseUrl}}?orderBy=favoriteCount
 GET {{baseUrl}}?orderBy=favoriteCount&pageSize=2&page=1
-GET {{baseUrl}}?orderBy=favoriteCount&pageSize=2&page=1
 GET {{baseUrl}}?orderBy=favoriteCount&pageSize=2&page=1&keyword=오늘
 
+### GET Best 3
+GET {{baseUrl}}?orderBy=favoriteCount&pageSize=3&page=1 
 
 ### PATCH Article 테스트
 PATCH {{baseUrl}}/1
