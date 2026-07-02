@@ -6,7 +6,7 @@ const articleRouter = express.Router();
 articleRouter
   .route("/")
   .post(articleController.postArticle)
-  .get(articleController.getArticle);
+  .get(articleController.getArticles);
 
 articleRouter
   .route("/:articleId")

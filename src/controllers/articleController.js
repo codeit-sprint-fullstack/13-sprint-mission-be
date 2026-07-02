@@ -8,7 +8,7 @@ const postArticle = asyncHandler(async (req, res) => {
   res.status(201).json(article);
 });
 
-const getArticle = asyncHandler(async (req, res) => {
+const getArticles = asyncHandler(async (req, res) => {
   const { page, pageSize, orderBy = "createdAt", keyword } = req.query;
 
   const article = await articleService.getArticles(
@@ -47,7 +47,7 @@ const deleteArticle = asyncHandler(async (req, res) => {
 
 export default {
   postArticle,
-  getArticle,
+  getArticles,
   getArticleDetail,
   patchArticle,
   deleteArticle,

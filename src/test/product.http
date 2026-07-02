@@ -65,4 +65,4 @@ Content-Type: application/json
 }
 
 ### DELETE Product 테스트
-DELETE {{baseUrl}}/16
+DELETE {{baseUrl}}/17

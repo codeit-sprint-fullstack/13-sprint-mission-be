@@ -10,7 +10,7 @@ const postComment = asyncHandler(async (req, res) => {
   return res.status(201).json(comment);
 });
 
-const getComment = asyncHandler(async (req, res) => {
+const getComments = asyncHandler(async (req, res) => {
   const { articleId } = req.params;
   const { cursor } = req.query;
 
@@ -41,7 +41,7 @@ const deleteComment = asyncHandler(async (req, res) => {
 
 export default {
   postComment,
-  getComment,
+  getComments,
   patchComment,
   deleteComment,
 };

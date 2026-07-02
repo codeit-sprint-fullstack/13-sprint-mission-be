@@ -8,7 +8,7 @@ const commentRouter = express.Router({
 commentRouter
   .route("/")
   .post(commentController.postComment)
-  .get(commentController.getComment);
+  .get(commentController.getComments);
 commentRouter
   .route("/:commentId")
   .patch(commentController.patchComment)
