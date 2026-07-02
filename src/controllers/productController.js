@@ -1,7 +1,7 @@
 import prisma from "../config/prisma.js";
 import { asyncHandler } from "./asyncHandler.js";
 
-export const getProduct = asyncHandler(async (req, res) => {
+const getProduct = asyncHandler(async (req, res) => {
   const { page, pageSize, orderBy = "recent", keyword } = req.query;
   const orderField = orderBy === "favorite" ? "favoriteCount" : "createdAt";
   const skip = (Number(page) - 1) * Number(pageSize);
@@ -33,7 +33,7 @@ export const getProduct = asyncHandler(async (req, res) => {
   res.status(200).json({ totalCount, list: products });
 });
 
-export const postProduct = asyncHandler(async (req, res) => {
+const postProduct = asyncHandler(async (req, res) => {
   const { tags = [], images = [], ...rest } = req.body;
 
   const result = await prisma.product.create({
@@ -60,7 +60,7 @@ export const postProduct = asyncHandler(async (req, res) => {
   res.status(201).json(result);
 });
 
-export const patchProduct = asyncHandler(async (req, res) => {
+const patchProduct = asyncHandler(async (req, res) => {
   const { productId } = req.params;
   const { tags = [], images = [], ...rest } = req.body;
 
@@ -84,7 +84,7 @@ export const patchProduct = asyncHandler(async (req, res) => {
   res.status(200).json(result);
 });
 
-export const deleteProduct = asyncHandler(async (req, res) => {
+const deleteProduct = asyncHandler(async (req, res) => {
   const { productId } = req.params;
   const result = await prisma.product.delete({
     where: { id: Number(productId) },
@@ -92,10 +92,18 @@ export const deleteProduct = asyncHandler(async (req, res) => {
   res.status(200).json(result);
 });
 
-export const getProductDetail = asyncHandler(async (req, res) => {
+const getProductDetail = asyncHandler(async (req, res) => {
   const { productId } = req.params;
   const result = await prisma.product.findUnique({
     where: { id: Number(productId) },
   });
   res.status(200).json(result);
 });
+
+export default {
+  getProduct,
+  postProduct,
+  patchProduct,
+  deleteProduct,
+  getProductDetail,
+};

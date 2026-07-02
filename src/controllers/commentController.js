@@ -1,7 +1,7 @@
 import prisma from "../config/prisma.js";
 import { asyncHandler } from "./asyncHandler.js";
 
-export const postComment = asyncHandler(async (req, res) => {
+const postComment = asyncHandler(async (req, res) => {
   const { articleId } = req.params;
   const result = await prisma.comment.create({
     data: {
@@ -12,7 +12,7 @@ export const postComment = asyncHandler(async (req, res) => {
   return res.status(201).json(result);
 });
 
-export const getComment = asyncHandler(async (req, res) => {
+const getComment = asyncHandler(async (req, res) => {
   const { articleId } = req.params;
   const { cursor } = req.query;
   const result = await prisma.comment.findMany({
@@ -27,7 +27,7 @@ export const getComment = asyncHandler(async (req, res) => {
   return res.status(200).json(result);
 });
 
-export const patchComment = asyncHandler(async (req, res) => {
+const patchComment = asyncHandler(async (req, res) => {
   const { articleId, commentId } = req.params;
   const result = await prisma.comment.update({
     where: { id: Number(commentId) },
@@ -39,10 +39,12 @@ export const patchComment = asyncHandler(async (req, res) => {
   return res.status(200).json(result);
 });
 
-export const deleteComment = asyncHandler(async (req, res) => {
+const deleteComment = asyncHandler(async (req, res) => {
   const { commentId } = req.params;
   const result = await prisma.comment.delete({
     where: { id: Number(commentId) },
   });
   return res.status(200).json(result);
 });
+
+export default { postComment, getComment, patchComment, deleteComment };

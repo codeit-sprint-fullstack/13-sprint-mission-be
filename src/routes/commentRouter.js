@@ -1,17 +1,12 @@
 import express from "express";
-import {
-  postComment,
-  getComment,
-  patchComment,
-  deleteComment,
-} from "../controllers/index.js";
+import commentController from "../controllers/commentController.js";
 
 const commentRouter = express.Router({
   mergeParams: true,
 });
-commentRouter.post("/", postComment);
-commentRouter.get("/", getComment);
-commentRouter.patch("/:commentId", patchComment);
-commentRouter.delete("/:commentId", deleteComment);
+commentRouter.post("/", commentController.postComment);
+commentRouter.get("/", commentController.getComment);
+commentRouter.patch("/:commentId", commentController.patchComment);
+commentRouter.delete("/:commentId", commentController.deleteComment);
 
 export default commentRouter;
