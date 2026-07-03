@@ -2,8 +2,8 @@ const { createId, prisma } = require("../repositories/prisma.repository");
 const articlesRepository = require("../repositories/article.repository");
 const commentsRepository = require("../repositories/comment.repository");
 const { HttpError } = require("../middlewares/error");
-const { articleResponse, commentResponse } = require("../utils/presenters");
-const { paginate } = require("../utils/listUtils");
+const { articleResponse, commentResponse } = require("../utils/presenter.util");
+const { paginate } = require("../utils/list.util");
 
 function normalizeImages(body) {
   if (Array.isArray(body.imageUrls)) return body.imageUrls.slice(0, 3);

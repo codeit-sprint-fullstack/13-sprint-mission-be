@@ -8,7 +8,7 @@ const {
   signAccessToken,
   signRefreshToken,
 } = require("../middlewares/auth");
-const { publicUser } = require("../utils/presenters");
+const { publicUser } = require("../utils/presenter.util");
 
 function authResponse(user) {
   return {

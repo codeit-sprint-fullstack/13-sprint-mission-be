@@ -3,8 +3,8 @@ const articlesRepository = require("../repositories/article.repository");
 const commentsRepository = require("../repositories/comment.repository");
 const productsRepository = require("../repositories/product.repository");
 const { HttpError } = require("../middlewares/error");
-const { commentResponse } = require("../utils/presenters");
-const { paginate } = require("../utils/listUtils");
+const { commentResponse } = require("../utils/presenter.util");
+const { paginate } = require("../utils/list.util");
 
 async function assertTarget(targetType, targetId) {
   const exists =
