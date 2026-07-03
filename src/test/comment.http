@@ -17,7 +17,7 @@ Content-Type: application/json
     "userId": 3
 }
 
-POST {{baseUrl}}
+POST http://localhost:3000/articles/1000/comments
 Content-Type: application/json
 
 {
@@ -25,24 +25,18 @@ Content-Type: application/json
     "userId": 4
 }
 
-POST {{baseUrl}}
+POST http://localhost:3000/articles/1/comments
 Content-Type: application/json
 
 {
-    "content": "저격수 옴닉 힐러 나왔으면 좋겠다",
+    "content": "",
     "userId": 4
 }
 
-POST {{baseUrl}}
-Content-Type: application/json
-
-{
-    "content": "ㅇㅈ",
-    "userId": 3
-}
 
 ### GET Comment 테스트
 GET {{baseUrl}}
+GET http://localhost:3000/articles/10000/comments
 GET {{baseUrl}}?cursor=1
 
 ### PATCH Article 테스트
@@ -53,6 +47,32 @@ Content-Type: application/json
     "content": "오버워치지~!!!!!!!!!!!"
 }
 
+PATCH {{baseUrl}}/4000
+Content-Type: application/json
+
+{
+    "content": "오버워치지~!!!!!!!!!!!"
+}
+
+PATCH http://localhost:3000/articles/10/comments/4
+Content-Type: application/json
+
+{
+    "content": "오버워치지~!!!!!!!!!!!"
+}
+
+PATCH http://localhost:3000/articles/1000/comments/4
+Content-Type: application/json
+
+{
+    "content": "오버워치지~!!!!!!!!!!!"
+}
 
 ### DELETE Comment 테스트
 DELETE {{baseUrl}}/12
+
+DELETE {{baseUrl}}/1200
+
+DELETE http://localhost:3000/articles/3/comments/5
+
+DELETE http://localhost:3000/articles/1000/comments/4

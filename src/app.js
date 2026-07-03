@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { articleRouter, productRouter, commentRouter } from "./routes/index.js";
+import errorHandler from "./middleware/errorHandler.js";
 import { setServers } from "node:dns/promises";
 
 setServers(["1.1.1.1", "8.8.8.8"]);
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 app.use("/products", productRouter);
 app.use("/articles", articleRouter);
 app.use("/articles/:articleId/comments", commentRouter);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 300;
 
