@@ -1,15 +1,10 @@
 const express = require("express");
+const userController = require("../controllers/user.controller");
 const asyncHandler = require("../middlewares/asyncHandler");
 const { requireAuth } = require("../middlewares/auth");
-const userService = require("../services/userService");
 
 const router = express.Router();
 
-router.route("/me").get(
-  requireAuth,
-  asyncHandler(async (req, res) => {
-    res.json(userService.me(req.user));
-  }),
-);
+router.route("/me").get(requireAuth, asyncHandler(userController.me));
 
 module.exports = router;
