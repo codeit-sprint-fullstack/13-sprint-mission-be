@@ -25,6 +25,10 @@ async function createUser(userData) {
     );
   if (password !== passwordConfirmation)
     throw createError(400, "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+  const existedEmailUser = await authRepository.findByEmail(email);
+  const existedUsernameUser = await authRepository.findByUsername(username);
+  if (existedEmailUser || existedUsernameUser)
+    throw createError(409, "이미 존재하는 유저입니다.");
 
   const hashedPassword = await hashPassword(password);
   const createdUser = await authRepository.create({
@@ -35,9 +39,7 @@ async function createUser(userData) {
   });
   const filteredUser = filterSensitiveUserData(createdUser);
 
-  const accessToken = createToken(filteredUser, "access");
-  const refreshToken = createToken(filteredUser, "refresh");
-  return { ...filteredUser, accessToken, refreshToken };
+  return filteredUser;
 }
 
 async function signIn(userData) {
@@ -54,9 +56,7 @@ async function signIn(userData) {
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) throw createError(401, "비밀번호가 일치하지 않습니다");
 
-  const accessToken = createToken(filteredUser, "access");
-  const refreshToken = createToken(filteredUser, "refresh");
-  return { ...filteredUser, accessToken, refreshToken };
+  return filteredUser;
 }
 
-export default { createUser, signIn };
+export default { createToken, createUser, signIn };
