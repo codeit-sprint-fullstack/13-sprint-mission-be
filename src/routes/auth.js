@@ -16,8 +16,10 @@ router.route("/signIn").post(
   }),
 );
 
-router.route("/refresh").post((req, res) => {
-  res.json(authService.refresh(req.body.refrehsToken));
-});
+router.route("/refresh").post(
+  asyncHandler(async (req, res) => {
+    res.json(await authService.refresh(req.body.refreshToken));
+  }),
+);
 
 module.exports = router;
