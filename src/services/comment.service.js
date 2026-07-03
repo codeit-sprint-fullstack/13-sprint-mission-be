@@ -1,10 +1,10 @@
-const { createId } = require("../repositories/database");
-const articlesRepository = require("../repositories/articlesRepository");
-const commentsRepository = require("../repositories/commentsRepository");
-const productsRepository = require("../repositories/productsRepository");
+const { createId } = require("../repositories/prisma.repository");
+const articlesRepository = require("../repositories/article.repository");
+const commentsRepository = require("../repositories/comment.repository");
+const productsRepository = require("../repositories/product.repository");
 const { HttpError } = require("../middlewares/error");
-const { commentResponse } = require("./presenters");
-const { paginate } = require("./listUtils");
+const { commentResponse } = require("../utils/presenters");
+const { paginate } = require("../utils/listUtils");
 
 async function assertTarget(targetType, targetId) {
   const exists =

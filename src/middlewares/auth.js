@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const { jwtSecret } = require("../config/env");
-const usersRepository = require("../repositories/usersRepository");
+const { jwtSecret } = require("../utils/env");
+const usersRepository = require("../repositories/user.repository");
 const { HttpError } = require("./error");
 
 function signAccessToken(user) {

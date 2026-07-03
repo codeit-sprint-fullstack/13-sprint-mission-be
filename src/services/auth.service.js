@@ -1,15 +1,14 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { createId } = require("../repositories/database");
-const usersRepository = require("../repositories/usersRepository");
+const { createId } = require("../repositories/prisma.repository");
+const usersRepository = require("../repositories/user.repository");
 const { HttpError } = require("../middlewares/error");
 const {
   jwtSecret,
   signAccessToken,
   signRefreshToken,
 } = require("../middlewares/auth");
-const { publicUser } = require("./presenters");
-const { match } = require("path-to-regexp");
+const { publicUser } = require("../utils/presenters");
 
 function authResponse(user) {
   return {
