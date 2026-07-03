@@ -2,15 +2,15 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const swaggerUi = require("swagger-ui-express");
-const { port, uploadDir } = require("./config/env");
-const swaggerSpec = require("./config/swagger");
+const { port, uploadDir } = require("./utils/env.util");
+const swaggerSpec = require("./utils/swagger.util");
 const { errorHandler, notFoundHandler } = require("./middlewares/error");
-const authRoutes = require("./routes/auth");
-const userRoutes = require("./routes/users");
-const uploadRoutes = require("./routes/uploads");
-const productRoutes = require("./routes/products");
-const articleRoutes = require("./routes/articles");
-const commentRoutes = require("./routes/comments");
+const authRoutes = require("./routes/auth.route");
+const userRoutes = require("./routes/user.route");
+const uploadRoutes = require("./routes/upload.route");
+const productRoutes = require("./routes/product.route");
+const articleRoutes = require("./routes/article.route");
+const commentRoutes = require("./routes/comment.route");
 
 const app = express();
 
