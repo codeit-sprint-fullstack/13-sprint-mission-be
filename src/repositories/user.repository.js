@@ -1,4 +1,4 @@
-const { prisma } = require("./database");
+const { prisma } = require("./prisma.repository");
 
 function findById(id) {
   return prisma.user.findUnique({ where: { id } });

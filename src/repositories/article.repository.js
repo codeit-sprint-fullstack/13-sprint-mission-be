@@ -1,4 +1,4 @@
-const { prisma } = require("./database");
+const { prisma } = require("./prisma.repository");
 
 const include = {
   owner: true,
@@ -9,13 +9,13 @@ function findAll({ keyword, orderBy } = {}) {
   const where = keyword
     ? {
         OR: [
-          { name: { contains: keyword, mode: "insensitive" } },
-          { description: { contains: keyword, mode: "insensitive" } },
+          { title: { contains: keyword, mode: "insensitive" } },
+          { content: { contains: keyword, mode: "insensitive" } },
         ],
       }
     : {};
 
-  return prisma.product.findMany({
+  return prisma.article.findMany({
     where,
     include,
     orderBy:
@@ -26,19 +26,19 @@ function findAll({ keyword, orderBy } = {}) {
 }
 
 function findById(id) {
-  return prisma.product.findUnique({ where: { id }, include });
+  return prisma.article.findUnique({ where: { id }, include });
 }
 
 function create(data) {
-  return prisma.product.create({ data, include });
+  return prisma.article.create({ data, include });
 }
 
 function update(id, data) {
-  return prisma.product.update({ where: { id }, data, include });
+  return prisma.article.update({ where: { id }, data, include });
 }
 
 function remove(id) {
-  return prisma.product.delete({ where: { id } });
+  return prisma.article.delete({ where: { id } });
 }
 
 module.exports = { create, findAll, findById, remove, update };

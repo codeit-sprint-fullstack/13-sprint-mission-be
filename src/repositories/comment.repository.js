@@ -1,4 +1,4 @@
-const { prisma } = require("./database");
+const { prisma } = require("./prisma.repository");
 
 const include = { owner: true };
 
