@@ -1,7 +1,7 @@
-const jwt = require("jsonwebtoken");
-const { jwtSecret } = require("../utils/env");
-const usersRepository = require("../repositories/user.repository");
-const { HttpError } = require("./error");
+import jwt from "jsonwebtoken";
+import * as usersRepository from "../repositories/user.repository.js";
+import { jwtSecret } from "../utils/env.util.js";
+import { HttpError } from "./error.js";
 
 function signAccessToken(user) {
   return jwt.sign({ sub: user.id }, jwtSecret, { expiresIn: "30m" });
@@ -57,7 +57,7 @@ function optionalAuth(req, res, next) {
   }
 }
 
-module.exports = {
+export {
   jwtSecret,
   optionalAuth,
   requireAuth,

@@ -1,7 +1,7 @@
-const uploadService = require("../services/upload.service");
+import * as uploadService from "../services/upload.service.js";
 
 function uploadImages(req, res) {
   res.status(201).json({ imageUrls: uploadService.imageUrlsFromRequest(req) });
 }
 
-module.exports = { uploadImages };
+export { uploadImages };

@@ -1,4 +1,4 @@
-const { prisma } = require("./prisma.repository");
+import { prisma } from "./prisma.repository.js";
 
 function findById(id) {
   return prisma.user.findUnique({ where: { id } });
@@ -16,4 +16,4 @@ function update(id, data) {
   return prisma.user.update({ where: { id }, data });
 }
 
-module.exports = { create, findByEmail, findById, update };
+export { create, findByEmail, findById, update };

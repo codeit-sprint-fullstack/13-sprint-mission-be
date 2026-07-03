@@ -1,4 +1,4 @@
-const { prisma } = require("./prisma.repository");
+import { prisma } from "./prisma.repository.js";
 
 const include = {
   owner: true,
@@ -41,4 +41,4 @@ function remove(id) {
   return prisma.article.delete({ where: { id } });
 }
 
-module.exports = { create, findAll, findById, remove, update };
+export { create, findAll, findById, remove, update };

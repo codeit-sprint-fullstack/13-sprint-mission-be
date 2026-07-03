@@ -1,4 +1,4 @@
-const commentService = require("../services/comment.service");
+import * as commentService from "../services/comment.service.js";
 
 async function update(req, res) {
   res.json(
@@ -14,4 +14,4 @@ async function remove(req, res) {
   res.json(await commentService.remove(req.params.commentId, req.user));
 }
 
-module.exports = { remove, update };
+export { remove, update };

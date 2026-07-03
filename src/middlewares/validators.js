@@ -1,4 +1,4 @@
-const { HttpError } = require("./error");
+import { HttpError } from "./error.js";
 
 function requireString(value, field, label) {
   if (typeof value !== "string" || !value.trim()) {
@@ -56,4 +56,4 @@ function validateComment(req, res, next) {
   }
 }
 
-module.exports = { validateArticle, validateComment, validateProduct };
+export { validateArticle, validateComment, validateProduct };

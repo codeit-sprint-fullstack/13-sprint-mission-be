@@ -1,5 +1,5 @@
-const articleService = require("../services/article.service");
-const commentService = require("../services/comment.service");
+import * as articleService from "../services/article.service.js";
+import * as commentService from "../services/comment.service.js";
 
 async function best(req, res) {
   res.json(await articleService.best(req.query, req.user?.id));
@@ -60,7 +60,7 @@ async function createComment(req, res) {
     );
 }
 
-module.exports = {
+export {
   best,
   create,
   createComment,

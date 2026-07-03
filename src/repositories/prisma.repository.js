@@ -1,5 +1,5 @@
-require("../utils/env");
-const { PrismaClient } = require("@prisma/client");
+import "../utils/env.util.js";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -11,4 +11,4 @@ function createId(prefix) {
   return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
-module.exports = { createId, now, prisma };
+export { createId, now, prisma };
