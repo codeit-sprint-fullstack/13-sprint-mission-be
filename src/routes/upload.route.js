@@ -1,7 +1,7 @@
-const express = require("express");
-const uploadController = require("../controllers/upload.controller");
-const { imageUpload } = require("../utils/upload.util");
-const { requireAuth } = require("../middlewares/auth");
+import express from "express";
+import * as uploadController from "../controllers/upload.controller.js";
+import { imageUpload } from "../utils/upload.util.js";
+import { requireAuth } from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -13,4 +13,4 @@ router
     uploadController.uploadImages,
   );
 
-module.exports = router;
+export default router;

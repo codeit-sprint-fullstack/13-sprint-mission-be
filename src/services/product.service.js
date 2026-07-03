@@ -1,9 +1,9 @@
-const { createId, prisma } = require("../repositories/prisma.repository");
-const productsRepository = require("../repositories/product.repository");
-const commentsRepository = require("../repositories/comment.repository");
-const { HttpError } = require("../middlewares/error");
-const { commentResponse, productResponse } = require("../utils/presenter.util");
-const { paginate } = require("../utils/list.util");
+import { HttpError } from "../middlewares/error.js";
+import * as productsRepository from "../repositories/product.repository.js";
+import * as commentsRepository from "../repositories/comment.repository.js";
+import { createId, prisma } from "../repositories/prisma.repository.js";
+import { commentResponse, productResponse } from "../utils/presenter.util.js";
+import { paginate } from "../utils/list.util.js";
 
 function normalizeImages(body) {
   if (Array.isArray(body.imageUrls)) return body.imageUrls.slice(0, 3);
@@ -102,13 +102,4 @@ async function unfavorite(productId, user) {
   return productResponse(await productsRepository.findById(productId), user.id);
 }
 
-module.exports = {
-  best,
-  create,
-  detail,
-  favorite,
-  list,
-  remove,
-  unfavorite,
-  update,
-};
+export { best, create, detail, favorite, list, remove, unfavorite, update };

@@ -1,11 +1,8 @@
-const express = require("express");
-const articleController = require("../controllers/article.controller");
-const asyncHandler = require("../middlewares/asyncHandler");
-const { optionalAuth, requireAuth } = require("../middlewares/auth");
-const {
-  validateArticle,
-  validateComment,
-} = require("../middlewares/validators");
+import express from "express";
+import * as articleController from "../controllers/article.controller.js";
+import asyncHandler from "../middlewares/asyncHandler.js";
+import { optionalAuth, requireAuth } from "../middlewares/auth.js";
+import { validateArticle, validateComment } from "../middlewares/validators.js";
 
 const router = express.Router();
 
@@ -35,4 +32,4 @@ router
     asyncHandler(articleController.createComment),
   );
 
-module.exports = router;
+export default router;

@@ -1,9 +1,15 @@
-require("dotenv").config({ quiet: true });
-const path = require("path");
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 
-module.exports = {
-  port: Number(process.env.PORT || 4000),
-  jwtSecret: process.env.JWT_SECRET || "local-panda-market-secret",
-  uploadDir:
-    process.env.UPLOAD_DIR || path.join(__dirname, "..", "..", "uploads"),
-};
+dotenv.config({ quiet: true });
+
+const __filename = fileURLToPath(import.meta.url);
+const __driname = path.dirname(__filename);
+
+const port = Number(process.env.PORT || 4000);
+const jwtSecret = process.env.JWT_SECRET || "local-panda-market-secret";
+const uploadDir =
+  process.env.UPLOAD_DIR || path.join(__dirname, "..", "..", "uploads");
+
+export { jwtSecret, port, uploadDir };

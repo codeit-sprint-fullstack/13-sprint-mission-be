@@ -1,22 +1,21 @@
-function paginate(items, query) {
+function paginate(items, query = {}) {
   const page = Math.max(Number(query.page || 1), 1);
-  const pageSize = Math.max(Number(query.pageSize || query.limit || 10), 1);
-  const start = (page - 1) * pageSize;
-  return {
-    list: items.slice(start, start + pageSize),
-    totalCount: items.length,
-    nextCursor: start + pageSize < items.length ? String(page + 1) : null,
-  };
+  const limit = Math.max(Number(query.limit || 10), 1);
+  const start = (page - 1) * limit;
+  const list = items.slice(start, start + limit);
+  const totalCount = items.length;
+  const totalPages = Math.max(Math.ceil(totalCount / limit), 1);
+  return { list, page, limit, totalCount, totalPages };
 }
 
 function sortByRecentOrFavorite(items, orderBy) {
-  const list = [...items];
+  const copied = [...items];
   if (orderBy === "favorite") {
-    return list.sort(
-      (a, b) => b.favoriteUserIds.length - a.favoriteUserIds.length,
+    return copied.sort(
+      (a, b) => (b.favoriteCount || 0) - (a.favoriteCount || 0),
     );
   }
-  return list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  return copied.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 }
 
-module.exports = { paginate, sortByRecentOrFavorite };
+export { paginate, sortByRecentOrFavorite };

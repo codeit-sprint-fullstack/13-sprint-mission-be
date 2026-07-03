@@ -4,4 +4,4 @@ function imageUrlsFromRequest(req) {
   );
 }
 
-module.exports = { imageUrlsFromRequest };
+export { imageUrlsFromRequest };

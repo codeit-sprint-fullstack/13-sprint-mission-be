@@ -1,22 +1,14 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { createId } = require("../repositories/prisma.repository");
-const usersRepository = require("../repositories/user.repository");
-const { HttpError } = require("../middlewares/error");
-const {
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { HttpError } from "../middlewares/error.js";
+import {
   jwtSecret,
   signAccessToken,
   signRefreshToken,
-} = require("../middlewares/auth");
-const { publicUser } = require("../utils/presenter.util");
-
-function authResponse(user) {
-  return {
-    user: publicUser(user),
-    accessToken: signAccessToken(user),
-    refreshToken: signRefreshToken(user),
-  };
-}
+} from "../middlewares/auth.js";
+import { createId } from "../repositories/prisma.repository.js";
+import usersRepository from "../repositories/user.repository.js";
+import { publicUser } from "../utils/presenter.util.js";
 
 async function signUp({ email, nickname, password }) {
   if (!email || !nickname || !password) {
@@ -73,4 +65,4 @@ async function refresh(refreshToken) {
   }
 }
 
-module.exports = { refresh, signIn, signUp };
+export { refresh, signIn, signUp };

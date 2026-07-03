@@ -4,4 +4,4 @@ function me(user) {
   return publicUser(user);
 }
 
-module.exports = { me };
+export { me };

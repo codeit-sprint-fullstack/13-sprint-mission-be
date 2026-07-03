@@ -1,11 +1,8 @@
-const express = require("express");
-const productController = require("../controllers/product.controller");
-const asyncHandler = require("../middlewares/asyncHandler");
-const { optionalAuth, requireAuth } = require("../middlewares/auth");
-const {
-  validateComment,
-  validateProduct,
-} = require("../middlewares/validators");
+import express from "express";
+import * as productController from "../controllers/product.controller.js";
+import asyncHandler from "../middlewares/asyncHandler.js";
+import { optionalAuth, requireAuth } from "../middlewares/auth.js";
+import { validateComment, validateProduct } from "../middlewares/validators.js";
 
 const router = express.Router();
 
@@ -39,4 +36,4 @@ router
     asyncHandler(productController.createComment),
   );
 
-module.exports = router;
+export default router;

@@ -1,10 +1,10 @@
-const { createId } = require("../repositories/prisma.repository");
-const articlesRepository = require("../repositories/article.repository");
-const commentsRepository = require("../repositories/comment.repository");
-const productsRepository = require("../repositories/product.repository");
-const { HttpError } = require("../middlewares/error");
-const { commentResponse } = require("../utils/presenter.util");
-const { paginate } = require("../utils/list.util");
+import { HttpError } from "../middlewares/error.js";
+import * as articlesRepository from "../repositories/article.repository.js";
+import * as commentsRepository from "../repositories/comment.repository.js";
+import * as productsRepository from "../repositories/product.repository.js";
+import { createId } from "../repositories/prisma.repository.js";
+import { commentResponse } from "../utils/presenter.util.js";
+import { paginate } from "../utils/list.util.js";
 
 async function assertTarget(targetType, targetId) {
   const exists =
@@ -59,4 +59,4 @@ async function remove(commentId, user) {
   return { ok: true };
 }
 
-module.exports = { createForTarget, listByTarget, remove, update };
+export { createForTarget, listByTarget, remove, update };

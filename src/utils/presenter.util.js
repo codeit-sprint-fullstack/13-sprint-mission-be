@@ -4,41 +4,39 @@ function publicUser(user) {
     id: user.id,
     email: user.email,
     nickname: user.nickname,
-    image: user.image || "",
+    image: user.image,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   };
 }
 
+function likedByViewer(likes = [], viewerId) {
+  return Boolean(viewerId && likes.some((like) => like.userId === viewerId));
+}
+
 function productResponse(product, viewerId) {
-  const likes = product.likes || [];
-  const writer = publicUser(product.owner);
   return {
     ...product,
     images: product.imageUrls || [],
-    favoriteCount: likes.length,
-    isFavorite: viewerId
-      ? likes.some((like) => like.userId === viewerId)
-      : false,
-    isLiked: viewerId ? likes.some((like) => like.userId === viewerId) : false,
-    ownerNickname: writer?.nickname || "",
-    writer,
+    favoriteCount: product.likes?.length || 0,
+    isFavorite: likedByViewer(product.likes, viewerId),
+    isLiked: likedByViewer(product.likes, viewerId),
+    writer: publicUser(product.owner),
+    ownerNickname: product.owner?.nickname,
     likes: undefined,
     owner: undefined,
   };
 }
 
 function articleResponse(article, viewerId) {
-  const likes = article.likes || [];
   return {
     ...article,
     images: article.imageUrls || [],
-    favoriteCount: likes.length,
-    isFavorite: viewerId
-      ? likes.some((like) => like.userId === viewerId)
-      : false,
-    isLiked: viewerId ? likes.some((like) => like.userId === viewerId) : false,
+    favoriteCount: article.likes?.length || 0,
+    isFavorite: likedByViewer(article.likes, viewerId),
+    isLiked: likedByViewer(article.likes, viewerId),
     writer: publicUser(article.owner),
+    ownerNickname: article.owner?.nickname,
     likes: undefined,
     owner: undefined,
   };
@@ -48,13 +46,9 @@ function commentResponse(comment) {
   return {
     ...comment,
     writer: publicUser(comment.owner),
+    ownerNickname: comment.owner?.nickname,
     owner: undefined,
   };
 }
 
-module.exports = {
-  articleResponse,
-  commentResponse,
-  productResponse,
-  publicUser,
-};
+export { articleResponse, commentResponse, productResponse, publicUser };

@@ -1,6 +1,6 @@
-const express = require("express");
-const authController = require("../controllers/auth.controller");
-const asyncHandler = require("../middlewares/asyncHandler");
+import express from "express";
+import * as authController from "../controllers/auth.controller.js";
+import asyncHandler from "../middlewares/asyncHandler.js";
 
 const router = express.Router();
 
@@ -8,4 +8,4 @@ router.route("/signUp").post(asyncHandler(authController.signUp));
 router.route("/signIn").post(asyncHandler(authController.signIn));
 router.route("/refresh").post(asyncHandler(authController.refresh));
 
-module.exports = router;
+export default router;

@@ -1,9 +1,9 @@
-const { createId, prisma } = require("../repositories/prisma.repository");
-const articlesRepository = require("../repositories/article.repository");
-const commentsRepository = require("../repositories/comment.repository");
-const { HttpError } = require("../middlewares/error");
-const { articleResponse, commentResponse } = require("../utils/presenter.util");
-const { paginate } = require("../utils/list.util");
+import { HttpError } from "../middlewares/error.js";
+import * as articlesRepository from "../repositories/article.repository.js";
+import * as commentsRepository from "../repositories/comment.repository.js";
+import { createId, prisma } from "../repositories/prisma.repository.js";
+import { articleResponse, commentResponse } from "../utils/presenter.util.js";
+import { paginate } from "../utils/list.util.js";
 
 function normalizeImages(body) {
   if (Array.isArray(body.imageUrls)) return body.imageUrls.slice(0, 3);
@@ -98,13 +98,4 @@ async function unfavorite(articleId, user) {
   return articleResponse(await articlesRepository.findById(articleId), user.id);
 }
 
-module.exports = {
-  best,
-  create,
-  detail,
-  favorite,
-  list,
-  remove,
-  unfavorite,
-  update,
-};
+export { best, create, detail, favorite, list, remove, unfavorite, update };
