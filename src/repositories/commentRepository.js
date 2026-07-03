@@ -17,7 +17,21 @@ async function create(articleId, comment) {
   return createdComment;
 }
 
-async function getAll(articleId, cursor) {
+async function findById(commentId) {
+  const comment = await prisma.comment.findUnique({
+    where: { id: Number(commentId) },
+    include: {
+      user: {
+        omit: {
+          password: true,
+        },
+      },
+    },
+  });
+  return comment;
+}
+
+async function findAll(articleId, cursor) {
   const comments = await prisma.comment.findMany({
     take: 10,
     cursor: cursor ? { id: Number(cursor) } : undefined,
@@ -69,4 +83,4 @@ async function deleteById(commentId) {
   return deletedComment;
 }
 
-export default { create, getAll, update, deleteById };
+export default { create, findById, findAll, update, deleteById };

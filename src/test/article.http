@@ -19,9 +19,27 @@ Content-Type: application/json
     "userId": 2
 }
 
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+    "title": "",
+    "content": "일리오스 우물에서 당했는데 분하지도 않고 그냥 신기하기만 했음",
+    "userId": 2
+}
+
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+    "title": "오리사 궁극기 낙사",
+    "content": "",
+    "userId": 2
+}
+
 ### GET Article 테스트
 GET {{baseUrl}}/1
-GET {{baseUrl}}/7
+GET {{baseUrl}}/200
 
 ### GET Article List 테스트
 GET {{baseUrl}}
@@ -33,6 +51,10 @@ GET {{baseUrl}}?orderBy=favoriteCount
 GET {{baseUrl}}?orderBy=favoriteCount&pageSize=2&page=1
 GET {{baseUrl}}?orderBy=favoriteCount&pageSize=2&page=1&keyword=오늘
 
+GET {{baseUrl}}?orderBy=createdAt&pageSize=0&page=1&keyword=오늘
+GET {{baseUrl}}?orderBy=createdAt&pageSize=2&page=-1&keyword=오늘
+GET {{baseUrl}}?orderBy=whatever&pageSize=2&page=1&keyword=오늘
+
 ### GET Best 3
 GET {{baseUrl}}?orderBy=favoriteCount&pageSize=3&page=1 
 
@@ -41,16 +63,45 @@ PATCH {{baseUrl}}/14
 Content-Type: application/json
 
 {
-    "title": "얼렁 끝내야하는데!!!!!",
+    "title": "얼렁 끝내야하는데...",
     "content": "잠오고 바쁘네 큰일이다"
 }
 
-PATCH {{baseUrl}}/1
+PATCH {{baseUrl}}/14
 Content-Type: application/json
 
 {
-    "title": "일리오스 오리사 궁극기 낙사"
+    "title": "끝내야는데"
+}
+
+PATCH {{baseUrl}}/14
+Content-Type: application/json
+
+{
+    "content": "우씨 언제 끝나"
+}
+
+PATCH {{baseUrl}}/100
+Content-Type: application/json
+
+{
+    "content": "우씨 언제 끝나"
+}
+
+PATCH {{baseUrl}}/14
+Content-Type: application/json
+
+{
+    "title":"",
+    "content": ""
+}
+
+PATCH {{baseUrl}}/14
+Content-Type: application/json
+
+{
+
 }
 
 ### DELETE Article 테스트
-DELETE {{baseUrl}}/12
+DELETE {{baseUrl}}/120
