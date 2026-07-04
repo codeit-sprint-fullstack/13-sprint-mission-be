@@ -1,17 +1,26 @@
 import express from "express";
+import auth from "../middleware/auth.js";
 import articleController from "../controllers/articleController.js";
 
 const articleRouter = express.Router();
 
 articleRouter
   .route("/")
-  .post(articleController.postArticle)
-  .get(articleController.getArticles);
+  .get(articleController.getArticles)
+  .post(auth.verifyAccessToken(), articleController.postArticle);
 
 articleRouter
   .route("/:articleId")
   .get(articleController.getArticleDetail)
-  .patch(articleController.patchArticle)
-  .delete(articleController.deleteArticle);
+  .patch(
+    auth.verifyAccessToken(),
+    auth.verifyArticleAuth,
+    articleController.patchArticle,
+  )
+  .delete(
+    auth.verifyAccessToken(),
+    auth.verifyArticleAuth,
+    articleController.deleteArticle,
+  );
 
 export default articleRouter;

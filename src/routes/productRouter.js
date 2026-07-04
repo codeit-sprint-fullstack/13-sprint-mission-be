@@ -1,17 +1,26 @@
 import express from "express";
+import auth from "../middleware/auth.js";
 import productController from "../controllers/productController.js";
 
 const productRouter = express.Router();
 
 productRouter
   .route("/")
-  .post(productController.postProduct)
-  .get(productController.getProducts);
+  .get(productController.getProducts)
+  .post(auth.verifyAccessToken(), productController.postProduct);
 
 productRouter
   .route("/:productId")
   .get(productController.getProductDetail)
-  .patch(productController.patchProduct)
-  .delete(productController.deleteProduct);
+  .patch(
+    auth.verifyAccessToken(),
+    auth.verifyProductAuth,
+    productController.patchProduct,
+  )
+  .delete(
+    auth.verifyAccessToken(),
+    auth.verifyProductAuth,
+    productController.deleteProduct,
+  );
 
 export default productRouter;

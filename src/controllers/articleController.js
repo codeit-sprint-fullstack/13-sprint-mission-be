@@ -2,7 +2,10 @@ import prisma from "../config/prisma.js";
 import articleService from "../services/articleService.js";
 
 const postArticle = async (req, res) => {
-  const article = await articleService.createArticle(req.body);
+  const article = await articleService.createArticle({
+    ...req.body,
+    userId: req.auth.id,
+  });
 
   res.status(201).json(article);
 };
@@ -31,7 +34,10 @@ const getArticleDetail = async (req, res) => {
 const patchArticle = async (req, res) => {
   const { articleId } = req.params;
 
-  const article = await articleService.updateArticle(articleId, req.body);
+  const article = await articleService.updateArticle(articleId, {
+    ...req.body,
+    userId: req.auth.id,
+  });
 
   res.status(200).json(article);
 };

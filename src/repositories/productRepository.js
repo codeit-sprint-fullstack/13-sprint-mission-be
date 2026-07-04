@@ -91,7 +91,10 @@ async function update(productId, update) {
     where: { id: Number(productId) },
     data: {
       tags: {
-        set: tags.map((name) => ({ name })),
+        connectOrCreate: tags.map((tag) => ({
+          where: { name: tag },
+          create: { name: tag },
+        })),
       },
       images: {
         deleteMany: {},

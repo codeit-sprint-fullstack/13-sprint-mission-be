@@ -3,7 +3,10 @@ import commentService from "../services/commentService.js";
 const postComment = async (req, res) => {
   const { articleId } = req.params;
 
-  const comment = await commentService.createComment(articleId, req.body);
+  const comment = await commentService.createComment(articleId, {
+    ...req.body,
+    userId: req.auth.id,
+  });
 
   return res.status(201).json(comment);
 };
@@ -20,11 +23,10 @@ const getComments = async (req, res) => {
 const patchComment = async (req, res) => {
   const { articleId, commentId } = req.params;
 
-  const comment = await commentService.updateComment(
-    articleId,
-    commentId,
-    req.body,
-  );
+  const comment = await commentService.updateComment(articleId, commentId, {
+    ...req.body,
+    userId: req.auth.id,
+  });
 
   return res.status(200).json(comment);
 };

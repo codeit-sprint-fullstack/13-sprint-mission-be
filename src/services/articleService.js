@@ -1,7 +1,7 @@
 import articleRepository from "../repositories/articleRepository.js";
 import createError from "../utils/createError.js";
 
-const VALID_ORDER_BY = ["recent", "likeCount"];
+const VALID_ORDER_BY = ["createdAt", "favoriteCount"];
 
 const createArticle = async (data) => {
   const { title, content } = data;
@@ -50,10 +50,7 @@ const updateArticle = async (articleId, data) => {
   if (!title && !content)
     throw createError(400, "수정할 값을 하나 이상 입력해야 합니다.");
 
-  return articleRepository.update(articleId, {
-    ...data,
-    userId: article.user.id,
-  });
+  return articleRepository.update(articleId, data);
 };
 
 const deleteArticle = async (articleId) => {
