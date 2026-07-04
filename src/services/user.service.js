@@ -1,4 +1,4 @@
-const { publicUser } = require("../utils/presenter.util");
+import { publicUser } from "../utils/presenter.util.js";
 
 function me(user) {
   return publicUser(user);

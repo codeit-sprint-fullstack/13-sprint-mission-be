@@ -11,6 +11,7 @@ import uploadRoutes from "./routes/upload.route.js";
 import productRoutes from "./routes/product.route.js";
 import articleRoutes from "./routes/article.route.js";
 import commentRoutes from "./routes/comment.route.js";
+import { fileURLToPath } from "url";
 
 const app = express();
 
@@ -33,7 +34,7 @@ app.use("/comments", commentRoutes);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-if (require.main === module) {
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   app.listen(port, () => {
     console.log(`Panda Market API listening on http://127.0.0.1:${port}`);
   });

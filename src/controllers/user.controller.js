@@ -4,4 +4,4 @@ function me(req, res) {
   res.json(userService.me(req.user));
 }
 
-module.exports = { me };
+export { me };

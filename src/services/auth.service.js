@@ -7,7 +7,7 @@ import {
   signRefreshToken,
 } from "../middlewares/auth.js";
 import { createId } from "../repositories/prisma.repository.js";
-import usersRepository from "../repositories/user.repository.js";
+import * as usersRepository from "../repositories/user.repository.js";
 import { publicUser } from "../utils/presenter.util.js";
 
 async function signUp({ email, nickname, password }) {
