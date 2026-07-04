@@ -3,34 +3,33 @@
 ### POST Comment 테스트
 POST {{baseUrl}}
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk
 
 {
-    "content": "오 해볼게요 입문으로 좋은 캐 뭐가 있나요?",
-    "userId": 1
+    "content": "죄송합니다"
 }
 
 POST {{baseUrl}}
 Content-Type: application/json
 
 {
-    "content": "아아....탱은.....뉴비가 하기 힘들죠",
-    "userId": 3
+    "content": "오 해볼게요 입문으로 좋은 캐 뭐가 있나요?"
 }
 
 POST http://localhost:3000/articles/1000/comments
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk
 
 {
-    "content": "똥탱",
-    "userId": 4
+    "content": "똥탱"
 }
 
 POST http://localhost:3000/articles/1/comments
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk
 
 {
-    "content": "",
-    "userId": 4
+    "content": ""
 }
 
 
@@ -40,7 +39,23 @@ GET http://localhost:3000/articles/10000/comments
 GET {{baseUrl}}?cursor=1
 
 ### PATCH Article 테스트
-PATCH {{baseUrl}}/4
+PATCH {{baseUrl}}/13
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk
+
+{
+    "content": "마인크래프트로 돈 벌어요 저는"
+}
+
+PATCH {{baseUrl}}/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk
+
+{
+    "content": "오버워치지~!!!!!!!!!!!"
+}
+
+PATCH {{baseUrl}}/2
 Content-Type: application/json
 
 {
@@ -49,30 +64,39 @@ Content-Type: application/json
 
 PATCH {{baseUrl}}/4000
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk
 
 {
     "content": "오버워치지~!!!!!!!!!!!"
 }
 
-PATCH http://localhost:3000/articles/10/comments/4
+PATCH http://localhost:3000/articles/5/comments/13
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk
 
 {
     "content": "오버워치지~!!!!!!!!!!!"
 }
 
-PATCH http://localhost:3000/articles/1000/comments/4
+PATCH http://localhost:3000/articles/1000/comments/13
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk
 
 {
     "content": "오버워치지~!!!!!!!!!!!"
 }
 
 ### DELETE Comment 테스트
+DELETE {{baseUrl}}/14
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk
+
 DELETE {{baseUrl}}/12
 
 DELETE {{baseUrl}}/1200
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk
 
 DELETE http://localhost:3000/articles/3/comments/5
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk
 
 DELETE http://localhost:3000/articles/1000/comments/4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk

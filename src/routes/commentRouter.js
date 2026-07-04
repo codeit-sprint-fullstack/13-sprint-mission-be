@@ -1,4 +1,5 @@
 import express from "express";
+import auth from "../middleware/auth.js";
 import commentController from "../controllers/commentController.js";
 
 const commentRouter = express.Router({
@@ -7,11 +8,20 @@ const commentRouter = express.Router({
 
 commentRouter
   .route("/")
-  .post(commentController.postComment)
-  .get(commentController.getComments);
+  .get(commentController.getComments)
+  .post(auth.verifyAccessToken(), commentController.postComment);
+
 commentRouter
   .route("/:commentId")
-  .patch(commentController.patchComment)
-  .delete(commentController.deleteComment);
+  .patch(
+    auth.verifyAccessToken(),
+    auth.verifyCommentAuth,
+    commentController.patchComment,
+  )
+  .delete(
+    auth.verifyAccessToken(),
+    auth.verifyCommentAuth,
+    commentController.deleteComment,
+  );
 
 export default commentRouter;

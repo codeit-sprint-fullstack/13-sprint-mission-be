@@ -14,7 +14,10 @@ const getProducts = async (req, res) => {
 };
 
 const postProduct = async (req, res) => {
-  const product = await productService.createProduct(req.body);
+  const product = await productService.createProduct({
+    ...req.body,
+    userId: req.auth.id,
+  });
 
   res.status(201).json(product);
 };
@@ -22,7 +25,10 @@ const postProduct = async (req, res) => {
 const patchProduct = async (req, res) => {
   const { productId } = req.params;
 
-  const product = await productService.updateProduct(productId, req.body);
+  const product = await productService.updateProduct(productId, {
+    ...req.body,
+    userId: req.auth.id,
+  });
 
   res.status(200).json(product);
 };
