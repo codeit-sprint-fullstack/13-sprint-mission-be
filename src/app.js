@@ -1,16 +1,16 @@
-const express = require("express");
-const cors = require("cors");
-const path = require("path");
-const swaggerUi = require("swagger-ui-express");
-const { port, uploadDir } = require("./utils/env.util");
-const swaggerSpec = require("./utils/swagger.util");
-const { errorHandler, notFoundHandler } = require("./middlewares/error");
-const authRoutes = require("./routes/auth.route");
-const userRoutes = require("./routes/user.route");
-const uploadRoutes = require("./routes/upload.route");
-const productRoutes = require("./routes/product.route");
-const articleRoutes = require("./routes/article.route");
-const commentRoutes = require("./routes/comment.route");
+import express from "express";
+import cors from "cors";
+import path from "path";
+import swaggerUi from "swagger-ui-express";
+import { port, uploadDir } from "./utils/env.util.js";
+import swaggerSpec from "./utils/swagger.util.js";
+import { errorHandler, notFoundHandler } from "./middlewares/error.js";
+import authRoutes from "./routes/auth.route.js";
+import userRoutes from "./routes/user.route.js";
+import uploadRoutes from "./routes/upload.route.js";
+import productRoutes from "./routes/product.route.js";
+import articleRoutes from "./routes/article.route.js";
+import commentRoutes from "./routes/comment.route.js";
 
 const app = express();
 
@@ -39,4 +39,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = app;
+export default app;
