@@ -23,4 +23,9 @@ articleRouter
     articleController.deleteArticle,
   );
 
+articleRouter
+  .route("/:articleId/likes")
+  .post(auth.verifyAccessToken(), articleController.likeArticle)
+  .delete(auth.verifyAccessToken(), articleController.unlikeArticle);
+
 export default articleRouter;

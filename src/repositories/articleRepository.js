@@ -113,6 +113,67 @@ async function findCommentsByArticleId(articleId) {
   return comments;
 }
 
+async function findLike(articleId, userId) {
+  const like = await prisma.articleLike.findUnique({
+    where: {
+      userId_articleId: {
+        userId: Number(userId),
+        articleId: Number(articleId),
+      },
+    },
+  });
+
+  return like;
+}
+
+async function like(articleId, userId) {
+  const likeUpdatedArticle = await prisma.$transaction(async (tx) => {
+    await tx.articleLike.create({
+      data: {
+        articleId: Number(articleId),
+        userId: Number(userId),
+      },
+    });
+
+    const updatedArticle = await tx.article.update({
+      where: { id: Number(articleId) },
+      data: {
+        favoriteCount: {
+          increment: 1,
+        },
+      },
+    });
+
+    return updatedArticle;
+  });
+  return likeUpdatedArticle;
+}
+
+async function unlike(articleId, userId) {
+  const likeUpdatedArticle = await prisma.$transaction(async (tx) => {
+    await tx.articleLike.delete({
+      where: {
+        userId_articleId: {
+          articleId: Number(articleId),
+          userId: Number(userId),
+        },
+      },
+    });
+
+    const updatedArticle = await tx.article.update({
+      where: { id: Number(articleId) },
+      data: {
+        favoriteCount: {
+          decrement: 1,
+        },
+      },
+    });
+
+    return updatedArticle;
+  });
+  return likeUpdatedArticle;
+}
+
 export default {
   create,
   findAll,
@@ -121,4 +182,7 @@ export default {
   update,
   deleteById,
   findCommentsByArticleId,
+  findLike,
+  like,
+  unlike,
 };

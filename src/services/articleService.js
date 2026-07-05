@@ -61,10 +61,50 @@ const deleteArticle = async (articleId) => {
   return deletedArticle;
 };
 
+const likeArticle = async (articleId, userId) => {
+  const existedLike = await articleRepository.findLike(articleId, userId);
+
+  if (existedLike) {
+    return {
+      liked: true,
+      favoriteCount: (await articleRepository.findById(articleId))
+        .favoriteCount,
+    };
+  }
+
+  const result = await articleRepository.like(articleId, userId);
+
+  return {
+    liked: true,
+    favoriteCount: result.favoriteCount,
+  };
+};
+
+const unlikeArticle = async (articleId, userId) => {
+  const existedLike = await articleRepository.findLike(articleId, userId);
+
+  if (!existedLike) {
+    const article = await articleRepository.findById(articleId);
+    return {
+      liked: false,
+      favoriteCount: article.favoriteCount,
+    };
+  }
+
+  const result = await articleRepository.unlike(articleId, userId);
+
+  return {
+    liked: false,
+    favoriteCount: result.favoriteCount,
+  };
+};
+
 export default {
   createArticle,
   getArticles,
   getArticleDetail,
   updateArticle,
   deleteArticle,
+  likeArticle,
+  unlikeArticle,
 };

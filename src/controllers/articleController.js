@@ -50,10 +50,26 @@ const deleteArticle = async (req, res) => {
   res.status(200).json(article);
 };
 
+const likeArticle = async (req, res) => {
+  const { articleId } = req.params;
+  const { id: userId } = req.auth;
+  const result = await articleService.likeArticle(articleId, userId);
+  res.status(200).json(result);
+};
+
+const unlikeArticle = async (req, res) => {
+  const { articleId } = req.params;
+  const { id: userId } = req.auth;
+  const result = await articleService.unlikeArticle(articleId, userId);
+  res.status(200).json(result);
+};
+
 export default {
   postArticle,
   getArticles,
   getArticleDetail,
   patchArticle,
   deleteArticle,
+  likeArticle,
+  unlikeArticle,
 };
