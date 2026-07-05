@@ -75,7 +75,7 @@ function createToken(user, type) {
 /** 토큰 갱신 서비스 로직 */
 async function refreshToken(userId, refreshToken) {
   const user = await authRepository.findById(userId);
-  
+
   if (!user || user.refreshToken !== refreshToken) {
     throw new AppError("갱신 토큰이 만료되었습니다.", 401);
   }

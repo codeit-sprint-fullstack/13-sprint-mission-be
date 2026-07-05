@@ -8,30 +8,62 @@
 import express from "express";
 import productController from "../controllers/product.controller.js";
 import commentController from "../controllers/comment.controller.js";
+import authMiddleware from "../middlewares/auth.js";
+import { validate } from "../middlewares/validate.js";
+import {
+  createProductSchema,
+  updateProductSchema,
+} from "../schemas/product.schemas.js";
 
 const productRouter = express.Router();
 
 /** ======== 상품 라우트 ======== */
 
 // GET /products
-productRouter.get("/", productController.getAllProducts);
+productRouter.get(
+  "/",
+  authMiddleware.verifyAccessTokenOptional,
+  productController.getAllProducts,
+);
 
 // GET /products/:id
-productRouter.get("/:id", productController.getProduct);
+productRouter.get(
+  "/:id",
+  authMiddleware.verifyAccessTokenOptional,
+  productController.getProduct,
+);
 
 // POST /products
-productRouter.post("/", productController.createProduct);
+productRouter.post(
+  "/",
+  authMiddleware.verifyAccessToken,
+  validate(createProductSchema),
+  productController.createProduct,
+);
 
 // PATCH /products/:id
-productRouter.patch("/:id", productController.updateProduct);
+productRouter.patch(
+  "/:id",
+  authMiddleware.verifyAccessToken,
+  validate(updateProductSchema),
+  productController.updateProduct,
+);
 
 // DELETE /products/:id
-productRouter.delete("/:id", productController.deleteProduct);
+productRouter.delete(
+  "/:id",
+  authMiddleware.verifyAccessToken,
+  productController.deleteProduct,
+);
 
 /** ======== 상품 좋아요 라우트 ======== */
 
 // POST /products/:productId/likes
-productRouter.post("/:productId/likes", productController.toggleProductLike);
+productRouter.post(
+  "/:productId/likes",
+  authMiddleware.verifyAccessToken,
+  productController.toggleProductLike,
+);
 
 /** ======== 상품 댓글 라우트 ======== */
 

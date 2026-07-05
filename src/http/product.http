@@ -1,3 +1,48 @@
 ### baseUrl 변수
 @baseUrl = http://localhost:3000
 
+@accessToken = 
+
+### 상품 조회
+GET {{baseUrl}}/products
+Authorization: Bearer {{accessToken}}
+
+### 단일 상품 조회
+GET {{baseUrl}}/products/1
+
+### 상품 등록
+POST {{baseUrl}}/products
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "images": ["https://picsum.photos/seed/Roir5/1510/652?grayscale&blur=10"],
+  "name": "맥북프로",
+  "price": 2500000,
+  "description": "올해 최신 상품 맥북입니다.",
+  "tags": ["맥북", "노트북"]
+}
+
+### 상품 수정
+PATCH {{baseUrl}}/products/41
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "images": ["https://picsum.photos/seed/Roir5/1510/652?grayscale&blur=10"],
+  "name": "맥북",
+  "price": 2500000,
+  "description": "올해 최신 상품 맥북입니다.",
+  "tags": ["맥북", "노트북"]
+}
+
+
+### 상품 수정
+DELETE {{baseUrl}}/products/43
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### 좋아요 한 상품
+POST {{baseUrl}}/products/83/likes
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
