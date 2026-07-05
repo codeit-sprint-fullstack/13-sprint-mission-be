@@ -3,7 +3,9 @@
 // - schema.prisma 기준으로 더미 데이터 생성 (faker 사용)
 // ============================================================
 
+import "dotenv/config";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { fakerKO as faker } from "@faker-js/faker";
 import prisma from "../src/config/prisma.js";
 
@@ -36,6 +38,11 @@ function pickRandomSubset(items, max) {
   return faker.helpers.arrayElements(items, count);
 }
 
+// auth.service.js의 createToken(type: "refresh")과 동일한 payload/만료 규칙
+function createRefreshToken(userId) {
+  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "2w" });
+}
+
 async function clearDatabase() {
   await prisma.productLike.deleteMany();
   await prisma.articleLike.deleteMany();
@@ -58,7 +65,16 @@ async function seedUsers() {
         avatar: faker.datatype.boolean() ? faker.image.avatar() : null,
       },
     });
-    users.push(user);
+
+    // 절반 정도는 로그인 세션이 남아있는 상태로 만들어 refresh-token 테스트에 바로 쓸 수 있게 함
+    const seededUser = faker.datatype.boolean()
+      ? await prisma.user.update({
+          where: { id: user.id },
+          data: { refreshToken: createRefreshToken(user.id) },
+        })
+      : user;
+
+    users.push(seededUser);
   }
   return users;
 }

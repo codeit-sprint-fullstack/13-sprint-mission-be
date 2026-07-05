@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import cookieParser from "cookie-parser";
 
 import errorHandler from "./middlewares/errorHandler.js";
 import userRouter from "./routes/user.router.js";
@@ -26,6 +27,9 @@ app.use(
 
 // JSON 파싱
 app.use(express.json());
+
+// 쿠키 파서
+app.use(cookieParser());
 
 // 헬스 체크 엔드포인트 (Render의 health check용)
 app.get("/health", (req, res) => {

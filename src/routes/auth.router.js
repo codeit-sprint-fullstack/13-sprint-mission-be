@@ -5,6 +5,7 @@
 
 import express from "express";
 import authController from "../controllers/auth.controller.js";
+import authMiddleware from "../middlewares/auth.js";
 
 const authRouter = express.Router();
 
@@ -17,6 +18,10 @@ authRouter.post("/signup", authController.signup);
 authRouter.post("/signin", authController.signin);
 
 // POST /auth/refresh-token
-authRouter.post("/refresh-token", authController.refreshToken);
+authRouter.post(
+  "/refresh-token",
+  authMiddleware.verifyRefreshToken,
+  authController.refreshToken,
+);
 
 export default authRouter;
