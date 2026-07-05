@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 .env
+uploads/
 
 # Editor directories and files
 .vscode/*
@@ -26,4 +27,3 @@ dist-ssr
 
 /generated/prisma
 
-/generated/prisma
