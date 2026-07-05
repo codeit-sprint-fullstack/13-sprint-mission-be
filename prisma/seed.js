@@ -154,14 +154,20 @@ async function seedArticleComments(users, articles) {
 async function seedProductLikes(users, products) {
   for (const product of products) {
     const likers = pickRandomSubset(users, MAX_LIKES_PER_ITEM);
-    for (const liker of likers) {
-      await prisma.productLike.create({
-        data: {
+    if (likers.length === 0) continue;
+
+    await prisma.$transaction([
+      prisma.productLike.createMany({
+        data: likers.map((liker) => ({
           ownerId: liker.id,
           productId: product.id,
-        },
-      });
-    }
+        })),
+      }),
+      prisma.product.update({
+        where: { id: product.id },
+        data: { likeCount: likers.length },
+      }),
+    ]);
   }
 }
 
