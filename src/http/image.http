@@ -1,3 +1,14 @@
 ### baseUrl 변수
 @baseUrl = http://localhost:3000
 
+### accessToken 변수
+@accessToken = 
+
+### 이미지 업로드 요청 예시 (Postman 사용)
+POST {{baseUrl}}/images/upload
+Authorization: Bearer {{accessToken}}
+
+{
+  "key": "image",
+  "value": "File 선택 후, 이미지 파일 선택"
+}

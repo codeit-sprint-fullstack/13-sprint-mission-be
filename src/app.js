@@ -44,8 +44,9 @@ async function start() {
     app.use("/auth", authRouter);
     app.use("/products", productRouter);
     app.use("/articles", articleRouter);
-    app.use("/images", imageRouter);
     app.use("/comments", commentRouter);
+    app.use("/images", imageRouter);
+    app.use("/download-images", express.static("uploads"));
 
     // 에러 핸들러 등록
     app.use(errorHandler);
