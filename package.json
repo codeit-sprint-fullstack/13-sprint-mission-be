@@ -7,6 +7,7 @@
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
     "migrate": "prisma migrate dev",
+    "reset": "prisma migrate reset",
     "seed": "node prisma/seed.js",
     "studio": "prisma studio"
   },
@@ -35,6 +36,7 @@
     "express-jwt": "^8.5.1",
     "express-session": "^1.19.0",
     "jsonwebtoken": "^9.0.3",
+    "multer": "^2.2.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
