@@ -14,6 +14,10 @@ import {
   createProductSchema,
   updateProductSchema,
 } from "../schemas/product.schemas.js";
+import {
+  createCommentSchema,
+  updateCommentSchema,
+} from "../schemas/comment.schemas.js";
 
 const productRouter = express.Router();
 
@@ -70,13 +74,31 @@ productRouter.post(
 // GET /products/:productId/comments
 productRouter.get(
   "/:productId/comments",
+  authMiddleware.verifyAccessTokenOptional,
   commentController.getAllProductComments,
 );
 
 // POST /products/:productId/comments
 productRouter.post(
   "/:productId/comments",
+  authMiddleware.verifyAccessToken,
+  validate(createCommentSchema),
   commentController.createProductComment,
+);
+
+// PATCH /products/:productId/comments/:commentId
+productRouter.patch(
+  "/:productId/comments/:commentId",
+  authMiddleware.verifyAccessToken,
+  validate(updateCommentSchema),
+  commentController.updateProductComment,
+);
+
+// DELETE /products/:productId/comments/:commentId
+productRouter.delete(
+  "/:productId/comments/:commentId",
+  authMiddleware.verifyAccessToken,
+  commentController.deleteProductComment,
 );
 
 export default productRouter;

@@ -6,7 +6,6 @@ import errorHandler from "./middlewares/errorHandler.js";
 import userRouter from "./routes/user.router.js";
 import productRouter from "./routes/product.router.js";
 import articleRouter from "./routes/article.router.js";
-import commentRouter from "./routes/comment.router.js";
 import authRouter from "./routes/auth.router.js";
 import imageRouter from "./routes/image.router.js";
 
@@ -44,7 +43,6 @@ async function start() {
     app.use("/auth", authRouter);
     app.use("/products", productRouter);
     app.use("/articles", articleRouter);
-    app.use("/comments", commentRouter);
     app.use("/images", imageRouter);
     app.use("/download-images", express.static("uploads"));
 

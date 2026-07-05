@@ -1,3 +1,35 @@
 ### baseUrl 변수
 @baseUrl = http://localhost:3000
 
+@productId = 83
+
+@commentId = 1
+
+@accessToken = 
+
+### 상품 댓글 조회
+GET {{baseUrl}}/products/{{productId}}/comments
+Authorization: Bearer {{accessToken}}
+
+### 상품 댓글 등록
+POST {{baseUrl}}/products/{{productId}}/comments
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "content": "댓글 테스트 중입니다."
+}
+
+### 상품 댓글 수정
+PATCH {{baseUrl}}/products/{{productId}}/comments/{{commentId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "content": "댓글 수정 성공인가요?"
+}
+
+### 상품 댓글 삭제
+DELETE {{baseUrl}}/products/{{productId}}/comments/{{commentId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}

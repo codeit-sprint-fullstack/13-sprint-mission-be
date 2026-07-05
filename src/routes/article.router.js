@@ -8,6 +8,12 @@
 import express from "express";
 import articleController from "../controllers/article.controller.js";
 import commentController from "../controllers/comment.controller.js";
+import authMiddleware from "../middlewares/auth.js";
+import { validate } from "../middlewares/validate.js";
+import {
+  createCommentSchema,
+  updateCommentSchema,
+} from "../schemas/comment.schemas.js";
 
 const articleRouter = express.Router();
 
@@ -38,13 +44,31 @@ articleRouter.post("/:articleId/likes", articleController.toggleArticleLike);
 // GET /articles/:articleId/comments
 articleRouter.get(
   "/:articleId/comments",
+  authMiddleware.verifyAccessTokenOptional,
   commentController.getAllArticleComments,
 );
 
 // POST /articles/:articleId/comments
 articleRouter.post(
   "/:articleId/comments",
+  authMiddleware.verifyAccessToken,
+  validate(createCommentSchema),
   commentController.createArticleComment,
+);
+
+// PATCH /articles/:articleId/comments/:commentId
+articleRouter.patch(
+  "/:articleId/comments/:commentId",
+  authMiddleware.verifyAccessToken,
+  validate(updateCommentSchema),
+  commentController.updateArticleComment,
+);
+
+// DELETE /articles/:articleId/comments/:commentId
+articleRouter.delete(
+  "/:articleId/comments/:commentId",
+  authMiddleware.verifyAccessToken,
+  commentController.deleteArticleComment,
 );
 
 export default articleRouter;
