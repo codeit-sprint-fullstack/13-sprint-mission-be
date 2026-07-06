@@ -12,12 +12,14 @@ const postArticle = async (req, res) => {
 
 const getArticles = async (req, res) => {
   const { page, pageSize, orderBy = "createdAt", keyword } = req.query;
+  const userId = req.auth?.id ?? null;
 
   const article = await articleService.getArticles(
     page,
     pageSize,
     orderBy,
     keyword,
+    userId,
   );
 
   res.status(200).json(article);
@@ -25,8 +27,9 @@ const getArticles = async (req, res) => {
 
 const getArticleDetail = async (req, res) => {
   const { articleId } = req.params;
+  const userId = req.auth?.id ?? null;
 
-  const article = await articleService.getArticleDetail(articleId);
+  const article = await articleService.getArticleDetail(articleId, userId);
 
   res.status(200).json(article);
 };
