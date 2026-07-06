@@ -5,6 +5,7 @@ import {
   articleRouter,
   productRouter,
   commentRouter,
+  productCommentRouter,
   authRouter,
 } from "./routes/index.js";
 import errorHandler from "./middleware/errorHandler.js";
@@ -30,6 +31,7 @@ app.get("/", (req, res) => {
 });
 app.use("/auth", authRouter);
 app.use("/products", productRouter);
+app.use("/products/:productId/comments", productCommentRouter);
 app.use("/articles", articleRouter);
 app.use("/articles/:articleId/comments", commentRouter);
 app.use(errorHandler);

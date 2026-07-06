@@ -8,17 +8,18 @@ datasource db {
 }
 
 model User{
-  id            Int       @id @default(autoincrement()) 
-  name          String
-  email         String    @unique
-  username      String    @unique
-  password      String
-  deletedAt     DateTime?
-  articles      Article[]
-  comments      Comment[]
-  products      Product[]
-  productLikes  ProductLike[]
-  articleLikes  ArticleLike[]
+  id              Int       @id @default(autoincrement()) 
+  name            String
+  email           String    @unique
+  username        String    @unique
+  password        String
+  deletedAt       DateTime?
+  articles        Article[]
+  comments        Comment[]
+  products        Product[]
+  productComments ProductComment[]
+  productLikes    ProductLike[]
+  articleLikes    ArticleLike[]
   @@map("users")
 }
 
@@ -50,19 +51,32 @@ model Comment{
 }
 
 model Product {
-  id              Int           @id @default(autoincrement()) 
+  id              Int               @id @default(autoincrement()) 
   name            String
   description     String
   price           Int       
-  favoriteCount   Int           @default(0)
+  favoriteCount   Int               @default(0)
   tags            Tag[]
   images          Image[]
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
   userId          Int
-  user            User          @relation(fields:[userId], references:[id], onDelete: Cascade)
+  user            User              @relation(fields:[userId], references:[id], onDelete: Cascade)
   productLikes    ProductLike[]
+  productComments ProductComment[]
   @@map("products")
+}
+
+model ProductComment{
+  id          Int       @id @default(autoincrement()) 
+  content     String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  userId      Int
+  productId   Int
+  user        User      @relation(fields:[userId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields:[productId], references: [id], onDelete: Cascade)
+  @@map("product_comments")
 }
 
 model Image{

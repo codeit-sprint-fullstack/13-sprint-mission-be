@@ -51,6 +51,9 @@ async function findById(productId, userId) {
       },
     },
   });
+
+  if (!product) return null;
+
   const { productLikes, ...rest } = product;
   return { ...rest, liked: !!productLikes.length };
 }
@@ -161,6 +164,20 @@ async function deleteById(productId) {
   return deletedProduct;
 }
 
+async function findProductCommentsByProductId(productId) {
+  const comments = await prisma.productComment.findMany({
+    where: { productId: Number(productId) },
+    include: {
+      user: {
+        omit: {
+          password: true,
+        },
+      },
+    },
+  });
+  return comments;
+}
+
 async function findLike(productId, userId) {
   const like = await prisma.productLike.findUnique({
     where: {
@@ -229,6 +246,7 @@ export default {
   countByKeyword,
   update,
   deleteById,
+  findProductCommentsByProductId,
   findLike,
   like,
   unlike,
