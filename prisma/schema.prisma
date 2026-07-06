@@ -14,9 +14,9 @@ datasource db {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  name  String
-  email String @unique
+  id       Int    @id @default(autoincrement())
+  nickname String
+  email    String @unique
 
   image             String?
   encryptedPassword String

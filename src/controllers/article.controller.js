@@ -1,7 +1,7 @@
 // article.controller.js
-import prisma from "../lib/prisma.js";
+import prisma from "../config/prisma.js";
 // import { asyncHandler } from "../utils/asyncHandler.js";
-import { NotFoundError } from "../utils/errors.js";
+import { NotFoundError } from "../middlewares/errorHandler.js";
 
 // [ ]  게시글 조회 API를 만들어 주세요.
 // [ ] `id`, `title`, `content`, `createdAt`를 조회합니다.

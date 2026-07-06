@@ -3,6 +3,8 @@ import express from "express";
 import cors from "cors";
 import articleRouter from "./routes/article.router.js";
 import productRouter from "./routes/product.router.js";
+import userRouter from "./routes/user.router.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
 
 dotenv.config(); // .env 파일 로드 (맨 먼저!)
 
@@ -16,12 +18,14 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-const PORT = process.env.PORT || 3000;
 app.use(express.json());
 // 라우터 등록
 app.use("/articles", articleRouter);
 app.use("/products", productRouter);
+app.use("/users", userRouter);
 
-app.listen(PORT, () => {
-  console.log(`서버가 http://localhost:${PORT} 에서 실행 중`);
-});
+// 요구사항(에러 처리): "모든 예외 상황을 처리할 수 있는 에러 핸들러 미들웨어를 구현합니다."
+// -> 반드시 라우터 등록 다음, 가장 마지막에 위치해야 함
+app.use(errorHandler);
+
+export default app;

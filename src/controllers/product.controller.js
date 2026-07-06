@@ -1,6 +1,6 @@
 // product.controller.js
-import prisma from "../lib/prisma.js";
-import { NotFoundError } from "../utils/errors.js";
+import prisma from "../config/prisma.js";
+import { NotFoundError } from "../middlewares/errorHandler.js";
 
 // [ ]  상품 상세 조회 API를 만들어 주세요.
 // [ ] id, name, description, price, tags, createdAt를 조회합니다.

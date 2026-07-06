@@ -21,21 +21,21 @@ async function main() {
   const [alice, bob, charlie] = await Promise.all([
     prisma.user.create({
       data: {
-        name: "김민지",
+        nickname: "김민지",
         email: "alice@example.com",
         encryptedPassword: password,
       },
     }),
     prisma.user.create({
       data: {
-        name: "이준호",
+        nickname: "이준호",
         email: "bob@example.com",
         encryptedPassword: password,
       },
     }),
     prisma.user.create({
       data: {
-        name: "박서연",
+        nickname: "박서연",
         email: "charlie@example.com",
         encryptedPassword: password,
       },

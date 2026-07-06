@@ -1,5 +1,5 @@
-import prisma from "../lib/prisma.js";
-import { ValidationError, NotFoundError } from "../utils/errors.js";
+import prisma from "../config/prisma.js";
+import { BadRequestError as ValidationError, NotFoundError } from "../middlewares/errorHandler.js";
 
 // 게시글 댓글 등록
 export const createArticleComment = async (req, res) => {
