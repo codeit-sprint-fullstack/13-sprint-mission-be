@@ -1,127 +1,148 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
+const SALT_ROUNDS = 10;
 
 async function main() {
-  console.log("seeding start!");
+  console.log("🌱 시딩 시작...");
 
-  await prisma.articleComment.deleteMany({});
-  await prisma.productComment.deleteMany({});
-  await prisma.tag.deleteMany({});
-  await prisma.product.deleteMany({});
-  await prisma.article.deleteMany({});
+  // FK 순서 고려: 자식 -> 부모 순으로 삭제
+  await prisma.like.deleteMany();
+  await prisma.productComment.deleteMany();
+  await prisma.articleComment.deleteMany();
+  await prisma.tag.deleteMany();
+  await prisma.product.deleteMany();
+  await prisma.article.deleteMany();
+  await prisma.user.deleteMany();
 
-  console.log("delete completed!");
+  const password = await bcrypt.hash("password123!", SALT_ROUNDS);
 
-  const p1 = await prisma.product.create({
+  const [alice, bob, charlie] = await Promise.all([
+    prisma.user.create({
+      data: {
+        name: "김민지",
+        email: "alice@example.com",
+        encryptedPassword: password,
+      },
+    }),
+    prisma.user.create({
+      data: {
+        name: "이준호",
+        email: "bob@example.com",
+        encryptedPassword: password,
+      },
+    }),
+    prisma.user.create({
+      data: {
+        name: "박서연",
+        email: "charlie@example.com",
+        encryptedPassword: password,
+      },
+    }),
+  ]);
+  console.log("✅ 유저 생성 완료");
+
+  const product1 = await prisma.product.create({
     data: {
-      name: "빈티지 가죽 자켓",
-      description: "상태 아주 좋은 리얼 가죽 빈티지 자켓입니다.",
-      price: 85000,
+      name: "아이패드 프로 11인치",
+      description: "거의 새 제품, 케이스랑 펜슬 포함해서 팝니다.",
+      price: 850000,
+      images: ["/uploads/sample-ipad-1.jpg"],
+      userId: alice.id,
+      tags: { create: [{ name: "전자기기" }, { name: "애플" }] },
     },
   });
 
-  const p2 = await prisma.product.create({
+  const product2 = await prisma.product.create({
     data: {
-      name: "무선 기계식 키보드",
-      description: "갈축 스위치 블루투스 키보드",
+      name: "무선 청소기",
+      description: "작년에 구매한 무선 청소기, 흡입력 좋아요.",
       price: 120000,
+      images: ["/uploads/sample-vacuum-1.jpg"],
+      userId: bob.id,
+      tags: { create: [{ name: "가전" }, { name: "생활용품" }] },
     },
   });
 
-  const p3 = await prisma.product.create({
+  await prisma.product.create({
     data: {
-      name: "아이패드 에어 5세대",
-      description: "기스 없음",
-      price: 580000,
+      name: "원목 책상",
+      description: "이사 때문에 급처합니다. 상태 좋아요.",
+      price: 60000,
+      images: [],
+      userId: charlie.id,
+      tags: { create: [{ name: "가구" }] },
     },
   });
+  console.log("✅ 상품 생성 완료");
 
-  const p4 = await prisma.product.create({
+  const article1 = await prisma.article.create({
     data: {
-      name: "캠핑용 미니 버너",
-      description: "화력 좋음",
-      price: 25000,
+      title: "오늘 날씨 진짜 좋네요",
+      content: "다들 산책 한 번씩 다녀오세요!",
+      userId: alice.id,
     },
   });
 
-  const p5 = await prisma.product.create({
+  const article2 = await prisma.article.create({
     data: {
-      name: "스탠리 텀블러",
-      description: "미개봉",
-      price: 35000,
+      title: "중고거래 사기 조심하세요",
+      content:
+        "최근에 사기 사례가 늘고 있으니 직거래 위주로 하시길 추천드려요.",
+      userId: bob.id,
     },
   });
+  console.log("✅ 게시글 생성 완료");
 
-  await prisma.tag.createMany({
+  await prisma.productComment.createMany({
     data: [
-      { name: "의류", productId: p1.id },
-      { name: "빈티지", productId: p1.id },
-      { name: "가죽자켓", productId: p1.id },
-
-      { name: "전자기기", productId: p2.id },
-      { name: "키보드", productId: p2.id },
-
-      { name: "애플", productId: p3.id },
-      { name: "태블릿", productId: p3.id },
-
-      { name: "캠핑", productId: p4.id },
-
-      { name: "텀블러", productId: p5.id },
+      {
+        content: "가격 조금만 깎아주실 수 있나요?",
+        productId: product1.id,
+        userId: bob.id,
+      },
+      {
+        content: "직거래 가능한가요?",
+        productId: product1.id,
+        userId: charlie.id,
+      },
+      {
+        content: "아직 판매 중인가요?",
+        productId: product2.id,
+        userId: alice.id,
+      },
     ],
-  });
-
-  const a1 = await prisma.article.create({
-    data: {
-      title: "맥북 M1 판매합니다",
-      content: "실사용 2년, 상태 좋습니다.",
-    },
-  });
-
-  const a2 = await prisma.article.create({
-    data: {
-      title: "탑싯 공부 같이 하실 분",
-      content: "주말 스터디 모집합니다.",
-    },
-  });
-
-  const a3 = await prisma.article.create({
-    data: {
-      title: "Express + Prisma 질문",
-      content: "pagination 구현 중 막힘",
-    },
   });
 
   await prisma.articleComment.createMany({
     data: [
-      { content: "가격 괜찮네요", articleId: a1.id },
-      { content: "네고 가능할까요?", articleId: a1.id },
-
-      { content: "참여하고 싶습니다", articleId: a2.id },
-      { content: "장소가 어디인가요?", articleId: a2.id },
-
-      { content: "cursor pagination 추천", articleId: a3.id },
+      {
+        content: "좋은 정보 감사합니다!",
+        articleId: article2.id,
+        userId: charlie.id,
+      },
+      {
+        content: "저도 예전에 당할 뻔했어요 ㅠㅠ",
+        articleId: article2.id,
+        userId: alice.id,
+      },
     ],
   });
+  console.log("✅ 댓글 생성 완료");
 
-  await prisma.productComment.createMany({
+  await prisma.like.createMany({
     data: [
-      { content: "이거 상태 진짜 좋네요", productId: p1.id },
-      { content: "사이즈 있나요?", productId: p1.id },
-
-      { content: "키감 어떤가요?", productId: p2.id },
-      { content: "배터리 오래가나요?", productId: p2.id },
-
-      { content: "아이패드 가격 괜찮네요", productId: p3.id },
-      { content: "애플펜슬 포함인가요?", productId: p3.id },
-
-      { content: "캠핑용으로 딱이네요", productId: p4.id },
-
-      { content: "텀블러 디자인 예쁘다", productId: p5.id },
+      { userId: bob.id, productId: product1.id },
+      { userId: charlie.id, productId: product1.id },
+      { userId: alice.id, productId: product2.id },
+      { userId: charlie.id, articleId: article1.id },
+      { userId: bob.id, articleId: article1.id },
     ],
   });
+  console.log("✅ 좋아요 생성 완료");
 
-  console.log("seed 완료");
+  console.log("🌱 시딩 완료!");
 }
 
 main()

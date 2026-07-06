@@ -8,7 +8,7 @@ const { BadRequestError, UnauthorizedError } = require("../utils/customError");
 const SALT_ROUNDS = 10;
 
 // 회원가입
-exports.register = asyncHandler(async (req, res) => {
+exports.signUp = asyncHandler(async (req, res) => {
   const { email, nickname, password } = req.body;
 
   const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -31,7 +31,7 @@ exports.register = asyncHandler(async (req, res) => {
 });
 
 // 로그인
-exports.login = asyncHandler(async (req, res) => {
+exports.signIn = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   const user = await prisma.user.findUnique({ where: { email } });

@@ -21,7 +21,7 @@ userRouter.post("/users", async (req, res, next) => {
   }
 });
 
-userRouter.post("/login", async (req, res, next) => {
+userRouter.post("/signIn", async (req, res, next) => {
   const { email, password } = req.body;
   try {
     if (!email || !password) {
@@ -46,7 +46,7 @@ userRouter.post("/login", async (req, res, next) => {
 });
 
 userRouter.post(
-  "/session-login",
+  "/session-signIn",
   auth.validateEmailAndPassword,
   passport.authenticate("local"),
   (req, res) => {

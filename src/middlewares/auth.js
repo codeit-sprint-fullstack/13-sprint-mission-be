@@ -8,7 +8,7 @@ function throwUnauthorizedError() {
   throw error;
 }
 
-async function verifySessionLogin(req, res, next) {
+async function verifySessionsignIn(req, res, next) {
   if (!req.isAuthenticated()) {
     throwUnauthorizedError();
   }
@@ -58,7 +58,7 @@ function validateEmailAndPassword(req, res, next) {
   }
 }
 export default {
-  verifySessionLogin,
+  verifySessionsignIn,
   verifyAccessToken,
   verifyReviewAuth,
   verifyRefreshToken,
