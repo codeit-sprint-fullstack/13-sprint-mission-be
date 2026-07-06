@@ -1,13 +1,13 @@
 ### baseUrl 변수
 @baseUrl = http://localhost:3000
 
-@accessToken = 
+@accessToken =
 
 ### 상품 조회
 GET {{baseUrl}}/products
 Authorization: Bearer {{accessToken}}
 
-### 단일 상품 조회
+### 단건 상품 조회
 GET {{baseUrl}}/products/1
 
 ### 상품 등록
@@ -36,8 +36,7 @@ Authorization: Bearer {{accessToken}}
   "tags": ["맥북", "노트북"]
 }
 
-
-### 상품 수정
+### 상품 삭제
 DELETE {{baseUrl}}/products/43
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}

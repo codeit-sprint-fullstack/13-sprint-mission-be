@@ -3,7 +3,7 @@
 // ============================================================
 import prisma from "../config/prisma.js";
 
-/** 상품 목록 조회 
+/** 상품 목록 조회
  * - 검색 / 정렬 / 페이지네이션 */
 async function findAll({ where, skip, take, orderBy }) {
   const [data, totalProducts] = await Promise.all([
@@ -20,20 +20,32 @@ async function findAll({ where, skip, take, orderBy }) {
   return { data, totalProducts };
 }
 
-/** 상품 단건 조회 
+/** 상품 단건 조회
  * - 태그 / 좋아요수 / 작성자 / 댓글 포함 */
 async function findById(id) {
   return await prisma.product.findUniqueOrThrow({
     where: { id },
     include: {
       tags: true,
-      owner: true,
-      productComments: true,
+      owner: { select: { id: true, nickname: true, avatar: true } },
+      productComments: {
+        include: {
+          owner: {
+            select: {
+              id: true,
+              nickname: true,
+              avatar: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
+        },
+      },
     },
   });
 }
 
-/** 상품 생성 
+/** 상품 생성
  * - 태그 함께 생성 */
 async function create({ data, tags, userId }) {
   return await prisma.product.create({

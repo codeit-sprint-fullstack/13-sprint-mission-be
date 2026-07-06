@@ -10,7 +10,7 @@ import { z } from "zod";
 export const createProductSchema = z.object({
   images: z
     .array(z.url({ message: "유효한 이미지 URL을 입력해주세요." }))
-    .max(1, { message: "이미지는 최대 1개까지 등록할 수 있습니다." }),
+    .max(3, { message: "이미지는 최대 3개까지 등록할 수 있습니다." }),
   name: z
     .string()
     .min(1, "name은 1자 이상이어야 합니다")
