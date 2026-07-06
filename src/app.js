@@ -1,8 +1,10 @@
 import cors from "cors";
 import express from "express";
 import cookieParser from "cookie-parser";
+import swaggerUi from "swagger-ui-express";
 
 import errorHandler from "./middlewares/errorHandler.js";
+import { swaggerSpec } from "./config/swagger.js";
 import userRouter from "./routes/user.router.js";
 import productRouter from "./routes/product.router.js";
 import articleRouter from "./routes/article.router.js";
@@ -34,6 +36,9 @@ app.use(cookieParser());
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
+
+// API 명세서 (Swagger UI)
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // 비동기 서버 시작
 async function start() {
