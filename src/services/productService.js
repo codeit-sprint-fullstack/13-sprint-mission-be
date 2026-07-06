@@ -3,7 +3,7 @@ import createError from "../utils/createError.js";
 
 const VALID_ORDER_BY = ["recent", "favorite"];
 
-async function getProducts(page, pageSize, orderBy, keyword) {
+async function getProducts(page, pageSize, orderBy, keyword, userId) {
   if (page && Number(page) < 1)
     throw createError(400, "page는 1 이상이어야 합니다.");
   if (pageSize && Number(pageSize) < 1)
@@ -12,7 +12,7 @@ async function getProducts(page, pageSize, orderBy, keyword) {
     throw createError(400, "잘못된 정렬 기준입니다.");
 
   const [products, totalCount] = await Promise.all([
-    productRepository.findAll(page, pageSize, orderBy, keyword),
+    productRepository.findAll(page, pageSize, orderBy, keyword, userId),
     productRepository.countByKeyword(keyword),
   ]);
 
@@ -47,12 +47,50 @@ async function deleteProduct(productId) {
   return await productRepository.deleteById(productId);
 }
 
-async function getProductDetail(productId) {
-  const product = await productRepository.findById(productId);
+async function getProductDetail(productId, userId) {
+  const product = await productRepository.findById(productId, userId);
   if (!product) throw createError(404, "상품을 찾을 수 없습니다.");
 
   return product;
 }
+
+const likeProduct = async (productId, userId) => {
+  const existedLike = await productRepository.findLike(productId, userId);
+
+  if (existedLike) {
+    return {
+      liked: true,
+      favoriteCount: (await productRepository.findById(productId))
+        .favoriteCount,
+    };
+  }
+
+  const result = await productRepository.like(productId, userId);
+
+  return {
+    liked: true,
+    favoriteCount: result.favoriteCount,
+  };
+};
+
+const unlikeProduct = async (productId, userId) => {
+  const existedLike = await productRepository.findLike(productId, userId);
+
+  if (!existedLike) {
+    const product = await productRepository.findById(productId);
+    return {
+      liked: false,
+      favoriteCount: product.favoriteCount,
+    };
+  }
+
+  const result = await productRepository.unlike(productId, userId);
+
+  return {
+    liked: false,
+    favoriteCount: result.favoriteCount,
+  };
+};
 
 export default {
   getProducts,
@@ -60,4 +98,6 @@ export default {
   updateProduct,
   deleteProduct,
   getProductDetail,
+  likeProduct,
+  unlikeProduct,
 };

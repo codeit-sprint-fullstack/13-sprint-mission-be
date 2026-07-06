@@ -17,10 +17,10 @@
 - [x] 상품 기능 인가 로직 작성하기
 - [x] Article 좋아요 스키마 작성하기 (7/5)
 - [x] Article 좋아요 API 작성하기
-- [ ] Article 좋아요 정보 GET할때 같이 리턴하기 (7/6)
-- [ ] Product 좋아요 스키마 작성하기
-- [ ] Product 좋아요 API 작성하기
-- [ ] Product 좋아요 정보 GET할때 같이 리턴하기
+- [x] Article 좋아요 정보 GET할때 같이 리턴하기 (7/6)
+- [x] Product 좋아요 스키마 작성하기
+- [x] Product 좋아요 API 작성하기
+- [x] Product 좋아요 정보 GET할때 같이 리턴하기
 - [ ] 댓글 스키마 작성하기
 - [ ] 댓글 API 작성하기
 - [ ] 댓글 기능 인가 로직 작성하기

@@ -30,7 +30,7 @@ async function create(product) {
   return createdProduct;
 }
 
-async function findById(productId) {
+async function findById(productId, userId) {
   const product = await prisma.product.findUnique({
     where: { id: Number(productId) },
     include: {
@@ -41,12 +41,21 @@ async function findById(productId) {
           password: true,
         },
       },
+      productLikes: {
+        where: {
+          userId: Number(userId ?? -1),
+        },
+        select: {
+          id: true,
+        },
+      },
     },
   });
-  return product;
+  const { productLikes, ...rest } = product;
+  return { ...rest, liked: !!productLikes.length };
 }
 
-async function findAll(page, pageSize, orderBy, keyword) {
+async function findAll(page, pageSize, orderBy, keyword, userId) {
   const orderField = orderBy === "favorite" ? "favoriteCount" : "createdAt";
   const skip = (Number(page) - 1) * Number(pageSize);
   const where = {};
@@ -63,6 +72,23 @@ async function findAll(page, pageSize, orderBy, keyword) {
   const queryOptions = {
     where,
     orderBy: { [orderField]: "desc" },
+    include: {
+      tags: true,
+      images: true,
+      user: {
+        omit: {
+          password: true,
+        },
+      },
+      productLikes: {
+        where: {
+          userId: Number(userId ?? -1),
+        },
+        select: {
+          id: true,
+        },
+      },
+    },
   };
   if (page && pageSize) {
     queryOptions.skip = (Number(page) - 1) * Number(pageSize);
@@ -70,7 +96,11 @@ async function findAll(page, pageSize, orderBy, keyword) {
     queryOptions.take = Number(pageSize);
   }
   const products = await prisma.product.findMany(queryOptions);
-  return products;
+  const mappedProducts = products.map(({ productLikes, ...rest }) => ({
+    ...rest,
+    liked: !!productLikes.length,
+  }));
+  return mappedProducts;
 }
 
 async function countByKeyword(keyword) {
@@ -131,6 +161,67 @@ async function deleteById(productId) {
   return deletedProduct;
 }
 
+async function findLike(productId, userId) {
+  const like = await prisma.productLike.findUnique({
+    where: {
+      userId_productId: {
+        userId: Number(userId),
+        productId: Number(productId),
+      },
+    },
+  });
+
+  return like;
+}
+
+async function like(productId, userId) {
+  const likeUpdatedProduct = await prisma.$transaction(async (tx) => {
+    await tx.productLike.create({
+      data: {
+        productId: Number(productId),
+        userId: Number(userId),
+      },
+    });
+
+    const updatedProduct = await tx.product.update({
+      where: { id: Number(productId) },
+      data: {
+        favoriteCount: {
+          increment: 1,
+        },
+      },
+    });
+
+    return updatedProduct;
+  });
+  return likeUpdatedProduct;
+}
+
+async function unlike(productId, userId) {
+  const likeUpdatedProduct = await prisma.$transaction(async (tx) => {
+    await tx.productLike.delete({
+      where: {
+        userId_productId: {
+          productId: Number(productId),
+          userId: Number(userId),
+        },
+      },
+    });
+
+    const updatedProduct = await tx.product.update({
+      where: { id: Number(productId) },
+      data: {
+        favoriteCount: {
+          decrement: 1,
+        },
+      },
+    });
+
+    return updatedProduct;
+  });
+  return likeUpdatedProduct;
+}
+
 export default {
   create,
   findById,
@@ -138,4 +229,7 @@ export default {
   countByKeyword,
   update,
   deleteById,
+  findLike,
+  like,
+  unlike,
 };

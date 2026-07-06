@@ -2,12 +2,14 @@ import productService from "../services/productService.js";
 
 const getProducts = async (req, res) => {
   const { page, pageSize, orderBy = "recent", keyword } = req.query;
+  const userId = req.auth?.id ?? null;
 
   const result = await productService.getProducts(
     page,
     pageSize,
     orderBy,
     keyword,
+    userId,
   );
 
   res.status(200).json(result);
@@ -43,10 +45,25 @@ const deleteProduct = async (req, res) => {
 
 const getProductDetail = async (req, res) => {
   const { productId } = req.params;
+  const userId = req.auth?.id ?? null;
 
-  const product = await productService.getProductDetail(productId);
+  const product = await productService.getProductDetail(productId, userId);
 
   res.status(200).json(product);
+};
+
+const likeProduct = async (req, res) => {
+  const { productId } = req.params;
+  const { id: userId } = req.auth;
+  const result = await productService.likeProduct(productId, userId);
+  res.status(200).json(result);
+};
+
+const unlikeProduct = async (req, res) => {
+  const { productId } = req.params;
+  const { id: userId } = req.auth;
+  const result = await productService.unlikeProduct(productId, userId);
+  res.status(200).json(result);
 };
 
 export default {
@@ -55,4 +72,6 @@ export default {
   patchProduct,
   deleteProduct,
   getProductDetail,
+  likeProduct,
+  unlikeProduct,
 };
