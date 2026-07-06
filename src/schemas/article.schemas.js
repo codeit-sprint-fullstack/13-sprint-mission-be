@@ -14,7 +14,7 @@ export const createArticleSchema = z.object({
   title: z
     .string()
     .min(1, "title은 1자 이상이어야 합니다")
-    .max(10, "title은 10자 이내로 입력해주세요")
+    .max(100, "title은 100자 이내로 입력해주세요")
     .trim(),
   content: z.string().min(1, "content는 1자 이상이어야 합니다").trim(),
 });

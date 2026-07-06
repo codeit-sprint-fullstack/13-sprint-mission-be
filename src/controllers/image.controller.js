@@ -10,7 +10,8 @@ async function uploadImage(req, res, next) {
   }
 
   const filename = req.file.filename;
-  res.json({ path: `/download-images/${filename}` });
+  const path = `${req.protocol}://${req.get("host")}/download-images/${filename}`;
+  res.json({ path });
 }
 
 export default { uploadImage };
