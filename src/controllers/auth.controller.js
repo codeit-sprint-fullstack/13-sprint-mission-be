@@ -29,6 +29,7 @@ async function signin(req, res, next) {
     httpOnly: true,
     sameSite: "none",
     secure: true,
+    path: "/auth/refresh-token",
   });
 
   res.json({ ...user, accessToken });
@@ -45,7 +46,7 @@ async function refreshToken(req, res, next) {
     httpOnly: true,
     sameSite: "none",
     secure: true,
-    path: "/refresh-token",
+    path: "/auth/refresh-token",
   });
 
   return res.json({ accessToken: newAccessToken });
