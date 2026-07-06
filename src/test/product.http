@@ -17,10 +17,16 @@ GET {{baseUrl}}?orderBy=whatever&pageSize=2&page=1
 GET {{baseUrl}}?orderBy=favorite&pageSize=0&page=1
 GET {{baseUrl}}?orderBy=favorite&pageSize=2&page=0
 
+GET {{baseUrl}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzMTM3ODQsImV4cCI6MTc4MzMxNzM4NH0.rkgiuFR7urgrx8ClpJOiJhoTSxIE2CLTLxPbr1zmT38
+
 ### GET Product Detail 테스트
-GET {{baseUrl}}/1
+GET {{baseUrl}}/20
 
 GET {{baseUrl}}/2000
+
+GET {{baseUrl}}/21
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzMTM3ODQsImV4cCI6MTc4MzMxNzM4NH0.rkgiuFR7urgrx8ClpJOiJhoTSxIE2CLTLxPbr1zmT38
 
 ### POST Product 테스트
 POST {{baseUrl}}
@@ -129,3 +135,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6I
 
 ### DELETE Product 테스트
 DELETE {{baseUrl}}/17
+
+## Like Product 테스트
+POST {{baseUrl}}/1/likes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzMTM3ODQsImV4cCI6MTc4MzMxNzM4NH0.rkgiuFR7urgrx8ClpJOiJhoTSxIE2CLTLxPbr1zmT38
+
+DELETE {{baseUrl}}/1/likes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzMTM3ODQsImV4cCI6MTc4MzMxNzM4NH0.rkgiuFR7urgrx8ClpJOiJhoTSxIE2CLTLxPbr1zmT38

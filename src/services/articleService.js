@@ -12,7 +12,7 @@ const createArticle = async (data) => {
   return articleRepository.create(data);
 };
 
-const getArticles = async (page, pageSize, orderBy, keyword) => {
+const getArticles = async (page, pageSize, orderBy, keyword, userId) => {
   if (page && Number(page) < 1)
     throw createError(400, "page는 1 이상이어야 합니다.");
   if (pageSize && Number(pageSize) < 1)
@@ -21,7 +21,7 @@ const getArticles = async (page, pageSize, orderBy, keyword) => {
     throw createError(400, "잘못된 정렬 기준입니다.");
 
   const [articles, totalCount] = await Promise.all([
-    articleRepository.findAll(page, pageSize, orderBy, keyword),
+    articleRepository.findAll(page, pageSize, orderBy, keyword, userId),
     articleRepository.countByKeyword(keyword),
   ]);
 
@@ -31,8 +31,8 @@ const getArticles = async (page, pageSize, orderBy, keyword) => {
   };
 };
 
-const getArticleDetail = async (articleId) => {
-  const article = await articleRepository.findById(articleId);
+const getArticleDetail = async (articleId, userId) => {
+  const article = await articleRepository.findById(articleId, userId);
   if (!article) throw createError(404, "게시글을 찾을 수 없습니다.");
 
   const comments = await articleRepository.findCommentsByArticleId(articleId);
@@ -61,10 +61,50 @@ const deleteArticle = async (articleId) => {
   return deletedArticle;
 };
 
+const likeArticle = async (articleId, userId) => {
+  const existedLike = await articleRepository.findLike(articleId, userId);
+
+  if (existedLike) {
+    return {
+      liked: true,
+      favoriteCount: (await articleRepository.findById(articleId))
+        .favoriteCount,
+    };
+  }
+
+  const result = await articleRepository.like(articleId, userId);
+
+  return {
+    liked: true,
+    favoriteCount: result.favoriteCount,
+  };
+};
+
+const unlikeArticle = async (articleId, userId) => {
+  const existedLike = await articleRepository.findLike(articleId, userId);
+
+  if (!existedLike) {
+    const article = await articleRepository.findById(articleId);
+    return {
+      liked: false,
+      favoriteCount: article.favoriteCount,
+    };
+  }
+
+  const result = await articleRepository.unlike(articleId, userId);
+
+  return {
+    liked: false,
+    favoriteCount: result.favoriteCount,
+  };
+};
+
 export default {
   createArticle,
   getArticles,
   getArticleDetail,
   updateArticle,
   deleteArticle,
+  likeArticle,
+  unlikeArticle,
 };

@@ -12,12 +12,14 @@ const postArticle = async (req, res) => {
 
 const getArticles = async (req, res) => {
   const { page, pageSize, orderBy = "createdAt", keyword } = req.query;
+  const userId = req.auth?.id ?? null;
 
   const article = await articleService.getArticles(
     page,
     pageSize,
     orderBy,
     keyword,
+    userId,
   );
 
   res.status(200).json(article);
@@ -25,8 +27,9 @@ const getArticles = async (req, res) => {
 
 const getArticleDetail = async (req, res) => {
   const { articleId } = req.params;
+  const userId = req.auth?.id ?? null;
 
-  const article = await articleService.getArticleDetail(articleId);
+  const article = await articleService.getArticleDetail(articleId, userId);
 
   res.status(200).json(article);
 };
@@ -50,10 +53,26 @@ const deleteArticle = async (req, res) => {
   res.status(200).json(article);
 };
 
+const likeArticle = async (req, res) => {
+  const { articleId } = req.params;
+  const { id: userId } = req.auth;
+  const result = await articleService.likeArticle(articleId, userId);
+  res.status(200).json(result);
+};
+
+const unlikeArticle = async (req, res) => {
+  const { articleId } = req.params;
+  const { id: userId } = req.auth;
+  const result = await articleService.unlikeArticle(articleId, userId);
+  res.status(200).json(result);
+};
+
 export default {
   postArticle,
   getArticles,
   getArticleDetail,
   patchArticle,
   deleteArticle,
+  likeArticle,
+  unlikeArticle,
 };

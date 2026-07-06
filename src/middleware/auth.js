@@ -11,6 +11,14 @@ function verifyAccessToken() {
   });
 }
 
+function verifyOptionalAccessToken() {
+  return expressjwt({
+    secret: process.env.JWT_SECRET,
+    algorithms: ["HS256"],
+    credentialsRequired: false,
+  });
+}
+
 async function verifyArticleAuth(req, res, next) {
   const { articleId } = req.params;
   const article = await articleRepository.findById(articleId);
@@ -46,6 +54,7 @@ async function verifyProductAuth(req, res, next) {
 
 export default {
   verifyAccessToken,
+  verifyOptionalAccessToken,
   verifyArticleAuth,
   verifyCommentAuth,
   verifyProductAuth,

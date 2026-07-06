@@ -6,12 +6,12 @@ const productRouter = express.Router();
 
 productRouter
   .route("/")
-  .get(productController.getProducts)
+  .get(auth.verifyOptionalAccessToken(), productController.getProducts)
   .post(auth.verifyAccessToken(), productController.postProduct);
 
 productRouter
   .route("/:productId")
-  .get(productController.getProductDetail)
+  .get(auth.verifyOptionalAccessToken(), productController.getProductDetail)
   .patch(
     auth.verifyAccessToken(),
     auth.verifyProductAuth,
@@ -22,5 +22,10 @@ productRouter
     auth.verifyProductAuth,
     productController.deleteProduct,
   );
+
+productRouter
+  .route("/:productId/likes")
+  .post(auth.verifyAccessToken(), productController.likeProduct)
+  .delete(auth.verifyAccessToken(), productController.unlikeProduct);
 
 export default productRouter;

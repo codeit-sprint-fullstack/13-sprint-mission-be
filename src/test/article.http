@@ -40,6 +40,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6I
 GET {{baseUrl}}/1
 GET {{baseUrl}}/200
 
+GET {{baseUrl}}/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzMDA0NjUsImV4cCI6MTc4MzMwNDA2NX0.U-l77WJKUB9Xop3a_snM9C7rmsLhF6eGGVXV9h2bTJE
+
 ### GET Article List 테스트
 GET {{baseUrl}}
 GET {{baseUrl}}?orderBy=createdAt
@@ -53,6 +56,9 @@ GET {{baseUrl}}?orderBy=favoriteCount&pageSize=2&page=1&keyword=오늘
 GET {{baseUrl}}?orderBy=createdAt&pageSize=0&page=1&keyword=오늘
 GET {{baseUrl}}?orderBy=createdAt&pageSize=2&page=-1&keyword=오늘
 GET {{baseUrl}}?orderBy=whatever&pageSize=2&page=1&keyword=오늘
+
+GET {{baseUrl}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzMDA0NjUsImV4cCI6MTc4MzMwNDA2NX0.U-l77WJKUB9Xop3a_snM9C7rmsLhF6eGGVXV9h2bTJE
 
 ### GET Best 3
 GET {{baseUrl}}?orderBy=favoriteCount&pageSize=3&page=1 
@@ -133,3 +139,10 @@ DELETE {{baseUrl}}/18
 
 DELETE {{baseUrl}}/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDYzNTQsImV4cCI6MTc4MzE0OTk1NH0.nx5QWehbrpVSudjQHSM9iAa2kH2QqjMJAxkbr06-qwo
+
+## Like Article 테스트
+POST {{baseUrl}}/1/likes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzMDA0NjUsImV4cCI6MTc4MzMwNDA2NX0.U-l77WJKUB9Xop3a_snM9C7rmsLhF6eGGVXV9h2bTJE
+
+DELETE {{baseUrl}}/1/likes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMyNDcxNjcsImV4cCI6MTc4MzI1MDc2N30.JBhzaBL3Gy2JfOfI4YrSVJ5LOXrHT4BFyVCk9J9Md4c

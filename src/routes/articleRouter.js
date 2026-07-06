@@ -6,12 +6,12 @@ const articleRouter = express.Router();
 
 articleRouter
   .route("/")
-  .get(articleController.getArticles)
+  .get(auth.verifyOptionalAccessToken(), articleController.getArticles)
   .post(auth.verifyAccessToken(), articleController.postArticle);
 
 articleRouter
   .route("/:articleId")
-  .get(articleController.getArticleDetail)
+  .get(auth.verifyOptionalAccessToken(), articleController.getArticleDetail)
   .patch(
     auth.verifyAccessToken(),
     auth.verifyArticleAuth,
@@ -22,5 +22,10 @@ articleRouter
     auth.verifyArticleAuth,
     articleController.deleteArticle,
   );
+
+articleRouter
+  .route("/:articleId/likes")
+  .post(auth.verifyAccessToken(), articleController.likeArticle)
+  .delete(auth.verifyAccessToken(), articleController.unlikeArticle);
 
 export default articleRouter;
