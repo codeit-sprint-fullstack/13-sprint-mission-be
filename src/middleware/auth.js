@@ -3,6 +3,7 @@ import createError from "../utils/createError.js";
 import articleRepository from "../repositories/articleRepository.js";
 import commentRepository from "../repositories/commentRepository.js";
 import productRepository from "../repositories/productRepository.js";
+import productCommentRepository from "../repositories/productCommentRepository.js";
 
 function verifyAccessToken() {
   return expressjwt({
@@ -52,10 +53,22 @@ async function verifyProductAuth(req, res, next) {
   next();
 }
 
+async function verifyProductCommentAuth(req, res, next) {
+  const { productCommentId } = req.params;
+  const comment = await productCommentRepository.findById(productCommentId);
+
+  if (!comment) throw createError(404, "댓글을 찾을 수 없습니다.");
+  if (req.auth.id !== comment.user.id)
+    throw createError(403, "해당 댓글에 대한 권한이 없습니다.");
+
+  next();
+}
+
 export default {
   verifyAccessToken,
   verifyOptionalAccessToken,
   verifyArticleAuth,
   verifyCommentAuth,
   verifyProductAuth,
+  verifyProductCommentAuth,
 };

@@ -51,7 +51,10 @@ async function getProductDetail(productId, userId) {
   const product = await productRepository.findById(productId, userId);
   if (!product) throw createError(404, "상품을 찾을 수 없습니다.");
 
-  return product;
+  const comments =
+    await productRepository.findProductCommentsByProductId(productId);
+
+  return { ...product, comments };
 }
 
 const likeProduct = async (productId, userId) => {
