@@ -6,7 +6,7 @@ async function best(req, res) {
 }
 
 async function list(req, res) {
-  res.json(await articleService.list(req, query, req.user?.id));
+  res.json(await articleService.list(req.query, req.user?.id));
 }
 
 async function create(req, res) {

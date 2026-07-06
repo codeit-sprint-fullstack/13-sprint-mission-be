@@ -36,7 +36,7 @@ async function createForTarget(targetType, targetId, content, user) {
     targetType,
     targetId,
     content,
-    ownerId: user.is,
+    ownerId: user.id,
   });
   return commentResponse(comment);
 }

@@ -14,7 +14,7 @@ function signRefreshToken(user) {
 }
 
 function parseToken(req) {
-  const header = req.headers.authrization || "";
+  const header = req.headers.authorization || "";
   const [, token] = header.split(" ");
   if (!token) return null;
   try {
@@ -24,13 +24,13 @@ function parseToken(req) {
   }
 }
 
-function attachUser(req, required) {
+async function attachUser(req, required) {
   const payload = parseToken(req);
   if (!payload?.sub) {
     if (required) throw new HttpError(401, "로그인이 필요합니다.");
     return null;
   }
-  const user = usersRepository.findById(payload.sub);
+  const user = await usersRepository.findById(payload.sub);
   if (!user) {
     if (required) throw new HttpError(401, "유효하지 않은 사용자입니다.");
     return null;
@@ -39,18 +39,18 @@ function attachUser(req, required) {
   return user;
 }
 
-function requireAuth(req, res, next) {
+async function requireAuth(req, res, next) {
   try {
-    attachUser(req, true);
+    await attachUser(req, true);
     next();
   } catch (error) {
     next(error);
   }
 }
 
-function optionalAuth(req, res, next) {
+async function optionalAuth(req, res, next) {
   try {
-    attachUser(req, false);
+    await attachUser(req, false);
     next();
   } catch (error) {
     next(error);

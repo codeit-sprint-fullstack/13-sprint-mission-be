@@ -21,7 +21,8 @@ router
 
 router
   .route("/:articleId/favorite")
-  .post(requireAuth, asyncHandler(articleController.favorite));
+  .post(requireAuth, asyncHandler(articleController.favorite))
+  .delete(requireAuth, asyncHandler(articleController.unfavorite));
 
 router
   .route("/:articleId/comments")

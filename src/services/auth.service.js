@@ -10,6 +10,14 @@ import { createId } from "../repositories/prisma.repository.js";
 import * as usersRepository from "../repositories/user.repository.js";
 import { publicUser } from "../utils/presenter.util.js";
 
+function authResponse(user) {
+  return {
+    user: publicUser(user),
+    accessToken: signAccessToken(user),
+    refreshToken: signRefreshToken(user),
+  };
+}
+
 async function signUp({ email, nickname, password }) {
   if (!email || !nickname || !password) {
     throw new HttpError(400, "email, nickname, password를 모두 입력해주세요.");

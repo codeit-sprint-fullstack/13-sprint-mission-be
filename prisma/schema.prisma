@@ -48,6 +48,7 @@ model Product {
 model Article {
   id        String        @id
   title     String
+  content   String        @default("")
   imageUrls String[]
   ownerId   String
   owner     User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)

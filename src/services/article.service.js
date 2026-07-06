@@ -12,7 +12,7 @@ function normalizeImages(body) {
 }
 
 async function list(query, viewerId) {
-  const keyword = String(query, keyword || "").trim();
+  const keyword = String(query.keyword || "").trim();
   const articles = await articlesRepository.findAll({
     keyword,
     orderBy: query.orderBy,
