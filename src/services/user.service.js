@@ -3,16 +3,10 @@
 // ============================================================
 import userRepository from "../repositories/user.repository.js";
 
-async function getById() {}
-async function getAllProducts() {}
-async function getAllArticles() {}
-async function getAllLikedProducts() {}
-async function getAllLikedArticles() {}
+async function getById(id) {
+  return await userRepository.findById(id);
+}
 
 export default {
   getById,
-  getAllProducts,
-  getAllArticles,
-  getAllLikedProducts,
-  getAllLikedArticles,
 };

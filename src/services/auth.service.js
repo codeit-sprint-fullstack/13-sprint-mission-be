@@ -83,6 +83,8 @@ async function refreshToken(userId, refreshToken) {
   const newAccessToken = createToken(user);
   const newRefreshToken = createToken(user, "refresh");
 
+  await authRepository.update(userId, { refreshToken: newRefreshToken });
+
   return { newAccessToken, newRefreshToken };
 }
 

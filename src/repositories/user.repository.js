@@ -3,16 +3,20 @@
 // ============================================================
 import prisma from "../config/prisma.js";
 
-async function findById() {}
-async function findAllProducts() {}
-async function findAllArticles() {}
-async function findAllLikedProducts() {}
-async function findAllLikedArticles() {}
+async function findById(id) {
+  return await prisma.user.findUniqueOrThrow({
+    where: { id },
+    select: {
+      id: true,
+      nickname: true,
+      email: true,
+      avatar: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+}
 
 export default {
   findById,
-  findAllProducts,
-  findAllArticles,
-  findAllLikedProducts,
-  findAllLikedArticles,
 };

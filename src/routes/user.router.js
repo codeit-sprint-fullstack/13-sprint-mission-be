@@ -6,6 +6,7 @@
 // ============================================
 
 import express from "express";
+import authMiddleware from "../middlewares/auth.js";
 import userController from "../controllers/user.controller.js";
 
 const userRouter = express.Router();
@@ -13,18 +14,6 @@ const userRouter = express.Router();
 /** ======== 유저 라우트 ======== */
 
 // GET /users/me
-userRouter.get("/me", userController.getMe);
-
-// GET /users/me/products
-userRouter.get("/me/products", userController.getMyProducts);
-
-// GET /users/me/articles
-userRouter.get("/me/articles", userController.getMyArticles);
-
-// GET /users/me/likes/products
-userRouter.get("/me/likes/products", userController.getMyLikedProducts);
-
-// GET /users/me/likes/articles
-userRouter.get("/me/likes/articles", userController.getMyLikedArticles);
+userRouter.get("/me", authMiddleware.verifyAccessToken, userController.getMe);
 
 export default userRouter;
