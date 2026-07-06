@@ -10,3 +10,5 @@ build/
 
 # OS metadata
 .DS_Store
+
+/src/generated/prisma
