@@ -14,30 +14,60 @@ import {
   createCommentSchema,
   updateCommentSchema,
 } from "../schemas/comment.schemas.js";
+import {
+  createArticleSchema,
+  updateArticleSchema,
+} from "../schemas/article.schemas.js";
 
 const articleRouter = express.Router();
 
 /** ======== 게시글 라우트 ======== */
 
 // GET /articles
-articleRouter.get("/", articleController.getAllArticles);
+articleRouter.get(
+  "/",
+  authMiddleware.verifyAccessTokenOptional,
+  articleController.getAllArticles,
+);
 
 // GET /articles/:id
-articleRouter.get("/:id", articleController.getArticle);
+articleRouter.get(
+  "/:id",
+  authMiddleware.verifyAccessTokenOptional,
+  articleController.getArticle,
+);
 
 // POST /articles
-articleRouter.post("/", articleController.createArticle);
+articleRouter.post(
+  "/",
+  authMiddleware.verifyAccessToken,
+  validate(createArticleSchema),
+  articleController.createArticle,
+);
 
 // PATCH /articles/:id
-articleRouter.patch("/:id", articleController.updateArticle);
+articleRouter.patch(
+  "/:id",
+  authMiddleware.verifyAccessToken,
+  validate(updateArticleSchema),
+  articleController.updateArticle,
+);
 
 // DELETE /articles/:id
-articleRouter.delete("/:id", articleController.deleteArticle);
+articleRouter.delete(
+  "/:id",
+  authMiddleware.verifyAccessToken,
+  articleController.deleteArticle,
+);
 
 /** ======== 게시글 좋아요 라우트 ======== */
 
-// POST /products/:articleId/likes
-articleRouter.post("/:articleId/likes", articleController.toggleArticleLike);
+// POST /articles/:articleId/likes
+articleRouter.post(
+  "/:articleId/likes",
+  authMiddleware.verifyAccessToken,
+  articleController.toggleArticleLike,
+);
 
 /** ======== 게시글 댓글 라우트 ======== */
 

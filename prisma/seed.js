@@ -108,11 +108,13 @@ async function seedArticles(users) {
   const articles = [];
   for (let i = 0; i < ARTICLE_COUNT; i += 1) {
     const owner = faker.helpers.arrayElement(users);
+    const imageCount = faker.number.int({ min: 0, max: 3 });
 
     const article = await prisma.article.create({
       data: {
         title: faker.lorem.sentence({ min: 3, max: 8 }),
         content: faker.lorem.paragraphs({ min: 1, max: 3 }),
+        images: Array.from({ length: imageCount }, () => faker.image.urlPicsumPhotos()),
         ownerId: owner.id,
       },
     });
@@ -174,14 +176,20 @@ async function seedProductLikes(users, products) {
 async function seedArticleLikes(users, articles) {
   for (const article of articles) {
     const likers = pickRandomSubset(users, MAX_LIKES_PER_ITEM);
-    for (const liker of likers) {
-      await prisma.articleLike.create({
-        data: {
+    if (likers.length === 0) continue;
+
+    await prisma.$transaction([
+      prisma.articleLike.createMany({
+        data: likers.map((liker) => ({
           ownerId: liker.id,
           articleId: article.id,
-        },
-      });
-    }
+        })),
+      }),
+      prisma.article.update({
+        where: { id: article.id },
+        data: { likeCount: likers.length },
+      }),
+    ]);
   }
 }
 

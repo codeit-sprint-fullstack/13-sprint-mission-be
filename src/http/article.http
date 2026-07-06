@@ -1,3 +1,44 @@
 ### baseUrl 변수
 @baseUrl = http://localhost:3000
 
+@accessToken = 
+
+### 게시글 조회
+GET {{baseUrl}}/articles
+Authorization: Bearer {{accessToken}}
+
+### 단건 게시글 조회
+GET {{baseUrl}}/articles/25
+Authorization: Bearer {{accessToken}}
+
+### 게시글 등록
+POST {{baseUrl}}/articles
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "images": ["https://picsum.photos/seed/Roir5/1510/652?grayscale&blur=10"],
+  "title": "맥북프로",
+  "content": "올해 최신 게시글 맥북입니다."
+}
+
+### 게시글 수정
+PATCH {{baseUrl}}/articles/27
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "images": ["https://picsum.photos/seed/Roir5/1510/652?grayscale&blur=10"],
+  "title": "맥북프로 수정~",
+  "content": "올해 최신 게시글 맥북입니다."
+}
+
+### 게시글 삭제
+DELETE {{baseUrl}}/articles/27
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### 좋아요 한 게시글
+POST {{baseUrl}}/articles/26/likes
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
