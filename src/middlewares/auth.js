@@ -1,66 +1,17 @@
 import { expressjwt } from "express-jwt";
-import reviewRepository from "../repositories/reviewRepository.js";
 
-function throwUnauthorizedError() {
-  // 인증되지 않은 경우 401 에러를 발생시키는 함수
-  const error = new Error("Unauthorized");
-  error.code = 401;
-  throw error;
-}
-
-async function verifySessionsignIn(req, res, next) {
-  if (!req.isAuthenticated()) {
-    throwUnauthorizedError();
-  }
-  next();
-}
-
-const verifyAccessToken = expressjwt({
+// 요구사항(상품/게시글/댓글 기능 인가): "로그인한 사용자만"
+// -> Authorization: Bearer {accessToken} 헤더가 없거나 유효하지 않으면 401 (errorHandler에서 처리)
+export const verifyAccessToken = expressjwt({
   secret: process.env.JWT_SECRET,
   algorithms: ["HS256"],
 });
 
-const verifyRefreshToken = expressjwt({
+// 요구사항(상품 상세/좋아요): "사용자가 '좋아요'를 눌렀는지 여부를 확인할 수 있도록
+// 응답 객체에 포함시켜 반환해 주세요." (isLiked)
+// -> 토큰이 없으면 비로그인으로 통과, 있으면 검증 후 req.auth를 채워줌
+export const optionalAuthenticate = expressjwt({
   secret: process.env.JWT_SECRET,
   algorithms: ["HS256"],
-  getToken: (req) => req.cookies.refreshToken,
+  credentialsRequired: false,
 });
-
-async function verifyReviewAuth(req, res, next) {
-  const { id: reviewId } = req.params;
-  try {
-    const review = await reviewRepository.getById(reviewId);
-    if (!review) {
-      const error = new Error("Review not found");
-      error.code = 404;
-      throw error;
-    }
-
-    if (review.authorId !== req.user.id) {
-      const error = new Error("Forbidden");
-      error.code = 403;
-      throw error;
-    }
-    // 인증 성공 시 다음 미들웨어로 이동
-    next();
-  } catch (error) {
-    // 에러 발생 시 에러 핸들러로 전파
-    return next(error);
-  }
-}
-
-function validateEmailAndPassword(req, res, next) {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    const error = new Error("email, password 가 모두 필요합니다.");
-    error.code = 422;
-    throw error;
-  }
-}
-export default {
-  verifySessionsignIn,
-  verifyAccessToken,
-  verifyReviewAuth,
-  verifyRefreshToken,
-  validateEmailAndPassword,
-};
