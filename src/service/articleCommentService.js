@@ -15,10 +15,10 @@ const articleCommentService = {
     return { list, nextCursor };
   },
 
-  async createComment({ articleId, content }) {
+  async createComment({ articleId, content, userId }) {
     const article = await articleRepository.findById(articleId);
     if (!article) throw createError("게시글을 찾을 수 없습니다.", 404);
-    return articleCommentRepository.create({ id: nanoid(), content, articleId });
+    return articleCommentRepository.create({ id: nanoid(), content, articleId, userId });
   },
 
   async updateComment(id, data) {

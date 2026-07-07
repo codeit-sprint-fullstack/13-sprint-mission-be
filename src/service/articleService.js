@@ -40,8 +40,8 @@ const articleService = {
     return article;
   },
 
-  async createArticle(data) {
-    return articleRepository.create({ id: nanoid(), ...data });
+  async createArticle(userId, data) {
+    return articleRepository.create({ id: nanoid(), userId, ...data });
   },
 
   async updateArticle(id, data) {

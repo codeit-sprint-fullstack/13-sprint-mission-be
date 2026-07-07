@@ -4,7 +4,6 @@ const OPTIONAL_SIZE = {
   content: { min: 1, max: 500 },
 };
 
-// 댓글 등록
 export const createCommentSchema = z.object({
   content: z
     .string()

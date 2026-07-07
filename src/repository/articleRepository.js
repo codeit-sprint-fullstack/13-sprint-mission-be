@@ -2,7 +2,20 @@ import prisma from "#/lib/prisma.js";
 
 const articleRepository = {
   findMany({ orderBy, skip, take }) {
-    return prisma.article.findMany({ orderBy, skip, take });
+    return prisma.article.findMany({
+      orderBy,
+      skip,
+      take,
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        favoriteCount: true,
+        createdAt: true,
+        updatedAt: true,
+        user: { select: { id: true, nickname: true, image: true } },
+      },
+    });
   },
 
   count() {
@@ -12,7 +25,15 @@ const articleRepository = {
   findById(id) {
     return prisma.article.findUnique({
       where: { id },
-      select: { id: true, title: true, content: true, createdAt: true },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        favoriteCount: true,
+        createdAt: true,
+        updatedAt: true,
+        user: { select: { id: true, nickname: true, image: true } },
+      },
     });
   },
 

@@ -4,7 +4,13 @@ const articleCommentRepository = {
   findMany({ articleId, cursor, limit }) {
     return prisma.articleComment.findMany({
       where: { articleId },
-      select: { id: true, content: true, createdAt: true },
+      select: {
+        id: true,
+        content: true,
+        createdAt: true,
+        updatedAt: true,
+        user: { select: { id: true, nickname: true, image: true } },
+      },
       orderBy: { createdAt: "desc" },
       take: limit + 1,
       ...(cursor && { cursor: { id: cursor }, skip: 1 }),

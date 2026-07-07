@@ -28,7 +28,7 @@ const articleController = {
   async createArticle(req, res, next) {
     try {
       const data = createArticleSchema.parse(req.body);
-      const article = await articleService.createArticle(data);
+      const article = await articleService.createArticle(req.user.id, data);
       res.status(201).json({ success: true, data: article });
     } catch (err) {
       next(err);

@@ -3,7 +3,7 @@ import {
   createCommentSchema,
   getCommentsSchema,
   updateCommentSchema,
-} from "#/schemas/articleCommet.Schema.js";
+} from "#/schemas/articleComment.Schema.js";
 
 const articleCommentController = {
   async getComments(req, res, next) {
@@ -21,7 +21,11 @@ const articleCommentController = {
     try {
       const { articleId } = req.params;
       const { content } = createCommentSchema.parse(req.body);
-      const comment = await articleCommentService.createComment({ articleId, content });
+      const comment = await articleCommentService.createComment({
+        articleId,
+        content,
+        userId: req.user.id,
+      });
       res.status(201).json({ success: true, data: comment });
     } catch (err) {
       next(err);
