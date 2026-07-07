@@ -22,17 +22,14 @@ const articleRepository = {
     return prisma.article.count();
   },
 
-  findById(id) {
+  findById(id, userId) {
     return prisma.article.findUnique({
       where: { id },
-      select: {
-        id: true,
-        title: true,
-        content: true,
-        favoriteCount: true,
-        createdAt: true,
-        updatedAt: true,
+      include: {
         user: { select: { id: true, nickname: true, image: true } },
+        ...(userId && {
+          articleLikes: { where: { userId }, select: { userId: true } },
+        }),
       },
     });
   },

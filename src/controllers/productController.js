@@ -18,7 +18,7 @@ const productController = {
 
   async getProductById(req, res, next) {
     try {
-      const product = await productService.getProductById(req.params.id);
+      const product = await productService.getProductById(req.params.id, req.user?.id);
       res.json(product);
     } catch (err) {
       next(err);
@@ -56,10 +56,26 @@ const productController = {
 
   async uploadImages(req, res, next) {
     try {
-      const images = (req.files ?? []).map(
-        (file) => `/uploads/${file.filename}`,
-      );
+      const images = (req.files ?? []).map((file) => `/uploads/${file.filename}`);
       res.json({ images });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async likeProduct(req, res, next) {
+    try {
+      const result = await productService.likeProduct(req.user.id, req.params.id);
+      res.json({ success: true, favoriteCount: result.favoriteCount });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async unlikeProduct(req, res, next) {
+    try {
+      const result = await productService.unlikeProduct(req.user.id, req.params.id);
+      res.json({ success: true, favoriteCount: result.favoriteCount });
     } catch (err) {
       next(err);
     }

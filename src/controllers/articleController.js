@@ -18,7 +18,7 @@ const articleController = {
 
   async getArticleById(req, res, next) {
     try {
-      const article = await articleService.getArticleById(req.params.id);
+      const article = await articleService.getArticleById(req.params.id, req.user?.id);
       res.json(article);
     } catch (err) {
       next(err);
@@ -49,6 +49,24 @@ const articleController = {
     try {
       await articleService.deleteArticle(req.params.id);
       res.status(204).send();
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async likeArticle(req, res, next) {
+    try {
+      const result = await articleService.likeArticle(req.user.id, req.params.id);
+      res.json({ success: true, favoriteCount: result.favoriteCount });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async unlikeArticle(req, res, next) {
+    try {
+      const result = await articleService.unlikeArticle(req.user.id, req.params.id);
+      res.json({ success: true, favoriteCount: result.favoriteCount });
     } catch (err) {
       next(err);
     }

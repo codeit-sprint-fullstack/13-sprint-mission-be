@@ -9,8 +9,16 @@ const productRepository = {
     return prisma.product.count();
   },
 
-  findById(id) {
-    return prisma.product.findUnique({ where: { id } });
+  findById(id, userId) {
+    return prisma.product.findUnique({
+      where: { id },
+      include: {
+        user: { select: { id: true, nickname: true, image: true } },
+        ...(userId && {
+          likes: { where: { userId }, select: { userId: true } },
+        }),
+      },
+    });
   },
 
   create(data) {

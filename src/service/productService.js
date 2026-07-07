@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import prisma from "#/lib/prisma.js";
 import { createError } from "#/utils/httpError.js";
 import { searchByKeyword } from "#/utils/searchHandler.js";
 import productRepository from "#/repository/productRepository.js";
@@ -32,10 +33,11 @@ const productService = {
     return { list, totalCount };
   },
 
-  async getProductById(id) {
-    const product = await productRepository.findById(id);
+  async getProductById(id, userId) {
+    const product = await productRepository.findById(id, userId);
     if (!product) throw createError("상품을 찾을 수 없습니다.", 404);
-    return product;
+    const { likes, ...rest } = product;
+    return { ...rest, isLiked: userId ? (likes?.length ?? 0) > 0 : false };
   },
 
   async createProduct(userId, data) {
@@ -48,6 +50,33 @@ const productService = {
 
   async deleteProduct(id) {
     return productRepository.delete(id);
+  },
+
+  async likeProduct(userId, productId) {
+    const product = await productRepository.findById(productId);
+    if (!product) throw createError("상품을 찾을 수 없습니다.", 404);
+
+    return prisma.$transaction(async (tx) => {
+      await tx.productLike.create({ data: { userId, productId } });
+      return tx.product.update({
+        where: { id: productId },
+        data: { favoriteCount: { increment: 1 } },
+        select: { id: true, favoriteCount: true },
+      });
+    });
+  },
+
+  async unlikeProduct(userId, productId) {
+    return prisma.$transaction(async (tx) => {
+      await tx.productLike.delete({
+        where: { userId_productId: { userId, productId } },
+      });
+      return tx.product.update({
+        where: { id: productId },
+        data: { favoriteCount: { decrement: 1 } },
+        select: { id: true, favoriteCount: true },
+      });
+    });
   },
 };
 
