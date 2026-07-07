@@ -6,14 +6,11 @@ export const createArticleCommentSchema = z.object({
   content: contentField,
 });
 
-export const updateArticleCommentSchema = z.object({
-  content: contentField,
-});
-
 export const createProductCommentSchema = z.object({
   content: contentField,
 });
 
-export const updateProductCommentSchema = z.object({
+// PATCH /comments/:commentId 에서 공용으로 사용 (상품/게시글 댓글 구분 없음)
+export const updateCommentSchema = z.object({
   content: contentField,
 });

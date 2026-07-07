@@ -39,7 +39,9 @@ function errorHandler(err, req, res, next) {
 
   // express-jwt: Authorization 헤더가 없거나 토큰이 유효하지 않을 때 던지는 에러
   if (err.name === "UnauthorizedError") {
-    return res.status(err.status || 401).json({ message: "로그인이 필요합니다." });
+    return res
+      .status(err.status || 401)
+      .json({ message: "로그인이 필요합니다." });
   }
 
   // Prisma: update/delete 대상 레코드가 없을 때

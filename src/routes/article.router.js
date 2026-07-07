@@ -9,16 +9,12 @@ import {
 } from "../controllers/article.controller.js";
 import {
   createArticleComment,
-  updateArticleComment,
-  deleteArticleComment,
   getArticleComments,
 } from "../controllers/comment.controller.js";
 import { createArticleSchema } from "../schemas/article.schema.js";
-import {
-  createArticleCommentSchema,
-  updateArticleCommentSchema,
-} from "../schemas/comment.schema.js";
+import { createArticleCommentSchema } from "../schemas/comment.schema.js";
 import { validate } from "../middlewares/validate.js";
+import { verifyAccessToken } from "../middlewares/auth.js";
 
 const router = Router();
 
@@ -29,18 +25,13 @@ router.post("/", validate(createArticleSchema), createArticle);
 router.patch("/:articleId", validate(createArticleSchema), updateArticle);
 router.delete("/:articleId", deleteArticle);
 
-// 게시물 댓글 관련 API
+// 게시물 댓글 관련 API (생성/목록만 여기서, 수정/삭제는 /comments/:commentId 로 통합)
 router.get("/:articleId/comments", getArticleComments);
 router.post(
   "/:articleId/comments",
+  verifyAccessToken,
   validate(createArticleCommentSchema),
   createArticleComment,
 );
-router.patch(
-  "/:articleId/comments/:commentId",
-  validate(updateArticleCommentSchema),
-  updateArticleComment,
-);
-router.delete("/:articleId/comments/:commentId", deleteArticleComment);
 
 export default router;

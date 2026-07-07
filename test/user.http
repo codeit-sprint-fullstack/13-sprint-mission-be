@@ -5,8 +5,8 @@ POST {{baseUrl}}/auth/signUp
 Content-Type: application/json
 
 {
-  "email": "test0707@example.com",
-  "nickname": "김민정",
+  "email": "test07073@example.com",
+  "nickname": "김승민",
   "password": "password1234!",
   "image": "https://unsplash.com/ko/%EC%82%AC%EC%A7%84/%EB%A7%90%EC%9D%84-%ED%83%84-%EC%97%AC%EC%84%B1%EC%9D%B4-%ED%81%B0-%EC%82%AC%EC%95%94-%EB%A9%94%EC%82%AC%EB%A5%BC-%ED%96%A5%ED%95%B4-%EB%8B%AC%EB%A0%A4%EA%B0%91%EB%8B%88%EB%8B%A4-5IZn_sWzcrQ"
 }
@@ -36,7 +36,7 @@ POST {{baseUrl}}/auth/signIn
 Content-Type: application/json
 
 {
-  "email": "test0707@example.com",
+  "email": "test07073@example.com",
   "password": "password1234!"
 }
 
