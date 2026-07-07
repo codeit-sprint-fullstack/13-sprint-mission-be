@@ -6,12 +6,12 @@ const articleRouter = express.Router();
 
 articleRouter
   .route("/")
-  .get(auth.verifyOptionalAccessToken(), articleController.getArticles)
+  .get(auth.verifyOptionalAccessToken, articleController.getArticles)
   .post(auth.verifyAccessToken(), articleController.postArticle);
 
 articleRouter
   .route("/:articleId")
-  .get(auth.verifyOptionalAccessToken(), articleController.getArticleDetail)
+  .get(auth.verifyOptionalAccessToken, articleController.getArticleDetail)
   .patch(
     auth.verifyAccessToken(),
     auth.verifyArticleAuth,

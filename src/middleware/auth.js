@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import { expressjwt } from "express-jwt";
 import createError from "../utils/createError.js";
 import articleRepository from "../repositories/articleRepository.js";
@@ -12,12 +13,23 @@ function verifyAccessToken() {
   });
 }
 
-function verifyOptionalAccessToken() {
-  return expressjwt({
-    secret: process.env.JWT_SECRET,
-    algorithms: ["HS256"],
-    credentialsRequired: false,
-  });
+function verifyOptionalAccessToken(req, res, next) {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader?.startsWith("Bearer ")) {
+    return next();
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  try {
+    req.auth = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (err) {
+    // 만료, 위조 등 모두 비로그인으로 처리
+    req.auth = undefined;
+  }
+
+  next();
 }
 
 async function verifyArticleAuth(req, res, next) {

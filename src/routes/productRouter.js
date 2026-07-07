@@ -6,12 +6,12 @@ const productRouter = express.Router();
 
 productRouter
   .route("/")
-  .get(auth.verifyOptionalAccessToken(), productController.getProducts)
+  .get(auth.verifyOptionalAccessToken, productController.getProducts)
   .post(auth.verifyAccessToken(), productController.postProduct);
 
 productRouter
   .route("/:productId")
-  .get(auth.verifyOptionalAccessToken(), productController.getProductDetail)
+  .get(auth.verifyOptionalAccessToken, productController.getProductDetail)
   .patch(
     auth.verifyAccessToken(),
     auth.verifyProductAuth,

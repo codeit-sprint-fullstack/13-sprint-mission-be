@@ -18,7 +18,7 @@ GET {{baseUrl}}?orderBy=favorite&pageSize=0&page=1
 GET {{baseUrl}}?orderBy=favorite&pageSize=2&page=0
 
 GET {{baseUrl}}
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzMTM3ODQsImV4cCI6MTc4MzMxNzM4NH0.rkgiuFR7urgrx8ClpJOiJhoTSxIE2CLTLxPbr1zmT38
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzOTI3MzAsImV4cCI6MTc4MzM5NjMzMH0.8HqsE9gdpywsxvKNe9cZFKGa3KUkYEL5wEHo8cW14j8
 
 ### GET Product Detail 테스트
 GET {{baseUrl}}/1

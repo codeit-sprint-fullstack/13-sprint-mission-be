@@ -58,7 +58,7 @@ GET {{baseUrl}}?orderBy=createdAt&pageSize=2&page=-1&keyword=오늘
 GET {{baseUrl}}?orderBy=whatever&pageSize=2&page=1&keyword=오늘
 
 GET {{baseUrl}}
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzMDA0NjUsImV4cCI6MTc4MzMwNDA2NX0.U-l77WJKUB9Xop3a_snM9C7rmsLhF6eGGVXV9h2bTJE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzOTI3MzAsImV4cCI6MTc4MzM5NjMzMH0.8HqsE9gdpywsxvKNe9cZFKGa3KUkYEL5wEHo8cW14j8
 
 ### GET Best 3
 GET {{baseUrl}}?orderBy=favoriteCount&pageSize=3&page=1 
