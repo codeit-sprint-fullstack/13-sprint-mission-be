@@ -13,3 +13,4 @@ node_modules/
 
 # Prisma 생성 파일
 prisma/migrations/dev.db*
+/generated/prisma
