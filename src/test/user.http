@@ -1,0 +1,6 @@
+@baseUrl=http://localhost:3000/user
+
+GET {{baseUrl}}/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzODMzMzIsImV4cCI6MTc4MzM4NjkzMn0.lEj6dXLvTunFiGm1mbKB3culcnydwRjdF2ukiUnQ6H0
+
+GET {{baseUrl}}/me

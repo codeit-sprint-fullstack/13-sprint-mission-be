@@ -7,6 +7,7 @@ import {
   commentRouter,
   productCommentRouter,
   authRouter,
+  userRouter,
 } from "./routes/index.js";
 import errorHandler from "./middleware/errorHandler.js";
 import { setServers } from "node:dns/promises";
@@ -30,6 +31,7 @@ app.get("/", (req, res) => {
   res.send("서버 잘 작동중!");
 });
 app.use("/auth", authRouter);
+app.use("/user", userRouter);
 app.use("/products", productRouter);
 app.use("/products/:productId/comments", productCommentRouter);
 app.use("/articles", articleRouter);
