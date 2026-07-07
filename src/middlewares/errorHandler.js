@@ -1,3 +1,4 @@
+// utils/customError.js 와 합침 그리고 utils/ 지움
 class CustomError extends Error {
   constructor(statusCode, message) {
     super(message);
