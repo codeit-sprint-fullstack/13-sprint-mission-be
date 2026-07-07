@@ -22,7 +22,7 @@ app.use(express.json());
 // 라우터 등록
 app.use("/articles", articleRouter);
 app.use("/products", productRouter);
-app.use("/users", userRouter);
+app.use("/auth", userRouter);
 
 // 요구사항(에러 처리): "모든 예외 상황을 처리할 수 있는 에러 핸들러 미들웨어를 구현합니다."
 // -> 반드시 라우터 등록 다음, 가장 마지막에 위치해야 함
