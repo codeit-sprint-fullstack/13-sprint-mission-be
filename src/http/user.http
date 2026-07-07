@@ -1,0 +1,37 @@
+@BASE_URL = http://localhost:3000
+@ACCESS_TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzgzNDA5ODg1LCJleHAiOjE3ODM0MTM0ODV9.YaQW3EbE36CO1JWsJ1w1GNg9l4wdlq1IrQHvOxmYBVk
+
+### 내정보 조회
+GET {{BASE_URL}}/users/me
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+
+### 프로필 사진 수정
+PATCH {{BASE_URL}}/users/me
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+{
+  "image": "https://example.com/...1"
+}
+
+
+### 비밀번호 수정
+PATCH {{BASE_URL}}/users/me/password
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+{
+  "passwordConfirmation": "123456789@",
+  "password": "123456789@",
+  "currentPassword": "12345678@"
+}
+
+### 내 상품 조회
+GET {{BASE_URL}}/users/me/products?page=1&pageSize=10&keyword=
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+
+### 
+GET {{BASE_URL}}/users/me/favorites?page=1&pageSize=10&keyword=
+Authorization: Bearer {{ACCESS_TOKEN}}

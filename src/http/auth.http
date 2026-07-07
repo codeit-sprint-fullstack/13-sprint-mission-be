@@ -1,0 +1,30 @@
+@BASE_URL = http://localhost:3000
+
+### 회원가입
+POST {{BASE_URL}}/auth/signUp
+Content-Type: application/json
+
+{
+  "email": "1ddas1@gamil.com",
+  "nickname": "a2태1현1",
+  "password": "12345678@",
+  "passwordConfirmation":"12345678@"
+}
+
+
+### 로그인
+POST {{BASE_URL}}/auth/signIn
+Content-Type: application/json
+
+{
+  "email": "1ddas1@gamil.com",
+  "password": "123456789@"
+}
+
+### 리프레쉬 토큰
+POST {{BASE_URL}}/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": "string"
+}

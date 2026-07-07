@@ -1,0 +1,57 @@
+@BASE_URL = http://localhost:3000
+@ACCESS_TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzgzNDA5ODg1LCJleHAiOjE3ODM0MTM0ODV9.YaQW3EbE36CO1JWsJ1w1GNg9l4wdlq1IrQHvOxmYBVk
+
+
+### 상품 생성
+POST {{BASE_URL}}/products
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+{
+  "images": [
+    "https://example.com/..."
+  ],
+  "tags": [
+    "전자제품"
+  ],
+  "price": 0,
+  "description": "string",
+  "name": "상품 이름"
+}
+
+### 상품 조회
+GET {{BASE_URL}}/products?page=1&pageSize=10&orderBy=recent
+
+
+### 상품 상세 조회
+GET {{BASE_URL}}/products/1
+
+### 상품 수정
+PATCH {{BASE_URL}}/products/1
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+{
+  "images": [
+    "https://example.com/..."
+  ],
+  "tags": [
+    "컴퓨터"
+  ],
+  "price": 0,
+  "description": "string",
+  "name": "상품 이름"
+}
+
+### 상품 삭제
+DELETE {{BASE_URL}}/products/7
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+### 상품 좋아요 등록
+POST {{BASE_URL}}/products/8/favorite
+Content-Type: application/json
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+### 상품 좋아요 삭제
+DELETE {{BASE_URL}}/products/8/favorite
+Authorization: Bearer {{ACCESS_TOKEN}}
