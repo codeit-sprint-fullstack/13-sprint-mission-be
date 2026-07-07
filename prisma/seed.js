@@ -1,6 +1,6 @@
-require("../src/config/env");
-const bcrypt = require("bcryptjs");
-const { PrismaClient } = require("@prisma/client");
+import "../src/config/env";
+import bcrypt from "bcryptjs";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 

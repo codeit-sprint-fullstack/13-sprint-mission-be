@@ -69,7 +69,7 @@ async function update(articleId, body, user) {
 
 async function remove(articleId, user) {
   const article = await articlesRepository.findById(articleId);
-  if (!article) throw new HttpError(404, "게시글을 찾을 수 없습ㅂ니다.");
+  if (!article) throw new HttpError(404, "게시글을 찾을 수 없습니다.");
   if (article.ownerId !== user.id)
     throw new HttpError(403, "게시글 작성자만 삭제할 수 있습니다.");
   await articlesRepository.remove(article.id);

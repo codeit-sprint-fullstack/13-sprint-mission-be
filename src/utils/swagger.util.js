@@ -124,7 +124,7 @@ export default {
         tags: ["Uploads"],
         summary: "이미지 업로드",
         security: [{ bearerAuth: [] }],
-        requsetBody: {
+        requestBody: {
           requried: true,
           content: {
             "multipart/form-data": {
@@ -198,7 +198,7 @@ export default {
         },
       },
       patch: {
-        tages: ["Products"],
+        tags: ["Products"],
         summary: "상품 수정",
         security: [{ bearerAuth: [] }],
         responses: {
