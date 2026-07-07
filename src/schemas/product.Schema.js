@@ -20,7 +20,9 @@ export const createProductSchema = z.object({
     .min(0, "가격은 0 이상이어야 합니다."),
   tags: z
     .array(z.string().max(OPTIONAL_SIZE.tag.max, "태그는 5자 이하여야 합니다."))
-    .optional(),
+    .optional()
+    .default([]),
+  images: z.array(z.string()).optional().default([]),
 });
 
 export const updateProductSchema = createProductSchema.partial();

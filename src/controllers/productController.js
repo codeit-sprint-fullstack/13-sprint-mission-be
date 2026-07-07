@@ -1,93 +1,69 @@
-import { asyncHandler } from "../utils/asycHandler.js";
-import prisma, { Prisma } from "../lib/prisma.js";
-import { success } from "zod";
-import { nanoid } from "nanoid";
-import { skip } from "@prisma/client/runtime/library";
-import { NotFoundError } from "../utils/errors.js";
-import { searchByKeyword } from "../utils/searchHandler.js";
+import productService from "#/service/productService.js";
+import {
+  createProductSchema,
+  getProductsSchema,
+  updateProductSchema,
+} from "#/schemas/product.Schema.js";
 
-//상품 등록
-export const createProduct = asyncHandler(async (req, res) => {
-  const product = await prisma.product.create({
-    data: {
-      id: nanoid(),
-      ...req.validatedData,
-    },
-  });
-  res.status(201).json({ success: true, data: product });
-});
+const productController = {
+  async getProducts(req, res, next) {
+    try {
+      const data = getProductsSchema.parse(req.query);
+      const result = await productService.getProducts(data);
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
+  },
 
-//상품 목록 조회
-export const getProducts = asyncHandler(async (req, res) => {
-  const {
-    page = 1,
-    pageSize = 10,
-    orderBy = "recent",
-    keyword = "",
-  } = req.query;
+  async getProductById(req, res, next) {
+    try {
+      const product = await productService.getProductById(req.params.id);
+      res.json(product);
+    } catch (err) {
+      next(err);
+    }
+  },
 
-  const offset = (Number(page) - 1) * Number(pageSize);
-  const limit = Number(pageSize);
-  const order =
-    orderBy === "oldest" ? { createdAt: "asc" } : { createdAt: "desc" };
+  async createProduct(req, res, next) {
+    try {
+      const data = createProductSchema.parse(req.body);
+      const product = await productService.createProduct(req.user.id, data);
+      res.status(201).json({ success: true, data: product });
+    } catch (err) {
+      next(err);
+    }
+  },
 
-  if (keyword) {
-    const { list, totalCount } = await searchByKeyword({
-      table: "products",
-      fields: ["name", "description"],
-      keyword,
-      order,
-      limit,
-      offset,
-    });
+  async updateProduct(req, res, next) {
+    try {
+      const data = updateProductSchema.parse(req.body);
+      const product = await productService.updateProduct(req.params.id, data);
+      res.json(product);
+    } catch (err) {
+      next(err);
+    }
+  },
 
-    return res.status(200).json({
-      list,
-      totalCount,
-    });
-  }
+  async deleteProduct(req, res, next) {
+    try {
+      await productService.deleteProduct(req.params.id);
+      res.status(204).send();
+    } catch (err) {
+      next(err);
+    }
+  },
 
-  const [totalCount, list] = await Promise.all([
-    prisma.product.count(),
-    prisma.product.findMany({
-      orderBy: order,
-      skip: offset,
-      take: limit,
-    }),
-  ]);
+  async uploadImages(req, res, next) {
+    try {
+      const images = (req.files ?? []).map(
+        (file) => `/uploads/${file.filename}`,
+      );
+      res.json({ images });
+    } catch (err) {
+      next(err);
+    }
+  },
+};
 
-  res.status(200).json({ list, totalCount });
-});
-
-//상품 상세 조회
-export const getProductById = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const product = await prisma.product.findUnique({ where: { id } });
-
-  if (!product) throw new NotFoundError("상품 아이디를 찾을 수 없습니다.");
-
-  res.json(product);
-});
-
-export const updateProduct = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const product = await prisma.product.update({
-    where: { id },
-    data: req.validatedData,
-  });
-
-  if (!product)
-    throw new NotFoundError({ message: "존재하지 않는 ID 입니다." });
-
-  res.json(product);
-});
-
-//상품 삭제
-export const deleteProduct = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const product = await prisma.product.delete({ where: { id } });
-
-  if (!product) throw new NotFoundError("존재하지 않는 상품 입니다.");
-
-  res.status(204).send();
-});
+export default productController;
