@@ -1,0 +1,47 @@
+@baseUrl = http://localhost:3001
+
+### 로그인 (토큰 발급용)
+# @name login
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "encryptedpassword": "password123"
+}
+
+### 상품 생성
+# @name createProduct
+POST {{baseUrl}}/product
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+{
+  "name": "테스트 상품",
+  "description": "설명입니다222222",
+  "price": 10000,
+  "tags": ["tag1", "tag2"],
+  "images": ["https://example.com/image.jpg"]
+}
+
+### 상품 좋아요
+POST {{baseUrl}}/product/{{createProduct.response.body.$.id}}/like
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+### 상품 좋아요 취소
+DELETE {{baseUrl}}/product/{{createProduct.response.body.$.id}}/like
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+### 상품 수정
+PUT {{baseUrl}}/product/{{createProduct.response.body.$.id}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+{
+  "name": "수정된 상품명",
+  "price": 2000
+}
+
+### 상품 삭제
+DELETE {{baseUrl}}/product/{{createProduct.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.accessToken}}

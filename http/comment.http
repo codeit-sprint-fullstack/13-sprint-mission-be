@@ -1,0 +1,84 @@
+@baseUrl = http://localhost:3001
+
+### 로그인 (토큰 발급용)
+# @name login
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "song@test.com",
+  "encryptedpassword": "password123"
+}
+
+### 댓글 달 상품 생성
+# @name createProduct
+POST {{baseUrl}}/product
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+{
+  "name": "댓글 테스트용 상품",
+  "description": "설명입니다",
+  "price": 10000,
+  "tags": ["tag1"],
+  "images": ["https://example.com/image.jpg"]
+}
+
+### 상품 댓글 생성
+# @name createComment
+POST {{baseUrl}}/comment
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+{
+  "content": "혹시 사용기간이 어떻게 되실까요?",
+  "productId": {{createProduct.response.body.$.id}}
+}
+
+### 댓글 수정
+PUT {{baseUrl}}/comment/{{createComment.response.body.$.id}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+{
+  "content": "수정된 댓글 내용입니다."
+}
+
+### 댓글 삭제
+DELETE {{baseUrl}}/comment/{{createComment.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+### 댓글 달 게시글 생성
+# @name createArticle
+POST {{baseUrl}}/article
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+{
+  "title": "댓글 테스트용 게시글",
+  "content": "내용입니다"
+}
+
+### 게시글 댓글 생성
+# @name createArticleComment
+POST {{baseUrl}}/comment
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+{
+  "content": "게시글에 남기는 댓글입니다.",
+  "articleId": {{createArticle.response.body.$.id}}
+}
+
+### 게시글 댓글 수정
+PUT {{baseUrl}}/comment/{{createArticleComment.response.body.$.id}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+{
+  "content": "수정된 게시글 댓글 내용입니다."
+}
+
+### 게시글 댓글 삭제
+DELETE {{baseUrl}}/comment/{{createArticleComment.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.accessToken}}

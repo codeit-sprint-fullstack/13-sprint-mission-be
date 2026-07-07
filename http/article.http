@@ -1,0 +1,44 @@
+@baseUrl = http://localhost:3001
+
+### 로그인 (토큰 발급용)
+# @name login
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "encryptedpassword": "password123"
+}
+
+### 게시글 생성
+# @name createArticle
+POST {{baseUrl}}/article
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+{
+  "title": "테스트 게시글",
+  "content": "내용입니다",
+  "image": "https://example.com/image.jpg"
+}
+
+### 게시글 좋아요
+POST {{baseUrl}}/article/{{createArticle.response.body.$.id}}/like
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+### 게시글 좋아요 취소
+DELETE {{baseUrl}}/article/{{createArticle.response.body.$.id}}/like
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+### 게시글 수정
+PUT {{baseUrl}}/article/{{createArticle.response.body.$.id}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+{
+  "title": "수정된 제목"
+}
+
+### 게시글 삭제
+DELETE {{baseUrl}}/article/{{createArticle.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.accessToken}}
