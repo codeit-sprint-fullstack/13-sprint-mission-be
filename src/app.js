@@ -26,6 +26,7 @@ app.use(
     ],
   }),
 );
+app.use("/uploads", express.static("uploads"));
 
 app.get("/", (req, res) => {
   res.send("서버 잘 작동중!");

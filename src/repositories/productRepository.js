@@ -1,10 +1,11 @@
 import prisma from "../config/prisma.js";
 
 async function create(product) {
-  const { tags = [], images = [], ...rest } = product;
+  const { price, tags = [], images = [], ...rest } = product;
   const createdProduct = await prisma.product.create({
     data: {
       ...rest,
+      price: Number(price),
       tags: {
         connectOrCreate: tags.map((tag) => ({
           where: { name: tag },

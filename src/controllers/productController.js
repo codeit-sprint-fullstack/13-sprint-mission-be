@@ -18,6 +18,12 @@ const getProducts = async (req, res) => {
 const postProduct = async (req, res) => {
   const product = await productService.createProduct({
     ...req.body,
+    tags: Array.isArray(req.body.tags)
+      ? req.body.tags
+      : req.body.tags
+        ? [req.body.tags]
+        : [],
+    images: req.files.map((file) => file.path.replaceAll("\\", "/")),
     userId: req.auth.id,
   });
 

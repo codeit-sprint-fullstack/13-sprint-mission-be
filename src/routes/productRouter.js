@@ -1,5 +1,6 @@
 import express from "express";
 import auth from "../middleware/auth.js";
+import upload from "../middleware/upload.js";
 import productController from "../controllers/productController.js";
 
 const productRouter = express.Router();
@@ -7,7 +8,11 @@ const productRouter = express.Router();
 productRouter
   .route("/")
   .get(auth.verifyOptionalAccessToken, productController.getProducts)
-  .post(auth.verifyAccessToken(), productController.postProduct);
+  .post(
+    auth.verifyAccessToken(),
+    upload.array("images", 3),
+    productController.postProduct,
+  );
 
 productRouter
   .route("/:productId")
