@@ -7,21 +7,31 @@ import optionalAuth from "#/middlewares/optionalAuth.js";
 const articleRouter = express.Router();
 const auth = passport.authenticate("access-token", { session: false });
 
-articleRouter.get("/", articleController.getArticles);
-articleRouter.post("/", auth, articleController.createArticle);
+articleRouter
+  .route("/")
+  .get(articleController.getArticles)
+  .post(auth, articleController.createArticle);
 
 // 댓글 수정/삭제 — /:id 보다 먼저 등록해야 충돌 방지
-articleRouter.patch("/comments/:id", auth, articleCommentController.updateComment);
-articleRouter.delete("/comments/:id", auth, articleCommentController.deleteComment);
+articleRouter
+  .route("/comments/:id")
+  .patch(auth, articleCommentController.updateComment)
+  .delete(auth, articleCommentController.deleteComment);
 
-articleRouter.get("/:id", optionalAuth, articleController.getArticleById);
-articleRouter.patch("/:id", auth, articleController.updateArticle);
-articleRouter.delete("/:id", auth, articleController.deleteArticle);
+articleRouter
+  .route("/:id")
+  .get(optionalAuth, articleController.getArticleById)
+  .patch(auth, articleController.updateArticle)
+  .delete(auth, articleController.deleteArticle);
 
-articleRouter.post("/:id/like", auth, articleController.likeArticle);
-articleRouter.delete("/:id/like", auth, articleController.unlikeArticle);
+articleRouter
+  .route("/:id/like")
+  .post(auth, articleController.likeArticle)
+  .delete(auth, articleController.unlikeArticle);
 
-articleRouter.post("/:articleId/comments", auth, articleCommentController.createComment);
-articleRouter.get("/:articleId/comments", articleCommentController.getComments);
+articleRouter
+  .route("/:articleId/comments")
+  .post(auth, articleCommentController.createComment)
+  .get(articleCommentController.getComments);
 
 export default articleRouter;
