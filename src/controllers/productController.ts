@@ -6,7 +6,11 @@ export const productController = {
   createProduct: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const ownerId = req.user?.userId;
-      if (!ownerId) throw new AppError("인증 정보가 없습니다.");
+      if (!ownerId) {
+        const error: AppError = new Error("인증 정보가 없습니다.");
+        error.statusCode = 401;
+        throw error;
+      }
 
       const { name, description, price, tags } = req.body;
       const files = req.files as Express.Multer.File[];
@@ -26,13 +30,11 @@ export const productController = {
         images,
       });
 
-      res
-        .status(201)
-        .json({
-          success: true,
-          message: "상품이 등록되었습니다.",
-          data: result,
-        });
+      res.status(201).json({
+        success: true,
+        message: "상품이 등록되었습니다.",
+        data: result,
+      });
     } catch (error) {
       next(error);
     }
@@ -66,13 +68,11 @@ export const productController = {
     try {
       const id = Number(req.params.id);
       const result = await productService.updateProduct(id, req.body);
-      res
-        .status(200)
-        .json({
-          success: true,
-          message: "상품이 수정되었습니다.",
-          data: result,
-        });
+      res.status(200).json({
+        success: true,
+        message: "상품이 수정되었습니다.",
+        data: result,
+      });
     } catch (error) {
       next(error);
     }

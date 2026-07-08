@@ -5,6 +5,7 @@ import path from "path";
 import { errorHandler } from "./middlewares/errorHandler";
 import authRoutes from "./routes/authRoutes";
 import productRoutes from "./routes/productRoutes";
+import commentRoutes from "./routes/commentRoutes";
 
 dotenv.config();
 
@@ -21,14 +22,13 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRoutes);
 app.use("/products", productRoutes);
+app.use("/", commentRoutes);
 
 app.use((req, res, next) => {
-  res
-    .status(404)
-    .json({
-      success: false,
-      message: "요청하신 API 라우트를 찾을 수 없습니다.",
-    });
+  res.status(404).json({
+    success: false,
+    message: "요청하신 API 라우트를 찾을 수 없습니다.",
+  });
 });
 
 app.use(errorHandler);
