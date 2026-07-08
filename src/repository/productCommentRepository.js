@@ -1,9 +1,9 @@
 import prisma from "#/lib/prisma.js";
 
-const articleCommentRepository = {
-  findMany({ articleId, cursor, limit }) {
-    return prisma.articleComment.findMany({
-      where: { articleId },
+const productCommentRepository = {
+  findMany({ productId, cursor, limit }) {
+    return prisma.productComment.findMany({
+      where: { productId },
       select: {
         id: true,
         content: true,
@@ -18,20 +18,20 @@ const articleCommentRepository = {
   },
 
   findById(id) {
-    return prisma.articleComment.findUnique({ where: { id } });
+    return prisma.productComment.findUnique({ where: { id } });
   },
 
   create(data) {
-    return prisma.articleComment.create({ data });
+    return prisma.productComment.create({ data });
   },
 
   update(id, data) {
-    return prisma.articleComment.update({ where: { id }, data });
+    return prisma.productComment.update({ where: { id }, data });
   },
 
   delete(id) {
-    return prisma.articleComment.delete({ where: { id } });
+    return prisma.productComment.delete({ where: { id } });
   },
 };
 
-export default articleCommentRepository;
+export default productCommentRepository;

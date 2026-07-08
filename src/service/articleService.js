@@ -46,11 +46,17 @@ const articleService = {
     return articleRepository.create({ id: nanoid(), userId, ...data });
   },
 
-  async updateArticle(id, data) {
+  async updateArticle(userId, id, data) {
+    const article = await articleRepository.findById(id);
+    if (!article) throw createError("게시글을 찾을 수 없습니다.", 404);
+    if (article.userId !== userId) throw createError("수정 권한이 없습니다.", 403);
     return articleRepository.update(id, data);
   },
 
-  async deleteArticle(id) {
+  async deleteArticle(userId, id) {
+    const article = await articleRepository.findById(id);
+    if (!article) throw createError("게시글을 찾을 수 없습니다.", 404);
+    if (article.userId !== userId) throw createError("삭제 권한이 없습니다.", 403);
     return articleRepository.delete(id);
   },
 

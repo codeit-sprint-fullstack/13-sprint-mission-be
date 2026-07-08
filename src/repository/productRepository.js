@@ -14,6 +14,16 @@ const productRepository = {
       where: { id },
       include: {
         user: { select: { id: true, nickname: true, image: true } },
+        comments: {
+          select: {
+            id: true,
+            content: true,
+            createdAt: true,
+            updatedAt: true,
+            user: { select: { id: true, nickname: true, image: true } },
+          },
+          orderBy: { createdAt: "desc" },
+        },
         ...(userId && {
           likes: { where: { userId }, select: { userId: true } },
         }),

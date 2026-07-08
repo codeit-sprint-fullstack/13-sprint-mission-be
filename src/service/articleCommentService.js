@@ -7,11 +7,9 @@ const articleCommentService = {
   async getComments({ articleId, cursor, pageSize }) {
     const limit = Number(pageSize);
     const comments = await articleCommentRepository.findMany({ articleId, cursor, limit });
-
     const hasNext = comments.length > limit;
     const list = hasNext ? comments.slice(0, limit) : comments;
     const nextCursor = hasNext ? list[list.length - 1].id : null;
-
     return { list, nextCursor };
   },
 
@@ -21,11 +19,17 @@ const articleCommentService = {
     return articleCommentRepository.create({ id: nanoid(), content, articleId, userId });
   },
 
-  async updateComment(id, data) {
+  async updateComment(userId, id, data) {
+    const comment = await articleCommentRepository.findById(id);
+    if (!comment) throw createError("댓글을 찾을 수 없습니다.", 404);
+    if (comment.userId !== userId) throw createError("수정 권한이 없습니다.", 403);
     return articleCommentRepository.update(id, data);
   },
 
-  async deleteComment(id) {
+  async deleteComment(userId, id) {
+    const comment = await articleCommentRepository.findById(id);
+    if (!comment) throw createError("댓글을 찾을 수 없습니다.", 404);
+    if (comment.userId !== userId) throw createError("삭제 권한이 없습니다.", 403);
     return articleCommentRepository.delete(id);
   },
 };

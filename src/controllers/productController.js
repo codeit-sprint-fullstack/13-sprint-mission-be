@@ -38,7 +38,7 @@ const productController = {
   async updateProduct(req, res, next) {
     try {
       const data = updateProductSchema.parse(req.body);
-      const product = await productService.updateProduct(req.params.id, data);
+      const product = await productService.updateProduct(req.user.id, req.params.id, data);
       res.json(product);
     } catch (err) {
       next(err);
@@ -47,7 +47,7 @@ const productController = {
 
   async deleteProduct(req, res, next) {
     try {
-      await productService.deleteProduct(req.params.id);
+      await productService.deleteProduct(req.user.id, req.params.id);
       res.status(204).send();
     } catch (err) {
       next(err);

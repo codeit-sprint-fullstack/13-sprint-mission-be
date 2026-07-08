@@ -1,16 +1,16 @@
-import articleCommentService from "#/service/articleCommentService.js";
+import productCommentService from "#/service/productCommentService.js";
 import {
   createCommentSchema,
   getCommentsSchema,
   updateCommentSchema,
-} from "#/schemas/articleComment.Schema.js";
+} from "#/schemas/productComment.Schema.js";
 
-const articleCommentController = {
+const productCommentController = {
   async getComments(req, res, next) {
     try {
-      const { articleId } = req.params;
+      const { productId } = req.params;
       const data = getCommentsSchema.parse(req.query);
-      const result = await articleCommentService.getComments({ articleId, ...data });
+      const result = await productCommentService.getComments({ productId, ...data });
       res.json(result);
     } catch (err) {
       next(err);
@@ -19,10 +19,10 @@ const articleCommentController = {
 
   async createComment(req, res, next) {
     try {
-      const { articleId } = req.params;
+      const { productId } = req.params;
       const { content } = createCommentSchema.parse(req.body);
-      const comment = await articleCommentService.createComment({
-        articleId,
+      const comment = await productCommentService.createComment({
+        productId,
         content,
         userId: req.user.id,
       });
@@ -35,7 +35,11 @@ const articleCommentController = {
   async updateComment(req, res, next) {
     try {
       const data = updateCommentSchema.parse(req.body);
-      const comment = await articleCommentService.updateComment(req.user.id, req.params.id, data);
+      const comment = await productCommentService.updateComment(
+        req.user.id,
+        req.params.id,
+        data,
+      );
       res.json(comment);
     } catch (err) {
       next(err);
@@ -44,7 +48,7 @@ const articleCommentController = {
 
   async deleteComment(req, res, next) {
     try {
-      await articleCommentService.deleteComment(req.user.id, req.params.id);
+      await productCommentService.deleteComment(req.user.id, req.params.id);
       res.status(204).send();
     } catch (err) {
       next(err);
@@ -52,4 +56,4 @@ const articleCommentController = {
   },
 };
 
-export default articleCommentController;
+export default productCommentController;

@@ -44,11 +44,17 @@ const productService = {
     return productRepository.create({ id: nanoid(), userId, ...data });
   },
 
-  async updateProduct(id, data) {
+  async updateProduct(userId, id, data) {
+    const product = await productRepository.findById(id);
+    if (!product) throw createError("상품을 찾을 수 없습니다.", 404);
+    if (product.userId !== userId) throw createError("수정 권한이 없습니다.", 403);
     return productRepository.update(id, data);
   },
 
-  async deleteProduct(id) {
+  async deleteProduct(userId, id) {
+    const product = await productRepository.findById(id);
+    if (!product) throw createError("상품을 찾을 수 없습니다.", 404);
+    if (product.userId !== userId) throw createError("삭제 권한이 없습니다.", 403);
     return productRepository.delete(id);
   },
 

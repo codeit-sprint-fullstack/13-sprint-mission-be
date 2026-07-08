@@ -38,7 +38,7 @@ const articleController = {
   async updateArticle(req, res, next) {
     try {
       const data = updateArticleSchema.parse(req.body);
-      const article = await articleService.updateArticle(req.params.id, data);
+      const article = await articleService.updateArticle(req.user.id, req.params.id, data);
       res.json(article);
     } catch (err) {
       next(err);
@@ -47,7 +47,7 @@ const articleController = {
 
   async deleteArticle(req, res, next) {
     try {
-      await articleService.deleteArticle(req.params.id);
+      await articleService.deleteArticle(req.user.id, req.params.id);
       res.status(204).send();
     } catch (err) {
       next(err);
