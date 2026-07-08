@@ -4,6 +4,8 @@ import {
   deleteArticle,
   getArticle,
   getArticles,
+  likeArticle,
+  unlikeArticle,
   updateArticle,
 } from '../controllers/articleController.js';
 import {
@@ -20,6 +22,8 @@ router.post('/', createArticle);
 router.get('/:id', getArticle);
 router.patch('/:id', updateArticle);
 router.delete('/:id', deleteArticle);
+router.post('/:articleId/like', likeArticle);
+router.delete('/:articleId/like', unlikeArticle);
 
 router.post('/:articleId/comments', createArticleComment);
 router.get('/:articleId/comments', getArticleComments);

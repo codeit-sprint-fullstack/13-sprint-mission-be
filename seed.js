@@ -22,6 +22,10 @@ const seedData = [
 ];
 
 async function seed() {
+  await prisma.articleLike.deleteMany();
+  await prisma.productLike.deleteMany();
+  await prisma.articleComment.deleteMany();
+  await prisma.article.deleteMany();
   await prisma.productComment.deleteMany();
   await prisma.product.deleteMany();
   await prisma.user.deleteMany();
@@ -36,7 +40,19 @@ async function seed() {
   });
 
   await prisma.product.createMany({
-    data: seedData.map((item) => ({ ...item, userId: seedUser.id })),
+    data: seedData.map((item, index) => ({
+      ...item,
+      imageUrl: `/uploads/sample-${index + 1}.png`,
+      likeCount: Math.max(0, 10 - index),
+      userId: seedUser.id,
+    })),
+  });
+
+  await prisma.article.createMany({
+    data: [
+      { title: '판다마켓 첫 게시글', content: '스프린트 미션 게시글입니다.', userId: seedUser.id, likeCount: 3 },
+      { title: '좋은 거래 팁', content: '상태와 가격을 꼼꼼히 확인해 보세요.', userId: seedUser.id, likeCount: 1 },
+    ],
   });
   console.log(`시드 데이터 ${seedData.length}개 삽입 완료`);
 
