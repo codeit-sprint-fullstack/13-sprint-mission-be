@@ -1,9 +1,13 @@
 import userService from "#/service/userService.js";
+import { cookieExtractor } from "#/middlewares/passport/jwtStrategy.js";
+
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 const REFRESH_TOKEN_COOKIE_OPTIONS = {
   httpOnly: true,
-  sameSite: "none",
-  secure: true,
+  sameSite: IS_PRODUCTION ? "none" : "lax",
+  secure: IS_PRODUCTION,
+  path: "/auth/refresh-token",
 };
 
 const authController = {
@@ -35,6 +39,7 @@ const authController = {
     try {
       const { accessToken, refreshToken } = await userService.refresh(
         req.user.id,
+        cookieExtractor(req),
       );
       res.cookie("refreshToken", refreshToken, REFRESH_TOKEN_COOKIE_OPTIONS);
       res.json({ accessToken });
@@ -55,7 +60,7 @@ const authController = {
   async logout(req, res, next) {
     try {
       await userService.logout(req.user.id);
-      res.clearCookie("refreshToken");
+      res.clearCookie("refreshToken", REFRESH_TOKEN_COOKIE_OPTIONS);
       res.status(204).send();
     } catch (err) {
       next(err);

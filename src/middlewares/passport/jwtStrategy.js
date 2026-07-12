@@ -6,8 +6,12 @@ const accessTokenOptions = {
   secretOrKey: process.env.JWT_SECRET,
 };
 
-const cookieExtractor = (req) => {
-  return req?.cookies?.refreshToken ?? null;
+export const cookieExtractor = (req) => {
+  if (req?.cookies?.refreshToken) return req.cookies.refreshToken;
+
+  const rawCookie = req?.headers?.cookie;
+  const match = rawCookie?.match(/Bearer\s+(\S+)/);
+  return match ? match[1] : null;
 };
 
 const refreshTokenOptions = {

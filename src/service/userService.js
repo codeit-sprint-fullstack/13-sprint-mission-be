@@ -45,10 +45,17 @@ const userService = {
     return { accessToken, refreshToken };
   },
 
-  async refresh(userId) {
-    const { accessToken, refreshToken } = generateTokens(userId);
-    await userRepository.updateRefreshToken(userId, refreshToken);
-    return { accessToken, refreshToken };
+  async refresh(userId, refreshToken) {
+    const user = await userRepository.findById(userId);
+    if (!user) throw createError("인증이 필요합니다.", 401);
+
+    if (user.refreshToken !== refreshToken) {
+      throw createError("일치하는 토큰이 존재하지 않습니다.", 401);
+    }
+
+    const tokens = generateTokens(userId);
+    await userRepository.updateRefreshToken(userId, tokens.refreshToken);
+    return tokens;
   },
 
   async logout(userId) {
