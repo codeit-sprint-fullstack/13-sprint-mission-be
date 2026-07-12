@@ -13,41 +13,43 @@ Content-Type: application/json
 ###
 @accessToken = {{login.response.body.accessToken}}
 
-### 댓글 테스트용 게시글 생성
-# @name createArticle
-POST {{localUrl}}/articles
+### 댓글 테스트용 상품 생성
+# @name createProduct
+POST {{localUrl}}/products
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "title": "댓글테스트",
-  "content": "댓글 테스트용 게시글입니다."
+  "name": "댓글테스트",
+  "price": 1000,
+  "description": "댓글 테스트용 상품입니다.",
+  "tags": []
 }
 
 ###
-@articleId = {{createArticle.response.body.data.id}}
+@productId = {{createProduct.response.body.data.id}}
 
 ### 댓글 등록
 # @name createComment
-POST {{localUrl}}/articles/{{articleId}}/comments
+POST {{localUrl}}/products/{{productId}}/comments
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "content": "좋은 글이네요!"
+  "content": "좋은 상품이네요!"
 }
 
 ###
 @commentId = {{createComment.response.body.data.id}}
 
 ### 댓글 목록 조회
-GET {{localUrl}}/articles/{{articleId}}/comments
+GET {{localUrl}}/products/{{productId}}/comments
 
 ### 댓글 목록 조회 (페이지네이션)
-GET {{localUrl}}/articles/{{articleId}}/comments?pageSize=5
+GET {{localUrl}}/products/{{productId}}/comments?pageSize=5
 
 ### 댓글 수정
-PATCH {{localUrl}}/articles/comments/{{commentId}}
+PATCH {{localUrl}}/products/comments/{{commentId}}
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
@@ -56,5 +58,5 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### 댓글 삭제
-DELETE {{localUrl}}/articles/comments/{{commentId}}
+DELETE {{localUrl}}/products/comments/{{commentId}}
 Authorization: Bearer {{accessToken}}

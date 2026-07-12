@@ -1,36 +1,59 @@
 @localUrl = http://localhost:3002
 
-
-### 게시물 조회
-GET {{localUrl}}/articles
-
-
-### 게시물 목록 조회
-GET {{localUrl}}/articles?keyword=Porro 
-
-
-### 
-GET  {{localUrl}}/articles/Zr8og4kNVjuVVY99RohMY
-
-
-### 게시글 삭제
-DELETE {{localUrl}}/articles/h1dfzXJJLBvUmMLGZ2O7w
-
-### 게시글 등록
-POST {{localUrl}}/articles
+### 로그인 (토큰 발급)
+# @name login
+POST {{localUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "title": "로된222 타이틀",
-  "content": "이것은 내용입니다만 무슨 문제라도?"
+  "email": "test@test.com",
+  "password": "test1234"
 }
 
+###
+@accessToken = {{login.response.body.accessToken}}
 
-### 게시글 수정
-PATCH  {{localUrl}}/articles/Zr8og4kNVjuVVY99RohMY
-Content-Type: application/json    
+### 게시글 목록 조회
+GET {{localUrl}}/articles
+
+### 게시글 목록 조회 (검색 + 페이지네이션 + 정렬)
+GET {{localUrl}}/articles?keyword=타이틀&page=1&pageSize=10&orderBy=recent
+
+### 게시글 등록
+# @name createArticle
+POST {{localUrl}}/articles
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
-  "title": "축구공3",
-  "content": "419613198415626948516"
+  "title": "테스트 타이틀",
+  "content": "이것은 테스트용 게시글 내용입니다."
 }
+
+###
+@articleId = {{createArticle.response.body.data.id}}
+
+### 게시글 상세 조회
+GET {{localUrl}}/articles/{{articleId}}
+
+### 게시글 수정
+PATCH {{localUrl}}/articles/{{articleId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "title": "수정된 타이틀",
+  "content": "수정된 내용입니다."
+}
+
+### 게시글 좋아요
+POST {{localUrl}}/articles/{{articleId}}/like
+Authorization: Bearer {{accessToken}}
+
+### 게시글 좋아요 취소
+DELETE {{localUrl}}/articles/{{articleId}}/like
+Authorization: Bearer {{accessToken}}
+
+### 게시글 삭제
+DELETE {{localUrl}}/articles/{{articleId}}
+Authorization: Bearer {{accessToken}}
