@@ -17,10 +17,23 @@ const isDevAllowedOrigin = (origin) =>
     origin
   );
 
+const isDeployedFrontendOrigin = (origin) =>
+  /^https:\/\/[a-z0-9-]+\.(vercel\.app|netlify\.app)$/.test(origin);
+
+const allowedOrigins = (process.env.FRONTEND_URL ?? "")
+  .split(",")
+  .map((url) => url.trim())
+  .filter(Boolean);
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || isDevAllowedOrigin(origin)) {
+      if (
+        !origin ||
+        isDevAllowedOrigin(origin) ||
+        isDeployedFrontendOrigin(origin) ||
+        allowedOrigins.includes(origin)
+      ) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
