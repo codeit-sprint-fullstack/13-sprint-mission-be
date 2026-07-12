@@ -21,6 +21,7 @@ const articleController = {
       const article = await articleService.getArticleById(req.params.id, req.user?.id);
       res.json(article);
     } catch (err) {
+     
       next(err);
     }
   },
