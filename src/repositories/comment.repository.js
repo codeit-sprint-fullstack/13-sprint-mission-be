@@ -9,12 +9,18 @@ async function findAll({ type, id }) {
     return prisma.productComment.findMany({
       where: { productId: id },
       orderBy: { createdAt: "desc" },
+      include: {
+        owner: { select: { id: true, nickname: true, avatar: true } },
+      },
     });
   }
 
   return prisma.articleComment.findMany({
     where: { articleId: id },
     orderBy: { createdAt: "desc" },
+    include: {
+      owner: { select: { id: true, nickname: true, avatar: true } },
+    },
   });
 }
 
