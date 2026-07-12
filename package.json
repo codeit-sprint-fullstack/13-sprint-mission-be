@@ -8,12 +8,12 @@
     "dev": "nodemon src/app.js",
     "start": "cross-env NODE_ENV=production node src/app.js",
     "build": "npx prisma generate",
-    "db:migrate": "npx prisma migrate dev",
-    "db:migrate:deploy": "npx prisma migrate deploy",
-    "db:reset": "npx prisma migrate reset",
-    "db:push": "npx prisma db push",
-    "db:seed": "node prisma/seed.js",
-    "db:studio": "npx prisma studio"
+    "db:migrate": "dotenv -e .env.development -- npx prisma migrate dev",
+    "db:migrate:deploy": "dotenv -e .env.production -- npx prisma migrate deploy",
+    "db:reset": "dotenv -e .env.development -- npx prisma migrate reset",
+    "db:push": "dotenv -e .env.development -- npx prisma db push",
+    "db:seed": "dotenv -e .env.development -- node prisma/seed.js",
+    "db:studio": "dotenv -e .env.development -- npx prisma studio"
   },
   "imports": {
     "#/*": "./src/*"
@@ -41,6 +41,7 @@
   "devDependencies": {
     "@faker-js/faker": "^10.4.0",
     "cross-env": "^10.1.0",
+    "dotenv-cli": "^11.0.0",
     "nodemon": "^3.1.14",
     "prisma": "^6.19.3"
   }
