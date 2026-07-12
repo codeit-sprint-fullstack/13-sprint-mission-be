@@ -13,46 +13,22 @@ export function create({ title, content, image, userId }) {
   });
 }
 
-export function findMany({ skip, take, keyword }) {
-  const where = keyword
-    ? {
-        OR: [
-          { name: { contains: keyword, mode: "insensitive" } },
-          { description: { contains: keyword, mode: "insensitive" } },
-        ],
-      }
-    : {};
-
-  return prisma.product.findMany({
-    where,
-    skip,
-    take,
-    orderBy: { createdAt: "desc" },
-    include: { tags: true, ...withLikeCount },
-  });
+export function findMany({ where, orderBy, skip, take, select }) {
+  return prisma.article.findMany({ where, orderBy, skip, take, select });
 }
 
-export function count({ keyword }) {
-  const where = keyword
-    ? {
-        OR: [
-          { name: { contains: keyword, mode: "insensitive" } },
-          { description: { contains: keyword, mode: "insensitive" } },
-        ],
-      }
-    : {};
-  return prisma.product.count({ where });
+export function count({ where }) {
+  return prisma.article.count({ where });
 }
 
 export function findAllWithLikeCount() {
-  return prisma.product.findMany({ include: { tags: true, ...withLikeCount } });
+  return prisma.article.findMany({ include: { ...withLikeCount } });
 }
 
 export function findById(id) {
-  return prisma.product.findUnique({
+  return prisma.article.findUnique({
     where: { id },
     include: {
-      tags: true,
       comments: {
         orderBy: { createdAt: "desc" },
         include: { user: { select: { id: true, nickname: true } } },
@@ -79,7 +55,7 @@ export async function likeProduct(userId, articleId) {
     prisma.like.create({ data: { userId, articleId } }),
     prisma.article.findUnique({
       where: { id: articleId },
-      include: { tags: true, ...withLikeCount },
+      include: { ...withLikeCount },
     }),
   ]);
   return article;
@@ -92,7 +68,7 @@ export async function unlikeProduct(userId, articleId) {
     }),
     prisma.article.findUnique({
       where: { id: articleId },
-      include: { tags: true, ...withLikeCount },
+      include: { ...withLikeCount },
     }),
   ]);
   return article;
@@ -108,6 +84,6 @@ export function findFavoritesByUser(userId) {
   return prisma.article.findMany({
     where: { likes: { some: { userId } } },
     orderBy: { createdAt: "desc" },
-    include: { tags: true, ...withLikeCount },
+    include: { ...withLikeCount },
   });
 }

@@ -2,6 +2,8 @@ import prisma from "../config/prisma.js";
 
 // 좋아요 개수를 항상 같이 세어야 해서(좋아요순 정렬, isLiked 계산) _count.likes 공통 포함
 const withLikeCount = { _count: { select: { likes: true } } };
+// 작성자 닉네임/이미지 표시, 본인 글만 수정/삭제 가능하게 하려면 작성자 정보가 필요함
+const withOwner = { user: { select: { id: true, nickname: true, image: true } } };
 
 // [기본 요구사항] 상품 등록: "상품 정보 등록 API 엔드포인트에 요청을 보내 상품을 등록합니다."
 // tags는 Tag 모델과 1:N 관계라 nested create로 함께 생성
@@ -23,7 +25,9 @@ export function create({ name, description, price, images, tags, userId }) {
 }
 
 // [기본 요구사항] 중고마켓 페이지: "좋아요 순 정렬 기능을 붙여주세요."
-export function findMany({ skip, take, keyword }) {
+// -> orderBy=favorite: 좋아요(likes) 개수 내림차순, 그 외(기본값): 최신순
+// 베스트 상품(좋아요 많은 순 최대 4개)도 이 함수를 orderBy=favorite, take=4로 재사용해서 조회함
+export function findMany({ skip, take, keyword, orderBy }) {
   const where = keyword
     ? {
         OR: [
@@ -37,8 +41,9 @@ export function findMany({ skip, take, keyword }) {
     where,
     skip,
     take,
-    orderBy: { createdAt: "desc" },
-    include: { tags: true, ...withLikeCount },
+    orderBy:
+      orderBy === "favorite" ? { likes: { _count: "desc" } } : { createdAt: "desc" },
+    include: { tags: true, ...withLikeCount, ...withOwner },
   });
 }
 
@@ -57,7 +62,9 @@ export function count({ keyword }) {
 // [기본 요구사항] 중고마켓 페이지: "베스트 상품 기능을 추가해 주세요. 베스트 상품은 가장 많이
 // 좋아요를 받은 순으로 PC 기준 최대 4개까지 조회 가능합니다."
 export function findAllWithLikeCount() {
-  return prisma.product.findMany({ include: { tags: true, ...withLikeCount } });
+  return prisma.product.findMany({
+    include: { tags: true, ...withLikeCount, ...withOwner },
+  });
 }
 
 // [기본 요구사항] 상품 상세: "해당 상품에 대한 댓글 리스트... 응답 객체에 포함시켜 반환해 주세요."
@@ -71,6 +78,7 @@ export function findById(id) {
         include: { user: { select: { id: true, nickname: true } } },
       },
       ...withLikeCount,
+      ...withOwner,
     },
   });
 }
@@ -94,7 +102,7 @@ export async function likeProduct(userId, productId) {
     prisma.like.create({ data: { userId, productId } }),
     prisma.product.findUnique({
       where: { id: productId },
-      include: { tags: true, ...withLikeCount },
+      include: { tags: true, ...withLikeCount, ...withOwner },
     }),
   ]);
   return product;
@@ -108,7 +116,7 @@ export async function unlikeProduct(userId, productId) {
     }),
     prisma.product.findUnique({
       where: { id: productId },
-      include: { tags: true, ...withLikeCount },
+      include: { tags: true, ...withLikeCount, ...withOwner },
     }),
   ]);
   return product;
@@ -126,6 +134,6 @@ export function findFavoritesByUser(userId) {
   return prisma.product.findMany({
     where: { likes: { some: { userId } } },
     orderBy: { createdAt: "desc" },
-    include: { tags: true, ...withLikeCount },
+    include: { tags: true, ...withLikeCount, ...withOwner },
   });
 }

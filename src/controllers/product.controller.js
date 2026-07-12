@@ -1,4 +1,3 @@
-// product.controller.js
 import * as productRepository from "../repositories/product.repository.js";
 import {
   NotFoundError,
@@ -83,14 +82,14 @@ export const deleteProduct = async (req, res) => {
 // [ ]  offset 방식의 페이지네이션 기능을 포함해 주세요.
 // [ ]  name, description에 포함된 단어로 검색할 수 있습니다.
 export const getProducts = async (req, res) => {
-  const { search, page = "1", limit = "10" } = req.query;
+  const { search, page = "1", limit = "10", orderBy } = req.query;
 
   const pageNum = Math.max(1, parseInt(page) || 1);
   const take = Math.max(1, parseInt(limit) || 10);
   const skip = (pageNum - 1) * take;
 
   const [products, total] = await Promise.all([
-    productRepository.findMany({ skip, take, keyword: search }),
+    productRepository.findMany({ skip, take, keyword: search, orderBy }),
     productRepository.count({ keyword: search }),
   ]);
 

@@ -14,6 +14,7 @@ export const getMe = async (req, res) => {
 };
 
 // GET /users/me/favorites: 내가 좋아요(favorite) 한 상품 목록
+// TODO: article
 export const getMyFavorites = async (req, res) => {
   const products = await productRepository.findFavoritesByUser(req.auth.userId);
   res.json({ totalCount: products.length, list: products });

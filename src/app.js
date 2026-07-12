@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import path from "path";
 import articleRouter from "./routes/article.router.js";
 import productRouter from "./routes/product.router.js";
@@ -23,6 +24,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.json());
+app.use(cookieParser());
 // 업로드된 이미지 정적 제공 (POST /images/upload가 반환하는 경로와 짝을 이룸)
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 

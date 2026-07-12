@@ -6,7 +6,6 @@ import {
 } from "../middlewares/errorHandler.js";
 
 // 여기서 먼저 400으로 걸러줌
-// TODO: 이거를 product이랑 한번에 뺄수는 없을까? 난 말하는 감자.. 하핳
 function parseArticleId(articleId) {
   const parsedId = parseInt(articleId);
   if (isNaN(parsedId)) {
@@ -23,7 +22,7 @@ export const getArticle = async (req, res) => {
   const article = await articleRepository.findById(parsedId);
   if (!article) throw new NotFoundError("Article를 찾을 수 없습니다");
   const isLiked = req.auth?.userId
-    ? await productRepository.isLikedByUser(req.auth.userId, parsedId)
+    ? await articleRepository.isLikedByUser(req.auth.userId, parsedId)
     : false;
   res.json({ success: true, data: article });
 };
