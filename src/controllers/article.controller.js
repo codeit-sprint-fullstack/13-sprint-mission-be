@@ -9,7 +9,7 @@ import articleService from "../services/article.service.js";
  */
 async function getAllArticles(req, res, next) {
   const { page = 1, pageSize = 10, search = "", order = "recent" } = req.query;
-  const articles = await articleService.getAll({
+  const { data, pagination } = await articleService.getAll({
     page,
     pageSize,
     search,
@@ -17,7 +17,7 @@ async function getAllArticles(req, res, next) {
     userId: req.user ? parseId(req.user.userId) : undefined,
   });
 
-  res.json({ success: true, articles });
+  res.json({ success: true, data, pagination });
 }
 
 /** 단일 게시글 조회 컨트롤러

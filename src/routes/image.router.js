@@ -79,7 +79,11 @@ const upload = multer({
  *             schema:
  *               type: object
  *               properties:
- *                 path: { type: string, example: /download-images/uuid.jpg }
+ *                 success: { type: boolean, example: true }
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     path: { type: string, example: /download-images/uuid.jpg }
  *       400: { $ref: '#/components/responses/BadRequest' }
  *       401: { $ref: '#/components/responses/Unauthorized' }
  */

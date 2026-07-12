@@ -11,7 +11,7 @@ import authService from "../services/auth.service.js";
 async function signup(req, res, next) {
   const data = signUpSchema.parse(req.body); // 유효성 검사 완료된 데이터
   const user = await authService.signup(data); // 유저 데이터
-  return res.status(201).json(user);
+  return res.status(201).json({ success: true, data: user });
 }
 
 /** 로그인 컨트롤러 */
@@ -32,7 +32,7 @@ async function signin(req, res, next) {
     path: "/auth/refresh-token",
   });
 
-  res.json({ ...user, accessToken });
+  res.json({ success: true, data: { ...user, accessToken } });
 }
 
 /** 토큰 갱신 컨트롤러 */
@@ -49,7 +49,7 @@ async function refreshToken(req, res, next) {
     path: "/auth/refresh-token",
   });
 
-  return res.json({ accessToken: newAccessToken });
+  return res.json({ success: true, data: { accessToken: newAccessToken } });
 }
 
 export default { signup, signin, refreshToken };

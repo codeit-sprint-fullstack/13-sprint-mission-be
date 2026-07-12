@@ -8,13 +8,13 @@ import parseId from "../utils/parse.js";
  * - GET /products/:productId/comments
  */
 async function getAllProductComments(req, res, next) {
-  const comments = await commentService.getAll({
+  const { data } = await commentService.getAll({
     type: "product",
     id: parseId(req.params.productId),
     userId: req.user ? parseId(req.user.userId) : undefined,
   });
 
-  res.json({ success: true, comments });
+  res.json({ success: true, data });
 }
 
 /** 상품 댓글 생성
@@ -35,13 +35,13 @@ async function createProductComment(req, res, next) {
  * - GET /articles/:articleId/comments
  */
 async function getAllArticleComments(req, res, next) {
-  const comments = await commentService.getAll({
+  const { data } = await commentService.getAll({
     type: "article",
     id: parseId(req.params.articleId),
     userId: req.user ? parseId(req.user.userId) : undefined,
   });
 
-  res.json({ success: true, comments });
+  res.json({ success: true, data });
 }
 
 /** 게시글 댓글 생성

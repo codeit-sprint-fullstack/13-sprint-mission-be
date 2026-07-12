@@ -54,13 +54,10 @@ const articleRouter = express.Router();
  *               type: object
  *               properties:
  *                 success: { type: boolean, example: true }
- *                 articles:
- *                   type: object
- *                   properties:
- *                     data:
- *                       type: array
- *                       items: { $ref: '#/components/schemas/Article' }
- *                     pagination: { $ref: '#/components/schemas/Pagination' }
+ *                 data:
+ *                   type: array
+ *                   items: { $ref: '#/components/schemas/Article' }
+ *                 pagination: { $ref: '#/components/schemas/Pagination' }
  *   post:
  *     summary: 게시글 등록
  *     tags: [Article]
@@ -276,12 +273,9 @@ articleRouter.post(
  *               type: object
  *               properties:
  *                 success: { type: boolean, example: true }
- *                 comments:
- *                   type: object
- *                   properties:
- *                     data:
- *                       type: array
- *                       items: { $ref: '#/components/schemas/Comment' }
+ *                 data:
+ *                   type: array
+ *                   items: { $ref: '#/components/schemas/Comment' }
  *   post:
  *     summary: 게시글 댓글 등록
  *     tags: [Comment]

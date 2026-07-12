@@ -9,7 +9,7 @@ import productService from "../services/product.service.js";
  */
 async function getAllProducts(req, res, next) {
   const { page = 1, pageSize = 10, search = "", order = "recent" } = req.query;
-  const products = await productService.getAll({
+  const { data, pagination } = await productService.getAll({
     page,
     pageSize,
     search,
@@ -17,7 +17,7 @@ async function getAllProducts(req, res, next) {
     userId: req.user ? parseId(req.user.userId) : undefined,
   });
 
-  res.json({ success: true, products });
+  res.json({ success: true, data, pagination });
 }
 
 /** 단일 상품 조회 컨트롤러

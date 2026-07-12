@@ -54,13 +54,10 @@ const productRouter = express.Router();
  *               type: object
  *               properties:
  *                 success: { type: boolean, example: true }
- *                 products:
- *                   type: object
- *                   properties:
- *                     data:
- *                       type: array
- *                       items: { $ref: '#/components/schemas/Product' }
- *                     pagination: { $ref: '#/components/schemas/Pagination' }
+ *                 data:
+ *                   type: array
+ *                   items: { $ref: '#/components/schemas/Product' }
+ *                 pagination: { $ref: '#/components/schemas/Pagination' }
  *   post:
  *     summary: 상품 등록
  *     tags: [Product]
@@ -284,12 +281,9 @@ productRouter.post(
  *               type: object
  *               properties:
  *                 success: { type: boolean, example: true }
- *                 comments:
- *                   type: object
- *                   properties:
- *                     data:
- *                       type: array
- *                       items: { $ref: '#/components/schemas/Comment' }
+ *                 data:
+ *                   type: array
+ *                   items: { $ref: '#/components/schemas/Comment' }
  *   post:
  *     summary: 상품 댓글 등록
  *     tags: [Comment]

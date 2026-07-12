@@ -33,7 +33,11 @@ const authRouter = express.Router();
  *         description: 회원가입 성공
  *         content:
  *           application/json:
- *             schema: { $ref: '#/components/schemas/User' }
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean, example: true }
+ *                 data: { $ref: '#/components/schemas/User' }
  *       400: { $ref: '#/components/responses/BadRequest' }
  *       409: { $ref: '#/components/responses/Conflict' }
  */
@@ -63,11 +67,15 @@ authRouter.post("/signup", authController.signup);
  *         content:
  *           application/json:
  *             schema:
- *               allOf:
- *                 - $ref: '#/components/schemas/User'
- *                 - type: object
- *                   properties:
- *                     accessToken: { type: string }
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean, example: true }
+ *                 data:
+ *                   allOf:
+ *                     - $ref: '#/components/schemas/User'
+ *                     - type: object
+ *                       properties:
+ *                         accessToken: { type: string }
  *       400: { $ref: '#/components/responses/BadRequest' }
  *       401: { $ref: '#/components/responses/Unauthorized' }
  */
@@ -89,7 +97,11 @@ authRouter.post("/signin", authController.signin);
  *             schema:
  *               type: object
  *               properties:
- *                 accessToken: { type: string }
+ *                 success: { type: boolean, example: true }
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     accessToken: { type: string }
  *       401: { $ref: '#/components/responses/Unauthorized' }
  */
 // POST /auth/refresh-token
