@@ -4,10 +4,126 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int      @id @default(autoincrement())
+  email             String   @unique
+  nickname          String
+  encryptedPassword String?
+  refreshToken      String?
+  image             String?
+  provider          String   @default("local")
+  providerId        String?  @unique
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  products        Product[]
+  productComments ProductComment[]
+  favorites       Favorite[]
+  articles        Article[]
+  articleComments ArticleComment[]
+  likes           Like[]
+
+  @@map("users")
+}
+
+model Image {
+  id        Int      @id @default(autoincrement())
+  url       String
+  productId Int?
+  product   Product? @relation(fields: [productId], references: [id])
+  articleId Int?
+  article   Article? @relation(fields: [articleId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@map("images")
+}
+
+model Product {
+  id              Int              @id @default(autoincrement())
+  name            String
+  description     String
+  price           Int
+  tags            String[]         @default([])
+  userId          Int
+  user            User             @relation(fields: [userId], references: [id])
+  images          Image[]
+  productComments ProductComment[]
+  favorites       Favorite[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@map("products")
+}
+
+model ProductComment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("product_comments")
+}
+
+model Favorite {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@map("favorites")
+}
+
+model Article {
+  id              Int              @id @default(autoincrement())
+  title           String
+  content         String
+  userId          Int
+  user            User             @relation(fields: [userId], references: [id])
+  images          Image[]
+  articleComments ArticleComment[]
+  likes           Like[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@map("articles")
+}
+
+model ArticleComment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  articleId Int
+  article   Article  @relation(fields: [articleId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("article_comments")
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  articleId Int
+  article   Article  @relation(fields: [articleId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, articleId])
+  @@map("likes")
 }
