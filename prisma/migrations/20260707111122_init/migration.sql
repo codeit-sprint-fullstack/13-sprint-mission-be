@@ -1,25 +1,3 @@
-/*
-  Warnings:
-
-  - You are about to drop the `article` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `article_comment` table. If the table is not empty, all the data it contains will be lost.
-  - Added the required column `userId` to the `products` table without a default value. This is not possible if the table is not empty.
-
-*/
--- DropForeignKey
-ALTER TABLE "article_comment" DROP CONSTRAINT "article_comment_articleId_fkey";
-
--- AlterTable
-ALTER TABLE "products" ADD COLUMN     "favoriteCount" INTEGER NOT NULL DEFAULT 0,
-ADD COLUMN     "images" TEXT[] DEFAULT ARRAY[]::TEXT[],
-ADD COLUMN     "userId" TEXT NOT NULL;
-
--- DropTable
-DROP TABLE "article";
-
--- DropTable
-DROP TABLE "article_comment";
-
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
@@ -32,6 +10,22 @@ CREATE TABLE "users" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "products" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "price" INTEGER NOT NULL,
+    "description" TEXT NOT NULL,
+    "images" TEXT[] DEFAULT ARRAY[]::TEXT[],
+    "tags" TEXT[],
+    "favoriteCount" INTEGER NOT NULL DEFAULT 0,
+    "userId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "products_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
