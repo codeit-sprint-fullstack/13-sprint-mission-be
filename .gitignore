@@ -1,0 +1,13 @@
+node_modules/
+
+# 환경 변수 파일 전체 제외
+.env
+.env.*
+!.env.example
+
+.idea/
+*.log
+.DS_Store
+
+# Prisma 생성 파일
+prisma/migrations/dev.db*

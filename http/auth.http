@@ -1,0 +1,67 @@
+POST http://localhost:3000/auth/signUp
+Content-Type: application/json
+
+{
+  "email": "test5@test.com",
+  "nickname": "test",
+  "password": "testtesttest",
+  "passwordConfirmation": "testtesttest"
+}
+
+
+### (회원가입) 재가입
+POST http://localhost:3000/auth/signUp
+Content-Type: application/json
+
+{
+"email": "test4@test.com",
+"nickname": "test2",
+"password": "testtesttest",
+"passwordConfirmation": "testtesttest"
+}
+
+
+
+### (회원가입) 재가입하면 중복 확인
+POST http://localhost:3000/auth/signUp
+Content-Type: application/json
+
+{
+  "email": "test2@test.com",
+  "nickname": "test2",
+  "password": "testtesttest",
+  "passwordConfirmation": "testtesttest"
+}
+
+### (로그인) 성공
+POST http://localhost:3000/auth/signIn
+Content-Type: application/json
+
+{
+  "email": "test3@test.com",
+  "password": "testtesttest"
+}
+
+
+### (로그인) 실패 가정 비밀번호 틀리게 입력
+POST http://localhost:3000/auth/signIn
+Content-Type: application/json
+
+{
+  "email": "test1@test.com",
+  "password": "tes"
+}
+
+### (로그인) 실패 가정 이메일 주소 오류 zod
+POST http://localhost:3000/auth/signIn
+Content-Type: application/json
+
+{
+  "email": "test11",
+  "password": "testtesttest"
+}
+
+
+### refresh token
+
+POST http://localhost:3000/auth/refresh-token
