@@ -1,0 +1,67 @@
+### baseUrl 변수
+@baseUrl = http://localhost:3000/api
+
+### accessToken 변수
+@accessToken =
+
+### productId 변수
+@productId = 1
+
+### 상품 이미지 업로드와 함께 상품 등록
+POST {{baseUrl}}/products
+Authorization: Bearer {{accessToken}}
+Content-Type: multipart/form-data; boundary=productImageBoundary
+
+--productImageBoundary
+Content-Disposition: form-data; name="name"
+
+이미지 업로드 테스트 상품
+--productImageBoundary
+Content-Disposition: form-data; name="price"
+
+10000
+--productImageBoundary
+Content-Disposition: form-data; name="description"
+
+상품 등록과 함께 이미지를 업로드하는 테스트입니다.
+--productImageBoundary
+Content-Disposition: form-data; name="tags"
+
+테스트,이미지
+--productImageBoundary
+Content-Disposition: form-data; name="image"; filename="sample.png"
+Content-Type: image/png
+
+< ./sample.png
+--productImageBoundary--
+
+### 상품 이미지 업로드와 함께 상품 수정
+PATCH {{baseUrl}}/products/{{productId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: multipart/form-data; boundary=productImageBoundary
+
+--productImageBoundary
+Content-Disposition: form-data; name="name"
+
+이미지 업로드 수정 상품
+--productImageBoundary
+Content-Disposition: form-data; name="price"
+
+12000
+--productImageBoundary
+Content-Disposition: form-data; name="description"
+
+상품 수정과 함께 이미지를 다시 업로드하는 테스트입니다.
+--productImageBoundary
+Content-Disposition: form-data; name="tags"
+
+수정,이미지
+--productImageBoundary
+Content-Disposition: form-data; name="image"; filename="sample.png"
+Content-Type: image/png
+
+< ./sample.png
+--productImageBoundary--
+
+### 업로드된 이미지 조회 예시
+GET http://localhost:3000/uploads/업로드된_파일명

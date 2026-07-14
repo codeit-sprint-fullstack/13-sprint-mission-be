@@ -1,0 +1,9 @@
+### baseUrl 변수
+@baseUrl = http://localhost:3000/api
+
+### accessToken 변수
+@accessToken =
+
+### 유저 정보 조회
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{accessToken}}

@@ -1,0 +1,50 @@
+### baseUrl 변수
+@baseUrl = http://localhost:3000/api
+
+### productId 변수
+@productId = 1
+
+### commentId 변수
+@commentId = 1
+
+### accessToken 변수
+@accessToken =
+
+### 상품 댓글 조회
+GET {{baseUrl}}/products/{{productId}}/comments
+Authorization: Bearer {{accessToken}}
+
+### 상품 댓글 등록
+POST {{baseUrl}}/products/{{productId}}/comments
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "content": "댓글 테스트입니다."
+}
+
+### 상품 댓글 수정
+PATCH {{baseUrl}}/comments/{{commentId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "content": "댓글 수정테스트입니다"
+}
+
+### 상품 댓글 삭제
+DELETE {{baseUrl}}/comments/{{commentId}}
+Authorization: Bearer {{accessToken}}
+
+### 상품 댓글 조회 - items 별칭
+GET {{baseUrl}}/items/{{productId}}/comments
+Authorization: Bearer {{accessToken}}
+
+### 상품 댓글 등록 - items 별칭
+POST {{baseUrl}}/items/{{productId}}/comments
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "content": "items 별칭 댓글 테스트입니다."
+}

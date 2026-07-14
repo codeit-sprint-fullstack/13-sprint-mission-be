@@ -1,0 +1,32 @@
+### baseUrl 변수
+@baseUrl = http://localhost:3000/api
+
+### accessToken 변수
+@accessToken =
+
+### 회원 가입
+POST {{baseUrl}}/auth/signUp
+Content-Type: application/json
+
+{
+  "email": "abc@gmail.com",
+  "nickname": "ABC1",
+  "password": "asdf1234"
+}
+
+### 로그인
+POST {{baseUrl}}/auth/signIn
+Content-Type: application/json
+
+{
+  "email": "abcd@gmail.com",
+  "password": "asdf1234"
+}
+
+### 내 정보 조회
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{accessToken}}
+
+### 토큰 갱신 - 현재 미구현
+# POST {{baseUrl}}/auth/refresh-token
+# Cookie: refreshToken=

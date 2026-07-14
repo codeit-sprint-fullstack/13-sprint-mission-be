@@ -1,0 +1,97 @@
+### baseUrl 변수
+@baseUrl = http://localhost:3000/api
+
+### accessToken 변수
+@accessToken =
+
+### 테스트용 회원가입
+POST {{baseUrl}}/auth/signUp
+Content-Type: application/json
+
+{
+  "email": "article-test@example.com",
+  "nickname": "게시글테스트",
+  "password": "password123"
+}
+
+### 로그인
+POST {{baseUrl}}/auth/signIn
+Content-Type: application/json
+
+{
+  "email": "article-test@example.com",
+  "password": "password123"
+}
+
+### 내 정보 조회
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{accessToken}}
+
+### 게시글 목록 조회
+GET {{baseUrl}}/articles
+Authorization: Bearer {{accessToken}}
+
+### 게시글 목록 조회 - 페이지네이션/검색
+GET {{baseUrl}}/articles?page=1&pageSize=10&keyword=맥북&orderBy=recent
+Authorization: Bearer {{accessToken}}
+
+### 단건 게시글 조회
+GET {{baseUrl}}/articles/1
+Authorization: Bearer {{accessToken}}
+
+### 게시글 등록
+POST {{baseUrl}}/articles
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "title": "게시글테스트 등록",
+  "content": "게시글 테스트입니다."
+}
+
+### 게시글 수정
+PATCH {{baseUrl}}/articles/1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "title": "테스트 수정",
+  "content": "게시글 수정테스트입니다."
+}
+
+### 게시글 삭제
+DELETE {{baseUrl}}/articles/1
+Authorization: Bearer {{accessToken}}
+
+### 게시글 좋아요 추가
+POST {{baseUrl}}/articles/1/favorite
+Authorization: Bearer {{accessToken}}
+
+### 게시글 좋아요 취소
+DELETE {{baseUrl}}/articles/1/favorite
+Authorization: Bearer {{accessToken}}
+
+### 게시글 댓글 목록 조회
+GET {{baseUrl}}/articles/1/comments
+
+### 게시글 댓글 등록
+POST {{baseUrl}}/articles/1/comments
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "content": "게시글 댓글 테스트입니다."
+}
+
+### 게시글 댓글 수정
+PATCH {{baseUrl}}/articles/1/comments/1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "content": "게시글 댓글 수정 테스트입니다."
+}
+
+### 게시글 댓글 삭제
+DELETE {{baseUrl}}/articles/1/comments/1
+Authorization: Bearer {{accessToken}}
