@@ -1,0 +1,25 @@
+### baseUrl 변수
+@baseUrl = http://localhost:3000
+
+### 회원 가입
+POST {{baseUrl}}/auth/signup
+Content-Type: application/json
+
+{
+  "email": "abc@gmail.com",
+  "nickname": "ABC1",
+  "password": "asdf1234"
+}
+
+### 로그인
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "abc@gmail.com",
+  "password": "asdf1234"
+}
+
+### 토큰 갱신
+POST {{baseUrl}}/auth/refresh-token
+Cookie: refreshToken=
