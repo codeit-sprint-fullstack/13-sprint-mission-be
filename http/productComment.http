@@ -1,0 +1,62 @@
+@localUrl = http://localhost:3002
+
+### 로그인 (토큰 발급)
+# @name login
+POST {{localUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "test1234"
+}
+
+###
+@accessToken = {{login.response.body.accessToken}}
+
+### 댓글 테스트용 상품 생성
+# @name createProduct
+POST {{localUrl}}/products
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "name": "댓글테스트",
+  "price": 1000,
+  "description": "댓글 테스트용 상품입니다.",
+  "tags": []
+}
+
+###
+@productId = {{createProduct.response.body.data.id}}
+
+### 댓글 등록
+# @name createComment
+POST {{localUrl}}/products/{{productId}}/comments
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "content": "좋은 상품이네요!"
+}
+
+###
+@commentId = {{createComment.response.body.data.id}}
+
+### 댓글 목록 조회
+GET {{localUrl}}/products/{{productId}}/comments
+
+### 댓글 목록 조회 (페이지네이션)
+GET {{localUrl}}/products/{{productId}}/comments?pageSize=5
+
+### 댓글 수정
+PATCH {{localUrl}}/products/comments/{{commentId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "content": "수정된 댓글입니다."
+}
+
+### 댓글 삭제
+DELETE {{localUrl}}/products/comments/{{commentId}}
+Authorization: Bearer {{accessToken}}
