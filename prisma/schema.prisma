@@ -1,0 +1,121 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  nickname String
+  email    String @unique
+
+  image             String?
+  encryptedPassword String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  products Product[]
+  articles Article[]
+  likes    Like[]
+
+  productComments ProductComment[]
+  articleComments ArticleComment[]
+}
+
+model Product {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+  price       Int
+
+  tags     Tag[]
+  comments ProductComment[]
+
+  images    String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User?  @relation(fields: [userId], references: [id])
+  userId Int?
+  likes  Like[]
+
+  @@map("products")
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("tags")
+}
+
+model Article {
+  id        Int              @id @default(autoincrement())
+  title     String
+  content   String
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  comments  ArticleComment[]
+  image     String?
+
+  user   User?  @relation(fields: [userId], references: [id])
+  userId Int?
+  likes  Like[]
+
+  @@map("articles")
+}
+
+model ProductComment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  @@map("product_comments")
+}
+
+model ArticleComment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  articleId Int
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  @@map("article_comments")
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int?
+  articleId Int?
+  createdAt DateTime @default(now())
+
+  user    User     @relation(fields: [userId], references: [id])
+  product Product? @relation(fields: [productId], references: [id])
+  article Article? @relation(fields: [articleId], references: [id])
+
+  @@unique([userId, productId])
+  @@unique([userId, articleId])
+}
