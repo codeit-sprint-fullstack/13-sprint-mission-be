@@ -1,0 +1,14 @@
+# Dependency directories
+node_modules/
+
+# Compiled out
+dist/
+build/
+
+# Environment variables
+.env
+
+# OS metadata
+.DS_Store
+
+/src/generated/prisma
