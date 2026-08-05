@@ -1,16 +1,20 @@
+import type { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import type { User } from '@prisma/client';
 import prisma from '../lib/prisma.js';
+import { getJwtSecret } from '../utils/auth.js';
+import { getErrorMessage } from '../utils/httpError.js';
 
-function createAccessToken(userId) {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1d' });
+function createAccessToken(userId: number): string {
+  return jwt.sign({ userId }, getJwtSecret(), { expiresIn: '1d' });
 }
 
-function serializeUser(user) {
+function serializeUser(user: User) {
   return { id: user.id, email: user.email, nickname: user.nickname };
 }
 
-export async function signUp(req, res) {
+export async function signUp(req: Request, res: Response) {
   try {
     const { email, nickname, password, passwordConfirmation } = req.body;
     if (!email || !nickname || !password) return res.status(400).json({ message: '필수 항목을 입력해 주세요.' });
@@ -26,11 +30,11 @@ export async function signUp(req, res) {
 
     res.status(201).json({ accessToken: createAccessToken(user.id), user: serializeUser(user) });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ message: getErrorMessage(error) });
   }
 }
 
-export async function signIn(req, res) {
+export async function signIn(req: Request, res: Response) {
   try {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ message: '이메일과 비밀번호를 입력해 주세요.' });
@@ -43,6 +47,6 @@ export async function signIn(req, res) {
 
     res.json({ accessToken: createAccessToken(user.id), user: serializeUser(user) });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: getErrorMessage(error) });
   }
 }

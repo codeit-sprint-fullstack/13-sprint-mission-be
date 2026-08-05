@@ -2,15 +2,16 @@
   "name": "13-sprint-mission-be",
   "version": "1.0.0",
   "description": "Panda Market product API for sprint mission",
-  "main": "app.js",
+  "main": "dist/app.js",
   "type": "module",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js",
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "dev": "tsx watch app.ts",
     "frontend:dev": "vite --config frontend/vite.config.js",
     "frontend:build": "vite build --config frontend/vite.config.js",
     "frontend:preview": "vite preview --config frontend/vite.config.js",
-    "seed": "node seed.js"
+    "seed": "tsx seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -34,8 +35,19 @@
   },
   "devDependencies": {
     "@prisma/client": "^7.8.0",
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.2.0",
+    "@types/node": "^26.1.2",
+    "@types/pg": "^8.20.4",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "dotenv": "^17.4.2",
     "nodemon": "^3.1.14",
-    "prisma": "^7.8.0"
+    "prisma": "^7.8.0",
+    "tsx": "^4.23.5",
+    "typescript": "^7.0.2"
   }
 }

@@ -1,16 +1,21 @@
+import type { Request, Response } from 'express';
+import { Prisma } from '@prisma/client';
 import prisma from '../lib/prisma.js';
 import { getAuthenticatedUserId, setOptionalAuthenticatedUser } from '../utils/auth.js';
+import { HttpError, getErrorMessage, getErrorStatusCode, isRecordNotFoundError } from '../utils/httpError.js';
+import type { ArticleIdParams, IdParams } from '../types/api.js';
 
-export async function getArticles(req, res) {
+export async function getArticles(req: Request, res: Response) {
   try {
     const page = Math.max(Number(req.query.page) || 1, 1);
     const limit = Math.min(Math.max(Number(req.query.limit) || 10, 1), 50);
     const offset = (page - 1) * limit;
     const keyword = String(req.query.keyword || '').trim();
-    const orderBy = req.query.orderBy === 'like' ? { likeCount: 'desc' } : { createdAt: 'desc' };
+    const orderBy: Prisma.ArticleOrderByWithRelationInput =
+      req.query.orderBy === 'like' ? { likeCount: 'desc' } : { createdAt: 'desc' };
     if (keyword.length > 50) return res.status(400).json({ message: '검색어는 50자 이내로 입력해 주세요.' });
 
-    const where = keyword
+    const where: Prisma.ArticleWhereInput = keyword
       ? {
           OR: [
             { title: { contains: keyword, mode: 'insensitive' } },
@@ -32,11 +37,11 @@ export async function getArticles(req, res) {
 
     res.json({ list: articles, totalCount: total, offset, limit });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: getErrorMessage(error) });
   }
 }
 
-export async function createArticle(req, res) {
+export async function createArticle(req: Request, res: Response) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
@@ -51,14 +56,15 @@ export async function createArticle(req, res) {
     });
     res.status(201).json(article);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ message: getErrorMessage(error) });
   }
 }
 
-export async function getArticle(req, res) {
+export async function getArticle(req: Request<IdParams>, res: Response) {
   try {
     setOptionalAuthenticatedUser(req);
-    const userId = req.user?.id;
+    // 비로그인(-1)은 어떤 실제 userId와도 매칭되지 않는 좋아요 조회 sentinel
+    const userId = req.user?.id ?? -1;
     const article = await prisma.article.findUnique({
       where: { id: Number(req.params.id) },
       select: {
@@ -68,21 +74,19 @@ export async function getArticle(req, res) {
         image: true,
         likeCount: true,
         createdAt: true,
-        likes: userId ? { where: { userId }, select: { id: true } } : false,
+        likes: { where: { userId }, select: { id: true } },
       },
     });
     if (!article) return res.status(404).json({ message: '게시글을 찾을 수 없습니다.' });
-    res.json({
-      ...article,
-      isLiked: Boolean(article.likes?.length),
-      likes: undefined,
-    });
+
+    const { likes, ...articleWithoutLikes } = article;
+    res.json({ ...articleWithoutLikes, isLiked: likes.length > 0 });
   } catch {
     res.status(400).json({ message: '잘못된 게시글 id입니다.' });
   }
 }
 
-export async function updateArticle(req, res) {
+export async function updateArticle(req: Request<IdParams>, res: Response) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
@@ -94,22 +98,23 @@ export async function updateArticle(req, res) {
     if (!current) return res.status(404).json({ message: '게시글을 찾을 수 없습니다.' });
     if (current.userId !== userId) return res.status(403).json({ message: '권한이 없습니다.' });
 
-    const data = {};
-    ['title', 'content', 'image'].forEach((key) => {
-      if (req.body[key] !== undefined) data[key] = req.body[key];
-    });
+    const data: Prisma.ArticleUpdateInput = {};
+    if (req.body.title !== undefined) data.title = req.body.title;
+    if (req.body.content !== undefined) data.content = req.body.content;
+    if (req.body.image !== undefined) data.image = req.body.image;
+
     const article = await prisma.article.update({
       where: { id: Number(req.params.id) },
       data,
     });
     res.json(article);
   } catch (error) {
-    if (error.code === 'P2025') return res.status(404).json({ message: '게시글을 찾을 수 없습니다.' });
-    res.status(400).json({ message: error.message });
+    if (isRecordNotFoundError(error)) return res.status(404).json({ message: '게시글을 찾을 수 없습니다.' });
+    res.status(400).json({ message: getErrorMessage(error) });
   }
 }
 
-export async function deleteArticle(req, res) {
+export async function deleteArticle(req: Request<IdParams>, res: Response) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
@@ -126,12 +131,12 @@ export async function deleteArticle(req, res) {
     });
     res.status(204).send();
   } catch (error) {
-    if (error.code === 'P2025') return res.status(404).json({ message: '게시글을 찾을 수 없습니다.' });
-    res.status(500).json({ message: error.message });
+    if (isRecordNotFoundError(error)) return res.status(404).json({ message: '게시글을 찾을 수 없습니다.' });
+    res.status(500).json({ message: getErrorMessage(error) });
   }
 }
 
-export async function likeArticle(req, res) {
+export async function likeArticle(req: Request<ArticleIdParams>, res: Response) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
@@ -139,11 +144,7 @@ export async function likeArticle(req, res) {
     const articleId = Number(req.params.articleId);
     const article = await prisma.$transaction(async (tx) => {
       const exists = await tx.article.findUnique({ where: { id: articleId }, select: { id: true } });
-      if (!exists) {
-        const error = new Error('게시글을 찾을 수 없습니다.');
-        error.statusCode = 404;
-        throw error;
-      }
+      if (!exists) throw new HttpError('게시글을 찾을 수 없습니다.', 404);
 
       const like = await tx.articleLike.findUnique({
         where: { userId_articleId: { userId, articleId } },
@@ -159,11 +160,11 @@ export async function likeArticle(req, res) {
 
     res.json({ ...article, isLiked: true });
   } catch (error) {
-    res.status(error.statusCode || 400).json({ message: error.message });
+    res.status(getErrorStatusCode(error, 400)).json({ message: getErrorMessage(error) });
   }
 }
 
-export async function unlikeArticle(req, res) {
+export async function unlikeArticle(req: Request<ArticleIdParams>, res: Response) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
@@ -185,6 +186,6 @@ export async function unlikeArticle(req, res) {
     if (!article) return res.status(404).json({ message: '게시글을 찾을 수 없습니다.' });
     res.json({ ...article, isLiked: false });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ message: getErrorMessage(error) });
   }
 }

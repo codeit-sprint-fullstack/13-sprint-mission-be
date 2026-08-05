@@ -1,7 +1,10 @@
+import type { Request, Response } from 'express';
 import prisma from '../lib/prisma.js';
 import { getAuthenticatedUserId } from '../utils/auth.js';
+import { getErrorMessage, isRecordNotFoundError } from '../utils/httpError.js';
+import type { ProductCommentParams, ProductIdParams } from '../types/api.js';
 
-export async function createProductComment(req, res) {
+export async function createProductComment(req: Request<ProductIdParams>, res: Response) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
@@ -15,15 +18,17 @@ export async function createProductComment(req, res) {
     });
     res.status(201).json(comment);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ message: getErrorMessage(error) });
   }
 }
 
-export async function getProductComments(req, res) {
+export async function getProductComments(req: Request<ProductIdParams>, res: Response) {
   try {
     const productId = Number(req.params.productId);
     const limit = Math.min(Math.max(Number(req.query.limit) || 10, 1), 50);
-    const cursor = req.query.cursor ? { cursor: { id: Number(req.query.cursor) }, skip: 1 } : {};
+    const cursor: { cursor?: { id: number }; skip?: number } = req.query.cursor
+      ? { cursor: { id: Number(req.query.cursor) }, skip: 1 }
+      : {};
 
     const comments = await prisma.productComment.findMany({
       where: { productId },
@@ -38,11 +43,11 @@ export async function getProductComments(req, res) {
 
     res.json({ list: comments, nextCursor: hasNext ? comments[comments.length - 1].id : null });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: getErrorMessage(error) });
   }
 }
 
-export async function updateProductComment(req, res) {
+export async function updateProductComment(req: Request<ProductCommentParams>, res: Response) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
@@ -62,12 +67,12 @@ export async function updateProductComment(req, res) {
     });
     res.json(updated);
   } catch (error) {
-    if (error.code === 'P2025') return res.status(404).json({ message: '댓글을 찾을 수 없습니다.' });
-    res.status(400).json({ message: error.message });
+    if (isRecordNotFoundError(error)) return res.status(404).json({ message: '댓글을 찾을 수 없습니다.' });
+    res.status(400).json({ message: getErrorMessage(error) });
   }
 }
 
-export async function deleteProductComment(req, res) {
+export async function deleteProductComment(req: Request<ProductCommentParams>, res: Response) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
@@ -86,7 +91,7 @@ export async function deleteProductComment(req, res) {
     });
     res.status(204).send();
   } catch (error) {
-    if (error.code === 'P2025') return res.status(404).json({ message: '댓글을 찾을 수 없습니다.' });
-    res.status(500).json({ message: error.message });
+    if (isRecordNotFoundError(error)) return res.status(404).json({ message: '댓글을 찾을 수 없습니다.' });
+    res.status(500).json({ message: getErrorMessage(error) });
   }
 }

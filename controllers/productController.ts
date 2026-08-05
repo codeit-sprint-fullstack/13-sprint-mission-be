@@ -1,7 +1,57 @@
+import type { Request, Response } from 'express';
+import { Prisma } from '@prisma/client';
 import prisma from '../lib/prisma.js';
 import { getAuthenticatedUserId, setOptionalAuthenticatedUser } from '../utils/auth.js';
+import { HttpError, getErrorMessage, getErrorStatusCode, isRecordNotFoundError } from '../utils/httpError.js';
+import type { IdParams, ProductIdParams } from '../types/api.js';
 
-function serializeProduct(product) {
+interface ProductListItem {
+  id: number;
+  name: string;
+  price: number;
+  imageUrl: string | null;
+  likeCount: number;
+  createdAt: Date;
+}
+
+interface ProductCommentSummary {
+  id: number;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface SerializableProduct {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl: string | null;
+  likeCount: number;
+  isLiked?: boolean;
+  comments?: ProductCommentSummary[];
+  tags: string[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface ProductCreatePayload {
+  name: string;
+  description: string;
+  price: number;
+  imageUrl: string | null;
+  tags: string[];
+}
+
+interface ProductUpdatePayload {
+  name?: string;
+  description?: string;
+  price?: number;
+  imageUrl?: string | null;
+  tags?: string[];
+}
+
+function serializeProduct(product: SerializableProduct) {
   return {
     id: product.id,
     name: product.name,
@@ -17,7 +67,7 @@ function serializeProduct(product) {
   };
 }
 
-function serializeProductListItem(product) {
+function serializeProductListItem(product: ProductListItem): ProductListItem {
   return {
     id: product.id,
     name: product.name,
@@ -28,8 +78,17 @@ function serializeProductListItem(product) {
   };
 }
 
-function validateProductPayload(body, { partial = false } = {}) {
-  const data = {};
+function throwValidationError(message: string): never {
+  throw new HttpError(message, 400);
+}
+
+function validateProductPayload(body: Record<string, unknown>, options: { partial: true }): ProductUpdatePayload;
+function validateProductPayload(body: Record<string, unknown>, options?: { partial?: false }): ProductCreatePayload;
+function validateProductPayload(
+  body: Record<string, unknown>,
+  { partial = false }: { partial?: boolean } = {},
+): ProductCreatePayload | ProductUpdatePayload {
+  const data: ProductUpdatePayload = {};
 
   if (!partial || body.name !== undefined) {
     if (typeof body.name !== 'string') {
@@ -47,7 +106,7 @@ function validateProductPayload(body, { partial = false } = {}) {
     if (typeof body.description !== 'string' || !body.description.trim()) {
       throwValidationError('상품 설명을 입력해 주세요.');
     }
-    data.description = body.description.trim();
+    data.description = (body.description as string).trim();
   }
 
   if (!partial || body.price !== undefined) {
@@ -66,38 +125,32 @@ function validateProductPayload(body, { partial = false } = {}) {
     if (body.imageUrl !== null && typeof body.imageUrl !== 'string') {
       throwValidationError('상품 이미지 경로를 확인해 주세요.');
     }
-    data.imageUrl = body.imageUrl?.trim() || null;
+    const imageUrl = body.imageUrl as string | null;
+    data.imageUrl = imageUrl ? imageUrl.trim() || null : null;
   }
 
   if (body.tags !== undefined) {
-    data.tags = Array.isArray(body.tags) ? body.tags : [];
+    data.tags = Array.isArray(body.tags) ? (body.tags as string[]) : [];
   } else if (!partial) {
     data.tags = [];
   }
 
-  return data;
+  return data as ProductCreatePayload | ProductUpdatePayload;
 }
 
-function throwValidationError(message) {
-  const error = new Error(message);
-  error.statusCode = 400;
-  throw error;
-}
-
-export async function getProducts(req, res) {
+export async function getProducts(req: Request, res: Response) {
   try {
     const page = Math.max(Number(req.query.page) || 1, 1);
     const limit = Math.min(Math.max(Number(req.query.limit || req.query.pageSize) || 10, 1), 50);
     const offset =
-      req.query.offset !== undefined
-        ? Math.max(Number(req.query.offset), 0)
-        : (page - 1) * limit;
+      req.query.offset !== undefined ? Math.max(Number(req.query.offset), 0) : (page - 1) * limit;
     const keyword = String(req.query.keyword || req.query.search || '').trim();
-    const orderBy = req.query.orderBy === 'favorite' || req.query.orderBy === 'like'
-      ? { likeCount: 'desc' }
-      : { createdAt: 'desc' };
+    const orderBy: Prisma.ProductOrderByWithRelationInput =
+      req.query.orderBy === 'favorite' || req.query.orderBy === 'like'
+        ? { likeCount: 'desc' }
+        : { createdAt: 'desc' };
 
-    const where = keyword
+    const where: Prisma.ProductWhereInput = keyword
       ? {
           OR: [
             { name: { contains: keyword, mode: 'insensitive' } },
@@ -125,11 +178,11 @@ export async function getProducts(req, res) {
       hasNext: offset + items.length < total,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: getErrorMessage(error) });
   }
 }
 
-export async function createProduct(req, res) {
+export async function createProduct(req: Request, res: Response) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
@@ -144,14 +197,15 @@ export async function createProduct(req, res) {
 
     res.status(201).json(serializeProduct(product));
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(getErrorStatusCode(error, 400)).json({ message: getErrorMessage(error) });
   }
 }
 
-export async function getProduct(req, res) {
+export async function getProduct(req: Request<IdParams>, res: Response) {
   try {
     setOptionalAuthenticatedUser(req);
-    const userId = req.user?.id;
+    // 비로그인(-1)은 어떤 실제 userId와도 매칭되지 않는 좋아요 조회 sentinel
+    const userId = req.user?.id ?? -1;
     const product = await prisma.product.findUnique({
       where: { id: Number(req.params.id) },
       select: {
@@ -164,7 +218,7 @@ export async function getProduct(req, res) {
         tags: true,
         createdAt: true,
         updatedAt: true,
-        likes: userId ? { where: { userId }, select: { id: true } } : false,
+        likes: { where: { userId }, select: { id: true } },
         comments: {
           orderBy: { createdAt: 'asc' },
           select: { id: true, content: true, createdAt: true, updatedAt: true },
@@ -176,17 +230,14 @@ export async function getProduct(req, res) {
       return res.status(404).json({ message: '상품을 찾을 수 없습니다.' });
     }
 
-    res.json(serializeProduct({
-      ...product,
-      isLiked: Boolean(product.likes?.length),
-      likes: undefined,
-    }));
+    const { likes, ...productWithoutLikes } = product;
+    res.json(serializeProduct({ ...productWithoutLikes, isLiked: likes.length > 0 }));
   } catch {
     res.status(400).json({ message: '잘못된 상품 id입니다.' });
   }
 }
 
-export async function updateProduct(req, res) {
+export async function updateProduct(req: Request<IdParams>, res: Response) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
@@ -208,14 +259,14 @@ export async function updateProduct(req, res) {
 
     res.json(serializeProduct(updated));
   } catch (error) {
-    if (error.code === 'P2025') {
+    if (isRecordNotFoundError(error)) {
       return res.status(404).json({ message: '상품을 찾을 수 없습니다.' });
     }
-    res.status(400).json({ message: error.message });
+    res.status(getErrorStatusCode(error, 400)).json({ message: getErrorMessage(error) });
   }
 }
 
-export async function getBestProducts(req, res) {
+export async function getBestProducts(req: Request, res: Response) {
   try {
     const products = await prisma.product.findMany({
       orderBy: { likeCount: 'desc' },
@@ -225,11 +276,11 @@ export async function getBestProducts(req, res) {
 
     res.json({ list: products.map(serializeProductListItem), totalCount: products.length });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: getErrorMessage(error) });
   }
 }
 
-export async function likeProduct(req, res) {
+export async function likeProduct(req: Request<ProductIdParams>, res: Response) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
@@ -237,11 +288,7 @@ export async function likeProduct(req, res) {
     const productId = Number(req.params.productId);
     const product = await prisma.$transaction(async (tx) => {
       const exists = await tx.product.findUnique({ where: { id: productId }, select: { id: true } });
-      if (!exists) {
-        const error = new Error('상품을 찾을 수 없습니다.');
-        error.statusCode = 404;
-        throw error;
-      }
+      if (!exists) throw new HttpError('상품을 찾을 수 없습니다.', 404);
 
       const like = await tx.productLike.findUnique({
         where: { userId_productId: { userId, productId } },
@@ -257,13 +304,13 @@ export async function likeProduct(req, res) {
       });
     });
 
-    res.json({ ...serializeProduct(product), isLiked: true });
+    res.json({ ...serializeProduct(product as SerializableProduct), isLiked: true });
   } catch (error) {
-    res.status(error.statusCode || 400).json({ message: error.message });
+    res.status(getErrorStatusCode(error, 400)).json({ message: getErrorMessage(error) });
   }
 }
 
-export async function unlikeProduct(req, res) {
+export async function unlikeProduct(req: Request<ProductIdParams>, res: Response) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
@@ -287,11 +334,11 @@ export async function unlikeProduct(req, res) {
     if (!product) return res.status(404).json({ message: '상품을 찾을 수 없습니다.' });
     res.json({ ...serializeProduct(product), isLiked: false });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ message: getErrorMessage(error) });
   }
 }
 
-export async function deleteProduct(req, res) {
+export async function deleteProduct(req: Request<IdParams>, res: Response) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
@@ -307,9 +354,9 @@ export async function deleteProduct(req, res) {
     await prisma.product.delete({ where: { id: Number(req.params.id) } });
     res.status(204).send();
   } catch (error) {
-    if (error.code === 'P2025') {
+    if (isRecordNotFoundError(error)) {
       return res.status(404).json({ message: '상품을 찾을 수 없습니다.' });
     }
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: getErrorMessage(error) });
   }
 }

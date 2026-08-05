@@ -5,5 +5,8 @@ node_modules
 .claude/
 
 /generated/prisma
+/dist
+/uploads/*
+!/uploads/.gitkeep
 
 docs/library-db/

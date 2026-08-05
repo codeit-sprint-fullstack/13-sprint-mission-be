@@ -1,3 +1,4 @@
+import type { NextFunction, Request, Response } from 'express';
 import { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
@@ -29,7 +30,7 @@ const upload = multer({
   },
 });
 
-function requireAuth(req, res, next) {
+function requireAuth(req: Request, res: Response, next: NextFunction) {
   if (!getAuthenticatedUserId(req, res)) return;
   next();
 }
