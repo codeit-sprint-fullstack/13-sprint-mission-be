@@ -1,17 +1,19 @@
 import { Request, Response, NextFunction } from "express";
 import { authService } from "../services/authService";
-import { SignUpDto } from "../dto/auth.dto";
+import { signUpSchema, signInSchema } from "../dto/auth.dto";
+import { success } from "zod";
 
 export const authController = {
   signUp: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { email, nickname, password } = req.body;
+      const validationResult = signUpSchema.safeParse(req.body);
 
-      if (!email || !nickname || !password) {
-        return res
-          .status(400)
-          .json({ success: false, message: "모든 필드를 입력해 주세요." });
+      if (!validationResult.success) {
+        const errorMessage = validationResult.error.issues[0].message;
+        return res.status(400).json({ success: false, message: errorMessage });
       }
+
+      const { email, nickname, password } = validationResult.data;
 
       const result = await authService.signUp({ email, nickname, password });
 
@@ -27,14 +29,14 @@ export const authController = {
 
   signIn: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { email, password } = req.body;
+      const validationResult = signInSchema.safeParse(req.body);
 
-      if (!email || !password) {
-        return res.status(400).json({
-          success: false,
-          message: "이메일과 비밀번호를 모두 입력해 주세요.",
-        });
+      if (!validationResult.success) {
+        const errorMessage = validationResult.error.issues[0].message;
+        return res.status(400).json({ success: false, message: errorMessage });
       }
+
+      const { email, password } = validationResult.data;
 
       const result = await authService.signIn({ email, password });
 
