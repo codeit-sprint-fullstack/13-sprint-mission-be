@@ -2,7 +2,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "../models/prismaClient";
 import { AppError } from "../middlewares/errorHandler";
-import { SignUpDto, SignInDto } from "../controllers/authController";
+import { SignUpDto, SignInDto } from "../dto/auth.dto";
+import { from } from "node:stream/iter";
 
 const JWT_SECRET = process.env.JWT_SECRET || "panda-market-secret-key-1234";
 

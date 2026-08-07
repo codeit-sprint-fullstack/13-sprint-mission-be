@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { authService } from "../services/authService";
-
-export type SignUpDto = { email: string; nickname: string; password: string };
-export type SignInDto = { email: string; password: string };
+import { SignUpDto } from "../dto/auth.dto";
 
 export const authController = {
   signUp: async (req: Request, res: Response, next: NextFunction) => {
@@ -32,12 +30,10 @@ export const authController = {
       const { email, password } = req.body;
 
       if (!email || !password) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-            message: "이메일과 비밀번호를 모두 입력해 주세요.",
-          });
+        return res.status(400).json({
+          success: false,
+          message: "이메일과 비밀번호를 모두 입력해 주세요.",
+        });
       }
 
       const result = await authService.signIn({ email, password });
