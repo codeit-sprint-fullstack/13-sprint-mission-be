@@ -1,8 +1,8 @@
 import express from "express";
-import * as articleController from "../controllers/article.controller.js";
-import asyncHandler from "../middlewares/asyncHandler.js";
-import { optionalAuth, requireAuth } from "../middlewares/auth.js";
-import { validateArticle, validateComment } from "../middlewares/validators.js";
+import * as articleController from "../controllers/article.controller";
+import asyncHandler from "../middlewares/asyncHandler";
+import { optionalAuth, requireAuth } from "../middlewares/auth";
+import { validateArticle, validateComment } from "../middlewares/validators";
 
 const router = express.Router();
 

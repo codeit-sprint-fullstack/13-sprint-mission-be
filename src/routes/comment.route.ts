@@ -1,8 +1,8 @@
 import express from "express";
-import * as commentController from "../controllers/comment.controller.js";
-import asyncHandler from "../middlewares/asyncHandler.js";
-import { requireAuth } from "../middlewares/auth.js";
-import { validateComment } from "../middlewares/validators.js";
+import * as commentController from "../controllers/comment.controller";
+import asyncHandler from "../middlewares/asyncHandler";
+import { requireAuth } from "../middlewares/auth";
+import { validateComment } from "../middlewares/validators";
 
 const router = express.Router();
 
