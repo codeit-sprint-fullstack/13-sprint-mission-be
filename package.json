@@ -1,6 +1,7 @@
 {
   "name": "sprint-mission-5",
   "version": "1.0.0",
+  "type": "commonjs",
   "description": "",
   "main": "dist/server.js",
   "scripts": {
