@@ -1,6 +1,7 @@
-import multer from "multer";
+import multer, { FileFilterCallback } from "multer";
 import path from "path";
 import fs from "fs";
+import { Request } from "express";
 
 // 요구사항(상품 등록): "multer 미들웨어를 사용하여 이미지 업로드 API를 구현해 주세요.
 // 업로드된 이미지는 서버에 저장하고, 해당 이미지의 경로를 response 객체에 포함해 반환합니다."
@@ -17,7 +18,11 @@ const storage = multer.diskStorage({
   },
 });
 
-function imageFileFilter(req, file, cb) {
+function imageFileFilter(
+  req: Request,
+  file: Express.Multer.File,
+  cb: FileFilterCallback,
+) {
   if (!file.mimetype.startsWith("image/")) {
     return cb(new Error("이미지 파일만 업로드할 수 있습니다."));
   }
