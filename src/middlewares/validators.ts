@@ -1,7 +1,7 @@
 import { HttpError } from "./error";
 import type { RequestHandler } from "express";
 
-function requreString(value: unknown, field: string, label?: string): string {
+function requireString(value: unknown, field: string, label?: string): string {
   if (typeof value !== "string" || !value.trim()) {
     throw new HttpError(400, `${label || field}을(를) 입력해주세요.`);
   }
