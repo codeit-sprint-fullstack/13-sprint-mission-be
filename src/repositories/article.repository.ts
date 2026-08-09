@@ -1,8 +1,15 @@
-import prisma from "../config/prisma.js";
+import prisma, { Prisma } from "../config/prisma.js";
 
 const withLikeCount = { _count: { select: { likes: true } } };
 
-export function create({ title, content, image, userId }) {
+interface CreateArticleParams {
+  title: string;
+  content: string;
+  image?: string;
+  userId?: number;
+}
+
+export function create({ title, content, image, userId }: CreateArticleParams) {
   return prisma.article.create({
     data: {
       title,
@@ -13,11 +20,19 @@ export function create({ title, content, image, userId }) {
   });
 }
 
-export function findMany({ where, orderBy, skip, take, select }) {
+interface FindManyArticlesParams {
+  where?: Prisma.ArticleWhereInput;
+  orderBy?: Prisma.ArticleOrderByWithRelationInput;
+  skip?: number;
+  take?: number;
+  select?: Prisma.ArticleSelect;
+}
+
+export function findMany({ where, orderBy, skip, take, select }: FindManyArticlesParams) {
   return prisma.article.findMany({ where, orderBy, skip, take, select });
 }
 
-export function count({ where }) {
+export function count({ where }: { where?: Prisma.ArticleWhereInput }) {
   return prisma.article.count({ where });
 }
 
@@ -25,7 +40,7 @@ export function findAllWithLikeCount() {
   return prisma.article.findMany({ include: { ...withLikeCount } });
 }
 
-export function findById(id) {
+export function findById(id: number) {
   return prisma.article.findUnique({
     where: { id },
     include: {
@@ -38,19 +53,19 @@ export function findById(id) {
   });
 }
 
-export function findByIdSimple(id) {
+export function findByIdSimple(id: number) {
   return prisma.article.findUnique({ where: { id } });
 }
 
-export function update(id, data) {
+export function update(id: number, data: Prisma.ArticleUpdateInput) {
   return prisma.article.update({ where: { id }, data });
 }
 
-export function remove(id) {
+export function remove(id: number) {
   return prisma.article.delete({ where: { id } });
 }
 
-export async function likeProduct(userId, articleId) {
+export async function likeProduct(userId: number, articleId: number) {
   const [, article] = await prisma.$transaction([
     prisma.like.create({ data: { userId, articleId } }),
     prisma.article.findUnique({
@@ -61,7 +76,7 @@ export async function likeProduct(userId, articleId) {
   return article;
 }
 
-export async function unlikeProduct(userId, articleId) {
+export async function unlikeProduct(userId: number, articleId: number) {
   const [, article] = await prisma.$transaction([
     prisma.like.delete({
       where: { userId_articleId: { userId, articleId } },
@@ -74,13 +89,13 @@ export async function unlikeProduct(userId, articleId) {
   return article;
 }
 
-export function isLikedByUser(userId, articleId) {
+export function isLikedByUser(userId: number, articleId: number) {
   return prisma.like
     .findUnique({ where: { userId_articleId: { userId, articleId } } })
     .then(Boolean);
 }
 
-export function findFavoritesByUser(userId) {
+export function findFavoritesByUser(userId: number) {
   return prisma.article.findMany({
     where: { likes: { some: { userId } } },
     orderBy: { createdAt: "desc" },
