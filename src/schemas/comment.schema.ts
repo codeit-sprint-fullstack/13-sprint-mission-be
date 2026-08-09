@@ -14,3 +14,7 @@ export const createProductCommentSchema = z.object({
 export const updateCommentSchema = z.object({
   content: contentField,
 });
+
+export type CreateArticleCommentInput = z.infer<typeof createArticleCommentSchema>;
+export type CreateProductCommentInput = z.infer<typeof createProductCommentSchema>;
+export type UpdateCommentInput = z.infer<typeof updateCommentSchema>;

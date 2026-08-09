@@ -15,3 +15,6 @@ export const createProductSchema = z.object({
 
 // 상품 수정은 모든 필드가 선택 (부분 수정 허용)
 export const updateProductSchema = createProductSchema.partial();
+
+export type CreateProductInput = z.infer<typeof createProductSchema>;
+export type UpdateProductInput = z.infer<typeof updateProductSchema>;
