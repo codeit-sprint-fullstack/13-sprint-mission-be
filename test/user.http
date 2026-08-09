@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:3000
+@baseUrl = http://localhost:4000
 
 ### 회원가입 (성공)
 POST {{baseUrl}}/auth/signUp
@@ -21,7 +21,7 @@ Content-Type: application/json
   "password": "password123!"
 }
 
-### 회원가입 (유효성 검증 실패 -> 400, zod)
+### 회원가입 (유효성 검증 실패 -> 400, zod) -> TODO: message:"올바른 이메일 형식이 아닙니다., 닉네임을 입력해 주세요., 비밀번호는 8자 이상이어야 합니다."
 POST {{baseUrl}}/auth/signUp
 Content-Type: application/json
 
@@ -49,7 +49,10 @@ Content-Type: application/json
   "password": "wrongpassword"
 }
 
-### 로그인 (존재하지 않는 이메일 -> 401)
+### 로그인 (존재하지 않는 이메일 -> 401) -> TODO: 
+# {
+#   "message": "이메일 또는 비밀번호가 일치하지 않습니다."
+# }
 POST {{baseUrl}}/auth/signIn
 Content-Type: application/json
 
