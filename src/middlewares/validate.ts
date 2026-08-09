@@ -9,7 +9,7 @@ import { BadRequestError } from "./errorHandler.js";
 // -> zod 스키마를 인자로 받아 req.body를 검증하는 미들웨어 팩토리
 export function validate<T>(schema: ZodType<T>) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const result = schema.safeParse(req.body);
+    const result = schema.safeParse(req.body); // 결과 객체
     if (!result.success) {
       const message = result.error.issues
         .map((issue) => issue.message)

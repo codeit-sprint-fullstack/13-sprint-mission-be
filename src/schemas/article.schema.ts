@@ -13,7 +13,7 @@ export const updateArticleSchema = createArticleSchema.partial();
 export type CreateArticleInput = z.infer<typeof createArticleSchema>;
 export type UpdateArticleInput = z.infer<typeof updateArticleSchema>;
 
-// TODO: type UpdateArticleInput = {
+// type UpdateArticleInput = {
 //   title?: string;
 //   content?: string;
-// }; 이렇게 처음부터 적으면 될일 아닌가? 
+// };

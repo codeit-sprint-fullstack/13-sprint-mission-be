@@ -1,7 +1,6 @@
 import { expressjwt } from "express-jwt";
 import { Request } from "express";
 import { JWT_SECRET } from "../config/env.js";
-// TODO: 왜 ts가 아니지?
 
 // accessToken은 httpOnly 쿠키로 발급됨 (auth.controller.js) -> 쿠키에서 읽음
 const getTokenFromCookie = (req: Request) => req.cookies?.accessToken;
