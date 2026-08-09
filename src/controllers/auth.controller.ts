@@ -1,25 +1,59 @@
+import crypto from "crypto";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express";
 import {
   BadRequestError,
   UnauthorizedError,
 } from "../middlewares/errorHandler.js";
 import * as userRepository from "../repositories/user.repository.js";
+import redis from "../config/redis.js";
+import { JWT_SECRET } from "../config/env.js";
+import { SignUpInput, SignInInput } from "../schemas/auth.schema.js";
 
 const SALT_ROUNDS = 10;
 const ACCESS_TOKEN_EXPIRES_IN = "1h";
 const ACCESS_TOKEN_MAX_AGE_MS = 60 * 60 * 1000;
 
+// 요구사항(심화 - 인증): "만료된 액세스 토큰을 새로 발급하는 리프레시 토큰 발급 기능을
+// 구현합니다. (jwt sliding session 적용)"
+// -> refresh token은 7일짜리로 발급하고, 매 갱신(/auth/refresh)마다 새 토큰으로 교체 +
+//    Redis의 만료시간도 다시 7일로 늘려서 계속 활동하는 사용자는 로그인이 끊기지 않게 함
+const REFRESH_TOKEN_EXPIRES_IN = "7d";
+const REFRESH_TOKEN_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
+const REFRESH_TOKEN_TTL_SECONDS = 7 * 24 * 60 * 60;
+
+interface AuthUser {
+  id: number;
+}
+
+interface RefreshTokenPayload {
+  userId: number;
+  jti: string;
+  type: "refresh";
+}
+
+// 기기별로 동시에 여러 세션이 살아있을 수 있게 jti(세션 id)로 구분해서 저장
+const refreshTokenKey = (userId: number, jti: string) => `refreshToken:${userId}:${jti}`;
+
 // 요구사항(인증): "로그인 API를 만들어 주세요. 사용자의 신원을 확인하고,
 // 성공적인 인증 후에는 액세스 토큰을 발급해 response 객체에 포함해 반환합니다."
-export function generateAccessToken(user) {
-  return jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+export function generateAccessToken(user: AuthUser) {
+  return jwt.sign({ userId: user.id }, JWT_SECRET, {
     expiresIn: ACCESS_TOKEN_EXPIRES_IN,
   });
 }
 
+function generateRefreshToken(user: AuthUser, jti: string) {
+  return jwt.sign(
+    { userId: user.id, jti, type: "refresh" },
+    JWT_SECRET,
+    { expiresIn: REFRESH_TOKEN_EXPIRES_IN },
+  );
+}
+
 // 프론트(Next.js)가 /api rewrite로 같은 origin처럼 호출하므로 sameSite:"lax"로 충분함
-function setAccessTokenCookie(res, accessToken) {
+function setAccessTokenCookie(res: Response, accessToken: string) {
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
     sameSite: "lax",
@@ -27,12 +61,38 @@ function setAccessTokenCookie(res, accessToken) {
   });
 }
 
+function setRefreshTokenCookie(res: Response, refreshToken: string) {
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    sameSite: "lax",
+    maxAge: REFRESH_TOKEN_MAX_AGE_MS,
+  });
+}
+
+// accessToken + refreshToken을 함께 발급하고, refreshToken은 Redis에 화이트리스트로 등록
+// (여기 등록된 것만 유효한 refreshToken으로 취급 -> 로그아웃/탈취 시 즉시 무효화 가능)
+async function issueTokens(res: Response, user: AuthUser) {
+  const jti = crypto.randomUUID();
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user, jti);
+
+  await redis.set(
+    refreshTokenKey(user.id, jti),
+    "1",
+    "EX",
+    REFRESH_TOKEN_TTL_SECONDS,
+  );
+
+  setAccessTokenCookie(res, accessToken);
+  setRefreshTokenCookie(res, refreshToken);
+}
+
 // 요구사항(인증): "회원가입 API를 만들어 주세요.
 // email, nickname, password 를 입력하여 회원가입을 진행합니다.
 // password는 해싱해 저장합니다."
-export const signUp = async (req, res, next) => {
+export const signUp = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email, nickname, password, image } = req.body;
+    const { email, nickname, password, image } = req.body as SignUpInput;
 
     const existingUser = await userRepository.findByEmail(email);
     if (existingUser) {
@@ -49,8 +109,7 @@ export const signUp = async (req, res, next) => {
     });
 
     // 요구사항: 회원가입 성공 시 바로 로그인된 상태가 되어야 함(프론트가 가입 직후 자동 로그인을 기대함)
-    const accessToken = generateAccessToken(user);
-    setAccessTokenCookie(res, accessToken);
+    await issueTokens(res, user);
 
     res.status(201).json({
       user: {
@@ -67,9 +126,9 @@ export const signUp = async (req, res, next) => {
 
 // 요구사항(인증): "로그인 API를 만들어 주세요. 사용자의 신원을 확인하고,
 // 성공적인 인증 후에는 액세스 토큰을 발급해 response 객체에 포함해 반환합니다."
-export const signIn = async (req, res, next) => {
+export const signIn = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body as SignInInput;
 
     const user = await userRepository.findByEmail(email);
     if (!user) {
@@ -81,8 +140,7 @@ export const signIn = async (req, res, next) => {
       throw new UnauthorizedError("이메일 또는 비밀번호가 일치하지 않습니다.");
     }
 
-    const accessToken = generateAccessToken(user);
-    setAccessTokenCookie(res, accessToken);
+    await issueTokens(res, user);
 
     res.status(200).json({
       user: {
@@ -92,6 +150,64 @@ export const signIn = async (req, res, next) => {
         image: user.image,
       },
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// 요구사항(심화 - 인증): "만료된 액세스 토큰을 새로 발급하는 리프레시 토큰 발급 기능을 구현합니다."
+// -> refreshToken 쿠키를 검증하고, Redis 화이트리스트에 있는지 확인한 뒤
+//    (재사용 방지를 위해 기존 토큰은 폐기하고) accessToken/refreshToken을 새로 발급
+export const refreshAccessToken = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const refreshToken: string | undefined = req.cookies?.refreshToken;
+    if (!refreshToken) {
+      throw new UnauthorizedError("refresh token이 없습니다.");
+    }
+
+    let payload: RefreshTokenPayload;
+    try {
+      payload = jwt.verify(refreshToken, JWT_SECRET) as RefreshTokenPayload;
+    } catch {
+      throw new UnauthorizedError("refresh token이 유효하지 않습니다.");
+    }
+    if (payload.type !== "refresh") {
+      throw new UnauthorizedError("refresh token이 유효하지 않습니다.");
+    }
+
+    const key = refreshTokenKey(payload.userId, payload.jti);
+    const isValid = await redis.get(key);
+    if (!isValid) {
+      throw new UnauthorizedError(
+        "만료되었거나 이미 사용된 refresh token입니다.",
+      );
+    }
+    await redis.del(key);
+
+    await issueTokens(res, { id: payload.userId });
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// 요구사항(심화 - 인증) 연계: refresh token을 발급하는 이상, 탈취/기기 분실 시
+// 해당 세션만 즉시 무효화할 수 있는 로그아웃 기능이 필요함
+export const logout = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const refreshToken: string | undefined = req.cookies?.refreshToken;
+    if (refreshToken) {
+      // 만료된 토큰이라도 쿠키/Redis 정리는 되어야 하므로 서명 검증 없이 payload만 확인
+      const payload = jwt.decode(refreshToken) as RefreshTokenPayload | null;
+      if (payload?.userId && payload?.jti) {
+        await redis.del(refreshTokenKey(payload.userId, payload.jti));
+      }
+    }
+
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    res.status(204).send();
   } catch (error) {
     next(error);
   }

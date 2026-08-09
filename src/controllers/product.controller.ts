@@ -1,13 +1,16 @@
+import { Request, Response } from "express";
+import { AuthenticatedRequest } from "../types/express.js";
 import * as productRepository from "../repositories/product.repository.js";
 import {
   NotFoundError,
   ForbiddenError,
   BadRequestError,
 } from "../middlewares/errorHandler.js";
+import { CreateProductInput, UpdateProductInput } from "../schemas/product.schema.js";
 
 // productId가 숫자가 아니면(예: 잘못된 값, 리졸브 안 된 변수 등) Prisma가 500을 던지기 전에
 // 여기서 먼저 400으로 걸러줌
-function parseProductId(productId) {
+function parseProductId(productId: string) {
   const parsedId = parseInt(productId);
   if (isNaN(parsedId)) {
     throw new BadRequestError("productId는 숫자여야 합니다.");
@@ -18,8 +21,8 @@ function parseProductId(productId) {
 // [ ]  상품 상세 조회 API를 만들어 주세요.
 // 요구사항(상품 상세): "해당 상품에 대한 댓글 리스트, 사용자가 '좋아요'를 눌렀는지
 // 여부를 확인할 수 있도록 응답 객체에 포함시켜 반환해 주세요."
-export const getProduct = async (req, res) => {
-  const { productId } = req.params;
+export const getProduct = async (req: Request, res: Response) => {
+  const { productId } = req.params as { productId: string };
   const parsedId = parseProductId(productId);
   const product = await productRepository.findById(parsedId);
   if (!product) throw new NotFoundError("Product을 찾을 수 없습니다");
@@ -33,8 +36,8 @@ export const getProduct = async (req, res) => {
 
 // [ ]  상품 등록 API를 만들어 주세요.
 // 요구사항(상품 기능 인가): "로그인한 사용자만 상품을 등록할 수 있습니다."
-export const createProduct = async (req, res) => {
-  const { name, description, price, tags, images } = req.body;
+export const createProduct = async (req: AuthenticatedRequest, res: Response) => {
+  const { name, description, price, tags, images } = req.body as CreateProductInput;
   const product = await productRepository.create({
     name,
     description,
@@ -48,8 +51,8 @@ export const createProduct = async (req, res) => {
 
 // [ ]  상품 수정 API를 만들어 주세요. (PATCH)
 // 요구사항(상품 기능 인가): "상품을 등록한 사용자만 해당 상품의 정보를 수정할 수 있습니다."
-export const updateProduct = async (req, res) => {
-  const { productId } = req.params;
+export const updateProduct = async (req: AuthenticatedRequest, res: Response) => {
+  const { productId } = req.params as { productId: string };
   const parsedId = parseProductId(productId);
 
   const existing = await productRepository.findByIdSimple(parsedId);
@@ -58,14 +61,17 @@ export const updateProduct = async (req, res) => {
     throw new ForbiddenError("본인이 등록한 상품만 수정할 수 있습니다.");
   }
 
-  const product = await productRepository.update(parsedId, req.body);
+  // tags는 Tag 릴레이션이라 평범한 문자열 배열로는 update에 바로 넣을 수 없어서 제외
+  // (릴레이션 갱신은 아직 지원하지 않음 - 이전에도 동작하지 않던 부분)
+  const { name, description, price, images } = req.body as UpdateProductInput;
+  const product = await productRepository.update(parsedId, { name, description, price, images });
   res.json({ success: true, data: product });
 };
 
 // [ ]  상품 삭제 API를 만들어 주세요.
 // 요구사항(상품 기능 인가): "상품을 등록한 사용자만 해당 상품을 삭제를 할 수 있습니다."
-export const deleteProduct = async (req, res) => {
-  const { productId } = req.params;
+export const deleteProduct = async (req: AuthenticatedRequest, res: Response) => {
+  const { productId } = req.params as { productId: string };
   const parsedId = parseProductId(productId);
 
   const existing = await productRepository.findByIdSimple(parsedId);
@@ -81,8 +87,13 @@ export const deleteProduct = async (req, res) => {
 // [ ]  상품 목록 조회 API를 만들어 주세요.
 // [ ]  offset 방식의 페이지네이션 기능을 포함해 주세요.
 // [ ]  name, description에 포함된 단어로 검색할 수 있습니다.
-export const getProducts = async (req, res) => {
-  const { search, page = "1", limit = "10", orderBy } = req.query;
+export const getProducts = async (req: Request, res: Response) => {
+  const {
+    search,
+    page = "1",
+    limit = "10",
+    orderBy,
+  } = req.query as Record<string, string>;
 
   const pageNum = Math.max(1, parseInt(page) || 1);
   const take = Math.max(1, parseInt(limit) || 10);
@@ -104,8 +115,8 @@ export const getProducts = async (req, res) => {
 };
 
 // 요구사항(좋아요 기능): "사용자는 상품에 '좋아요'를 할 수 있습니다."
-export const likeProduct = async (req, res) => {
-  const { productId } = req.params;
+export const likeProduct = async (req: AuthenticatedRequest, res: Response) => {
+  const { productId } = req.params as { productId: string };
   const product = await productRepository.likeProduct(
     req.auth.userId,
     parseProductId(productId),
@@ -114,8 +125,8 @@ export const likeProduct = async (req, res) => {
 };
 
 // 요구사항(좋아요 기능): "사용자는 상품에 '좋아요'를 취소할 수 있습니다."
-export const unlikeProduct = async (req, res) => {
-  const { productId } = req.params;
+export const unlikeProduct = async (req: AuthenticatedRequest, res: Response) => {
+  const { productId } = req.params as { productId: string };
   const product = await productRepository.unlikeProduct(
     req.auth.userId,
     parseProductId(productId),

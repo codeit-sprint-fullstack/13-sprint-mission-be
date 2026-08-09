@@ -1,3 +1,5 @@
+import { Request, Response } from "express";
+import { AuthenticatedRequest } from "../types/express.js";
 import * as CommentRepository from "../repositories/comment.repository.js";
 import * as productRepository from "../repositories/product.repository.js";
 import * as articleRepository from "../repositories/article.repository.js";
@@ -6,15 +8,20 @@ import {
   NotFoundError,
   ForbiddenError,
 } from "../middlewares/errorHandler.js";
+import {
+  CreateArticleCommentInput,
+  CreateProductCommentInput,
+  UpdateCommentInput,
+} from "../schemas/comment.schema.js";
 
-function toCommentResponse({ user, ...comment }) {
+function toCommentResponse<T extends { user: unknown }>({ user, ...comment }: T) {
   return { ...comment, writer: user };
 }
 
 // 게시글 댓글 등록
 // 요구사항(댓글 기능 인가): "로그인한 사용자만 게시글에 댓글을 등록할 수 있습니다."
-export const createArticleComment = async (req, res) => {
-  const { articleId } = req.params;
+export const createArticleComment = async (req: AuthenticatedRequest, res: Response) => {
+  const { articleId } = req.params as { articleId: string };
   const parsedArticleId = parseInt(articleId);
   if (isNaN(parsedArticleId)) {
     throw new BadRequestError("articleId는 숫자여야 합니다");
@@ -25,7 +32,7 @@ export const createArticleComment = async (req, res) => {
     throw new NotFoundError("게시글을 찾을 수 없습니다");
   }
 
-  const { content } = req.body;
+  const { content } = req.body as CreateArticleCommentInput;
   const comment = await CommentRepository.createArticleComment({
     content,
     articleId: parsedArticleId,
@@ -36,9 +43,9 @@ export const createArticleComment = async (req, res) => {
 };
 
 // 게시글 댓글 목록 조회 (cursor 페이지네이션)
-export const getArticleComments = async (req, res) => {
-  const { articleId } = req.params;
-  const { cursor, limit = "10" } = req.query;
+export const getArticleComments = async (req: Request, res: Response) => {
+  const { articleId } = req.params as { articleId: string };
+  const { cursor, limit = "10" } = req.query as Record<string, string>;
   const parsedArticleId = parseInt(articleId);
   const pageLimit = parseInt(limit);
   if (isNaN(parsedArticleId)) {
@@ -56,10 +63,10 @@ export const getArticleComments = async (req, res) => {
     take: pageLimit + 1,
   });
 
-  let nextCursor = null;
+  let nextCursor: number | null = null;
   if (comments.length > pageLimit) {
     const nextItem = comments.pop();
-    nextCursor = nextItem?.id;
+    nextCursor = nextItem?.id ?? null;
   }
 
   res.json({ list: comments.map(toCommentResponse), nextCursor });
@@ -67,8 +74,8 @@ export const getArticleComments = async (req, res) => {
 
 // 상품 댓글 등록
 // 요구사항(댓글 기능 인가): "로그인한 사용자만 상품에 댓글을 등록할 수 있습니다."
-export const createProductComment = async (req, res) => {
-  const { productId } = req.params;
+export const createProductComment = async (req: AuthenticatedRequest, res: Response) => {
+  const { productId } = req.params as { productId: string };
   const parsedProductId = parseInt(productId);
   if (isNaN(parsedProductId)) {
     throw new BadRequestError("productId는 숫자여야 합니다");
@@ -79,7 +86,7 @@ export const createProductComment = async (req, res) => {
     throw new NotFoundError("상품을 찾을 수 없습니다");
   }
 
-  const { content } = req.body;
+  const { content } = req.body as CreateProductCommentInput;
   const comment = await CommentRepository.createProductComment({
     content,
     productId: parsedProductId,
@@ -90,9 +97,9 @@ export const createProductComment = async (req, res) => {
 };
 
 // 상품 댓글 목록 조회 (cursor 페이지네이션)
-export const getProductComments = async (req, res) => {
-  const { productId } = req.params;
-  const { cursor, limit = "10" } = req.query;
+export const getProductComments = async (req: Request, res: Response) => {
+  const { productId } = req.params as { productId: string };
+  const { cursor, limit = "10" } = req.query as Record<string, string>;
   const parsedProductId = parseInt(productId);
   const pageLimit = parseInt(limit);
   if (isNaN(parsedProductId)) {
@@ -110,18 +117,18 @@ export const getProductComments = async (req, res) => {
     take: pageLimit + 1,
   });
 
-  let nextCursor = null;
+  let nextCursor: number | null = null;
   if (comments.length > pageLimit) {
     const nextItem = comments.pop();
-    nextCursor = nextItem?.id;
+    nextCursor = nextItem?.id ?? null;
   }
 
   res.json({ list: comments.map(toCommentResponse), nextCursor });
 };
 
 // 요구사항(댓글 기능 인가): "댓글을 등록한 사용자만 댓글을 수정하거나 삭제할 수 있습니다."
-export const updateComment = async (req, res) => {
-  const { commentId } = req.params;
+export const updateComment = async (req: AuthenticatedRequest, res: Response) => {
+  const { commentId } = req.params as { commentId: string };
   const parsedId = parseInt(commentId);
   if (isNaN(parsedId)) {
     throw new BadRequestError("commentId는 숫자여야 합니다");
@@ -133,14 +140,14 @@ export const updateComment = async (req, res) => {
     throw new ForbiddenError("본인이 등록한 댓글만 수정할 수 있습니다.");
   }
 
-  const { content } = req.body;
+  const { content } = req.body as UpdateCommentInput;
   const updated = await CommentRepository.update(found.table, parsedId, content);
 
   res.json(toCommentResponse(updated));
 };
 
-export const deleteComment = async (req, res) => {
-  const { commentId } = req.params;
+export const deleteComment = async (req: AuthenticatedRequest, res: Response) => {
+  const { commentId } = req.params as { commentId: string };
   const parsedId = parseInt(commentId);
   if (isNaN(parsedId)) {
     throw new BadRequestError("commentId는 숫자여야 합니다");
