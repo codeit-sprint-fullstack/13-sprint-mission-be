@@ -1,12 +1,10 @@
 import { Request, Response } from "express";
-import * as articleRepository from "../repositories/article.repository.js";
-import { Prisma } from "../config/prisma.js";
+import * as articleService from "../services/article.service.js";
+import { BadRequestError } from "../middlewares/errorHandler.js";
 import {
-  NotFoundError,
-  ForbiddenError,
-  BadRequestError,
-} from "../middlewares/errorHandler.js";
-import { CreateArticleInput, UpdateArticleInput } from "../schemas/article.schema.js";
+  CreateArticleInput,
+  UpdateArticleInput,
+} from "../schemas/article.schema.js";
 
 // 여기서 먼저 400으로 걸러줌
 function parseArticleId(articleId: string) {
@@ -21,24 +19,15 @@ function parseArticleId(articleId: string) {
 // [ ] `id`, `title`, `content`, `createdAt`를 조회합니다.
 export const getArticle = async (req: Request, res: Response) => {
   const { articleId } = req.params as { articleId: string };
-  const parsedId = parseArticleId(articleId);
-  const article = await articleRepository.findById(parsedId);
-  if (!article) throw new NotFoundError("Article를 찾을 수 없습니다");
-  const isLiked = req.auth?.userId
-    ? await articleRepository.isLikedByUser(req.auth.userId, parsedId)
-    : false;
+  const article = await articleService.getArticle(parseArticleId(articleId), req.auth?.userId);
   res.json({ success: true, data: article });
 };
 
 // [ ]  게시글 등록 API를 만들어 주세요.
 // [ ] `title`, `content`를 입력해 게시글을 등록합니다.
 export const createArticle = async (req: Request, res: Response) => {
-  const { title, content } = req.body as CreateArticleInput;
-  const article = await articleRepository.create({
-    title,
-    content,
-    userId: req.auth?.userId,
-  });
+  const input = req.body as CreateArticleInput;
+  const article = await articleService.createArticle(input, req.auth?.userId);
   res.status(201).json({ success: true, data: article });
 };
 
@@ -46,14 +35,14 @@ export const createArticle = async (req: Request, res: Response) => {
 export const updateArticle = async (req: Request, res: Response) => {
   const { articleId } = req.params as { articleId: string };
   const data = req.body as UpdateArticleInput;
-  const article = await articleRepository.update(parseArticleId(articleId), data);
+  const article = await articleService.updateArticle(parseArticleId(articleId), data);
   res.json({ success: true, data: article });
 };
 
 // [ ]  게시글 삭제 API를 만들어 주세요.
 export const deleteArticle = async (req: Request, res: Response) => {
   const { articleId } = req.params as { articleId: string };
-  await articleRepository.remove(parseArticleId(articleId));
+  await articleService.deleteArticle(parseArticleId(articleId));
   res.json({ success: true, message: "Article이 삭제되었습니다" });
 };
 
@@ -70,42 +59,15 @@ export const getArticles = async (req: Request, res: Response) => {
     limit = "10",
   } = req.query as Record<string, string>;
 
-  const where: Prisma.ArticleWhereInput = {};
-  if (search) {
-    where.OR = [
-      { title: { contains: search, mode: "insensitive" } },
-      { content: { contains: search, mode: "insensitive" } },
-    ];
-  }
-
-  const orderByMap: Record<string, Prisma.ArticleOrderByWithRelationInput> = {
-    recent: { createdAt: "desc" },
-  };
-  const orderBy = orderByMap[sort] ?? { createdAt: "desc" };
-
   const pageNum = Math.max(1, parseInt(page) || 1);
   const take = Math.max(1, parseInt(limit) || 10);
-  const skip = (pageNum - 1) * take;
 
-  const [articles, total] = await Promise.all([
-    articleRepository.findMany({
-      where,
-      orderBy,
-      skip,
-      take,
-
-      select: {
-        id: true,
-        title: true,
-        content: true,
-        createdAt: true,
-      },
-    }),
-
-    articleRepository.count({
-      where,
-    }),
-  ]);
+  const { articles, total } = await articleService.getArticles({
+    search,
+    sort,
+    page: pageNum,
+    limit: take,
+  });
 
   res.json({
     success: true,

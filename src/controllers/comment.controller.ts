@@ -1,22 +1,12 @@
 import { Request, Response } from "express";
-import { AuthenticatedRequest } from "../types/express.js";
-import * as CommentRepository from "../repositories/comment.repository.js";
-import * as productRepository from "../repositories/product.repository.js";
-import * as articleRepository from "../repositories/article.repository.js";
-import {
-  BadRequestError,
-  NotFoundError,
-  ForbiddenError,
-} from "../middlewares/errorHandler.js";
+import { AuthenticatedRequest } from "../types/auth.js";
+import * as commentService from "../services/comment.service.js";
+import { BadRequestError } from "../middlewares/errorHandler.js";
 import {
   CreateArticleCommentInput,
   CreateProductCommentInput,
   UpdateCommentInput,
 } from "../schemas/comment.schema.js";
-
-function toCommentResponse<T extends { user: unknown }>({ user, ...comment }: T) {
-  return { ...comment, writer: user };
-}
 
 // 게시글 댓글 등록
 // 요구사항(댓글 기능 인가): "로그인한 사용자만 게시글에 댓글을 등록할 수 있습니다."
@@ -27,19 +17,14 @@ export const createArticleComment = async (req: AuthenticatedRequest, res: Respo
     throw new BadRequestError("articleId는 숫자여야 합니다");
   }
 
-  const article = await articleRepository.findByIdSimple(parsedArticleId);
-  if (!article) {
-    throw new NotFoundError("게시글을 찾을 수 없습니다");
-  }
-
   const { content } = req.body as CreateArticleCommentInput;
-  const comment = await CommentRepository.createArticleComment({
+  const comment = await commentService.createArticleComment(
+    parsedArticleId,
     content,
-    articleId: parsedArticleId,
-    userId: req.auth.userId,
-  });
+    req.auth.userId,
+  );
 
-  res.status(201).json(toCommentResponse(comment));
+  res.status(201).json(comment);
 };
 
 // 게시글 댓글 목록 조회 (cursor 페이지네이션)
@@ -47,29 +32,16 @@ export const getArticleComments = async (req: Request, res: Response) => {
   const { articleId } = req.params as { articleId: string };
   const { cursor, limit = "10" } = req.query as Record<string, string>;
   const parsedArticleId = parseInt(articleId);
-  const pageLimit = parseInt(limit);
   if (isNaN(parsedArticleId)) {
     throw new BadRequestError("articleId는 숫자여야 합니다");
   }
 
-  const article = await articleRepository.findByIdSimple(parsedArticleId);
-  if (!article) {
-    throw new NotFoundError("게시글을 찾을 수 없습니다");
-  }
-
-  const comments = await CommentRepository.findArticleComments({
-    articleId: parsedArticleId,
+  const result = await commentService.getArticleComments(parsedArticleId, {
     cursor: cursor ? parseInt(cursor) : undefined,
-    take: pageLimit + 1,
+    limit: parseInt(limit),
   });
 
-  let nextCursor: number | null = null;
-  if (comments.length > pageLimit) {
-    const nextItem = comments.pop();
-    nextCursor = nextItem?.id ?? null;
-  }
-
-  res.json({ list: comments.map(toCommentResponse), nextCursor });
+  res.json(result);
 };
 
 // 상품 댓글 등록
@@ -81,19 +53,14 @@ export const createProductComment = async (req: AuthenticatedRequest, res: Respo
     throw new BadRequestError("productId는 숫자여야 합니다");
   }
 
-  const product = await productRepository.findByIdSimple(parsedProductId);
-  if (!product) {
-    throw new NotFoundError("상품을 찾을 수 없습니다");
-  }
-
   const { content } = req.body as CreateProductCommentInput;
-  const comment = await CommentRepository.createProductComment({
+  const comment = await commentService.createProductComment(
+    parsedProductId,
     content,
-    productId: parsedProductId,
-    userId: req.auth.userId,
-  });
+    req.auth.userId,
+  );
 
-  res.status(201).json(toCommentResponse(comment));
+  res.status(201).json(comment);
 };
 
 // 상품 댓글 목록 조회 (cursor 페이지네이션)
@@ -101,29 +68,16 @@ export const getProductComments = async (req: Request, res: Response) => {
   const { productId } = req.params as { productId: string };
   const { cursor, limit = "10" } = req.query as Record<string, string>;
   const parsedProductId = parseInt(productId);
-  const pageLimit = parseInt(limit);
   if (isNaN(parsedProductId)) {
     throw new BadRequestError("productId는 숫자여야 합니다");
   }
 
-  const product = await productRepository.findByIdSimple(parsedProductId);
-  if (!product) {
-    throw new NotFoundError("상품을 찾을 수 없습니다");
-  }
-
-  const comments = await CommentRepository.findProductComments({
-    productId: parsedProductId,
+  const result = await commentService.getProductComments(parsedProductId, {
     cursor: cursor ? parseInt(cursor) : undefined,
-    take: pageLimit + 1,
+    limit: parseInt(limit),
   });
 
-  let nextCursor: number | null = null;
-  if (comments.length > pageLimit) {
-    const nextItem = comments.pop();
-    nextCursor = nextItem?.id ?? null;
-  }
-
-  res.json({ list: comments.map(toCommentResponse), nextCursor });
+  res.json(result);
 };
 
 // 요구사항(댓글 기능 인가): "댓글을 등록한 사용자만 댓글을 수정하거나 삭제할 수 있습니다."
@@ -134,16 +88,10 @@ export const updateComment = async (req: AuthenticatedRequest, res: Response) =>
     throw new BadRequestError("commentId는 숫자여야 합니다");
   }
 
-  const found = await CommentRepository.findCommentAnywhere(parsedId);
-  if (!found) throw new NotFoundError("댓글을 찾을 수 없습니다");
-  if (found.comment.userId !== req.auth.userId) {
-    throw new ForbiddenError("본인이 등록한 댓글만 수정할 수 있습니다.");
-  }
-
   const { content } = req.body as UpdateCommentInput;
-  const updated = await CommentRepository.update(found.table, parsedId, content);
+  const updated = await commentService.updateComment(parsedId, req.auth.userId, content);
 
-  res.json(toCommentResponse(updated));
+  res.json(updated);
 };
 
 export const deleteComment = async (req: AuthenticatedRequest, res: Response) => {
@@ -153,12 +101,6 @@ export const deleteComment = async (req: AuthenticatedRequest, res: Response) =>
     throw new BadRequestError("commentId는 숫자여야 합니다");
   }
 
-  const found = await CommentRepository.findCommentAnywhere(parsedId);
-  if (!found) throw new NotFoundError("댓글을 찾을 수 없습니다");
-  if (found.comment.userId !== req.auth.userId) {
-    throw new ForbiddenError("본인이 등록한 댓글만 삭제할 수 있습니다.");
-  }
-
-  await CommentRepository.remove(found.table, parsedId);
+  await commentService.deleteComment(parsedId, req.auth.userId);
   res.status(204).send();
 };
