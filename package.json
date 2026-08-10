@@ -163,7 +163,8 @@
     "build": "tsc",
     "start": "node --enable-source-maps dist/app.js",
     "migrate": "prisma migrate dev",
-    "studio": "prisma studio"
+    "studio": "prisma studio",
+    "seed": "tsx prisma/seed.ts"
   },
   "repository": {
     "type": "git",

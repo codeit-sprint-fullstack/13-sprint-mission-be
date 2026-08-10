@@ -27,7 +27,7 @@ async function assertTarget(target: TargetRef) {
   if (!exists) {
     throw new HttpError(
       404,
-      target.tragetType === "product"
+      target.targetType === "product"
         ? "상품을 찾을 수 없습니다."
         : "게시글을 찾을 수 없습니다.",
     );

@@ -67,7 +67,7 @@ async function create(body: ProductBody, user: AuthUser) {
 async function update(productId: string, body: ProductBody, user: AuthUser) {
   const product = await productsRepository.findById(productId);
   if (!product) throw new HttpError(404, "상품을 찾을 수 없습니다.");
-  if (product.ownreId !== user.id)
+  if (product.ownerId !== user.id)
     throw new HttpError(403, "상품 작성자만 수정할 수 있습니다.");
   const updated = await productsRepository.update(productId, {
     name: body.name,
