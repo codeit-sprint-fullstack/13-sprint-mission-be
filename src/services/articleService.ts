@@ -1,9 +1,19 @@
 import articleRepository from "../repositories/articleRepository.js";
 import createError from "../utils/createError.js";
+import type { User, Article } from "@prisma/client";
+import type {
+  ArticleFindAllRequestType,
+  ArticlePostRequestType,
+  ArticlePatchRequestType,
+  ArticleReturnType,
+} from "../types/article";
+import type { CommentReturnType } from "../types/comment";
 
 const VALID_ORDER_BY = ["createdAt", "favoriteCount"];
 
-const createArticle = async (data) => {
+const createArticle = async (
+  data: ArticlePostRequestType & { userId: User["id"] },
+): Promise<ArticleReturnType> => {
   const { title, content } = data;
 
   if (!title || !content)
@@ -12,7 +22,16 @@ const createArticle = async (data) => {
   return articleRepository.create(data);
 };
 
-const getArticles = async (page, pageSize, orderBy, keyword, userId) => {
+const getArticles = async ({
+  page,
+  pageSize,
+  orderBy,
+  keyword,
+  userId,
+}: ArticleFindAllRequestType): Promise<{
+  totalCount: number;
+  list: ArticleReturnType[];
+}> => {
   if (page && Number(page) < 1)
     throw createError(400, "page는 1 이상이어야 합니다.");
   if (pageSize && Number(pageSize) < 1)
@@ -21,7 +40,7 @@ const getArticles = async (page, pageSize, orderBy, keyword, userId) => {
     throw createError(400, "잘못된 정렬 기준입니다.");
 
   const [articles, totalCount] = await Promise.all([
-    articleRepository.findAll(page, pageSize, orderBy, keyword, userId),
+    articleRepository.findAll({ page, pageSize, orderBy, keyword, userId }),
     articleRepository.countByKeyword(keyword),
   ]);
 
@@ -31,7 +50,10 @@ const getArticles = async (page, pageSize, orderBy, keyword, userId) => {
   };
 };
 
-const getArticleDetail = async (articleId, userId) => {
+const getArticleDetail = async (
+  articleId: Article["id"],
+  userId?: User["id"],
+): Promise<ArticleReturnType & { comments: CommentReturnType[] }> => {
   const article = await articleRepository.findById(articleId, userId);
   if (!article) throw createError(404, "게시글을 찾을 수 없습니다.");
 
@@ -43,7 +65,10 @@ const getArticleDetail = async (articleId, userId) => {
   };
 };
 
-const updateArticle = async (articleId, data) => {
+const updateArticle = async (
+  articleId: Article["id"],
+  data: ArticlePatchRequestType,
+): Promise<ArticleReturnType> => {
   const { title, content } = data;
   const article = await articleRepository.findById(articleId);
   if (!article) throw createError(404, "게시글을 찾을 수 없습니다.");
@@ -53,7 +78,9 @@ const updateArticle = async (articleId, data) => {
   return articleRepository.update(articleId, data);
 };
 
-const deleteArticle = async (articleId) => {
+const deleteArticle = async (
+  articleId: Article["id"],
+): Promise<ArticleReturnType> => {
   const article = await articleRepository.findById(articleId);
   if (!article) throw createError(404, "게시글을 찾을 수 없습니다.");
 
@@ -61,7 +88,10 @@ const deleteArticle = async (articleId) => {
   return deletedArticle;
 };
 
-const likeArticle = async (articleId, userId) => {
+const likeArticle = async (
+  articleId: Article["id"],
+  userId: User["id"],
+): Promise<{ liked: true; favoriteCount: number }> => {
   const existedLike = await articleRepository.findLike(articleId, userId);
 
   if (existedLike) {
@@ -80,7 +110,10 @@ const likeArticle = async (articleId, userId) => {
   };
 };
 
-const unlikeArticle = async (articleId, userId) => {
+const unlikeArticle = async (
+  articleId: Article["id"],
+  userId: User["id"],
+): Promise<{ liked: false; favoriteCount: number }> => {
   const existedLike = await articleRepository.findLike(articleId, userId);
 
   if (!existedLike) {

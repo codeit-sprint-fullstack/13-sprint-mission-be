@@ -3,11 +3,11 @@
 ### POST Article 테스트
 POST {{baseUrl}}
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDYzNTQsImV4cCI6MTc4MzE0OTk1NH0.nx5QWehbrpVSudjQHSM9iAa2kH2QqjMJAxkbr06-qwo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODY0MjczNDgsImV4cCI6MTc4NzAzMjE0OH0.NNmy2Kky5qqMmPkk4iOuF8M3WGCHn4dANe7JznJWChc
 
 {
-    "title": "똥",
-    "content": "바나나 똥"
+    "title": "디몬 스킨 만든 사람 빨리 퇴사해라",
+    "content": "저게 어떻게 디몬이지? 무슨 생각으로 저게 어울릴꺼라 생각한거지??? 생각하고 만든 스킨인가???? 죽고싶은가???"
 }
 
 POST {{baseUrl}}
@@ -41,7 +41,7 @@ GET {{baseUrl}}/1
 GET {{baseUrl}}/200
 
 GET {{baseUrl}}/2
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzMDA0NjUsImV4cCI6MTc4MzMwNDA2NX0.U-l77WJKUB9Xop3a_snM9C7rmsLhF6eGGVXV9h2bTJE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODY0MjczNDgsImV4cCI6MTc4NzAzMjE0OH0.NNmy2Kky5qqMmPkk4iOuF8M3WGCHn4dANe7JznJWChc
 
 ### GET Article List 테스트
 GET {{baseUrl}}
@@ -58,7 +58,7 @@ GET {{baseUrl}}?orderBy=createdAt&pageSize=2&page=-1&keyword=오늘
 GET {{baseUrl}}?orderBy=whatever&pageSize=2&page=1&keyword=오늘
 
 GET {{baseUrl}}
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzOTI3MzAsImV4cCI6MTc4MzM5NjMzMH0.8HqsE9gdpywsxvKNe9cZFKGa3KUkYEL5wEHo8cW14j8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODY0MjczNDgsImV4cCI6MTc4NzAzMjE0OH0.NNmy2Kky5qqMmPkk4iOuF8M3WGCHn4dANe7JznJWChc
 
 ### GET Best 3
 GET {{baseUrl}}?orderBy=favoriteCount&pageSize=3&page=1 
@@ -66,11 +66,11 @@ GET {{baseUrl}}?orderBy=favoriteCount&pageSize=3&page=1
 ### PATCH Article 테스트
 PATCH {{baseUrl}}/17
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDYzNTQsImV4cCI6MTc4MzE0OTk1NH0.nx5QWehbrpVSudjQHSM9iAa2kH2QqjMJAxkbr06-qwo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODY0MjczNDgsImV4cCI6MTc4NzAzMjE0OH0.NNmy2Kky5qqMmPkk4iOuF8M3WGCHn4dANe7JznJWChc
 
 {
     "title": "사실 나도 옵치 하지롱",
-    "content": "옵옵옵"
+    "content": "옵치가 제일좋아~~~"
 }
 
 PATCH {{baseUrl}}/17
@@ -132,8 +132,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6I
 }
 
 ### DELETE Article 테스트
-DELETE {{baseUrl}}/18
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDYzNTQsImV4cCI6MTc4MzE0OTk1NH0.nx5QWehbrpVSudjQHSM9iAa2kH2QqjMJAxkbr06-qwo
+DELETE {{baseUrl}}/26
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODY0MjczNDgsImV4cCI6MTc4NzAzMjE0OH0.NNmy2Kky5qqMmPkk4iOuF8M3WGCHn4dANe7JznJWChc
 
 DELETE {{baseUrl}}/18
 
@@ -141,8 +141,8 @@ DELETE {{baseUrl}}/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDYzNTQsImV4cCI6MTc4MzE0OTk1NH0.nx5QWehbrpVSudjQHSM9iAa2kH2QqjMJAxkbr06-qwo
 
 ## Like Article 테스트
-POST {{baseUrl}}/1/likes
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzMDA0NjUsImV4cCI6MTc4MzMwNDA2NX0.U-l77WJKUB9Xop3a_snM9C7rmsLhF6eGGVXV9h2bTJE
+POST {{baseUrl}}/25/likes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODY0MjczNDgsImV4cCI6MTc4NzAzMjE0OH0.NNmy2Kky5qqMmPkk4iOuF8M3WGCHn4dANe7JznJWChc
 
-DELETE {{baseUrl}}/1/likes
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMyNDcxNjcsImV4cCI6MTc4MzI1MDc2N30.JBhzaBL3Gy2JfOfI4YrSVJ5LOXrHT4BFyVCk9J9Md4c
+DELETE {{baseUrl}}/25/likes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODY0MjczNDgsImV4cCI6MTc4NzAzMjE0OH0.NNmy2Kky5qqMmPkk4iOuF8M3WGCHn4dANe7JznJWChc

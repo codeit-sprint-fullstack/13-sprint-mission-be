@@ -1,6 +1,6 @@
 import express from "express";
 import auth from "../middleware/auth.js";
-import articleController from "../controllers/articleController.js";
+import articleController from "../controllers/articleController";
 
 const articleRouter = express.Router();
 
