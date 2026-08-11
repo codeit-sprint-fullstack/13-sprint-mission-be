@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import prisma from '../lib/prisma.js';
 import { getAuthenticatedUserId } from '../utils/auth.js';
 import { getErrorMessage, isRecordNotFoundError } from '../utils/httpError.js';
+import { serializeProductCommentResponse } from '../utils/productResponses.js';
 import type { ProductCommentParams, ProductIdParams } from '../types/api.js';
 
 export async function createProductComment(req: Request<ProductIdParams>, res: Response) {
@@ -15,8 +16,9 @@ export async function createProductComment(req: Request<ProductIdParams>, res: R
 
     const comment = await prisma.productComment.create({
       data: { content: req.body.content, productId, userId },
+      include: { user: { select: { id: true, nickname: true } } },
     });
-    res.status(201).json(comment);
+    res.status(201).json(serializeProductCommentResponse(comment));
   } catch (error) {
     res.status(400).json({ message: getErrorMessage(error) });
   }
@@ -34,14 +36,20 @@ export async function getProductComments(req: Request<ProductIdParams>, res: Res
       where: { productId },
       orderBy: { createdAt: 'asc' },
       take: limit + 1,
-      select: { id: true, content: true, createdAt: true },
+      select: {
+        id: true,
+        content: true,
+        createdAt: true,
+        user: { select: { id: true, nickname: true } },
+      },
       ...cursor,
     });
 
     const hasNext = comments.length > limit;
     if (hasNext) comments.pop();
 
-    res.json({ list: comments, nextCursor: hasNext ? comments[comments.length - 1].id : null });
+    const nextCursor = hasNext ? comments[comments.length - 1].id : null;
+    res.json({ list: comments.map(serializeProductCommentResponse), nextCursor });
   } catch (error) {
     res.status(500).json({ message: getErrorMessage(error) });
   }
@@ -64,8 +72,9 @@ export async function updateProductComment(req: Request<ProductCommentParams>, r
     const updated = await prisma.productComment.update({
       where: { id: Number(req.params.commentId) },
       data: { content: req.body.content },
+      include: { user: { select: { id: true, nickname: true } } },
     });
-    res.json(updated);
+    res.json(serializeProductCommentResponse(updated));
   } catch (error) {
     if (isRecordNotFoundError(error)) return res.status(404).json({ message: '댓글을 찾을 수 없습니다.' });
     res.status(400).json({ message: getErrorMessage(error) });

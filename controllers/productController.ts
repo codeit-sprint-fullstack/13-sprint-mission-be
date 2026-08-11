@@ -3,6 +3,7 @@ import { Prisma } from '@prisma/client';
 import prisma from '../lib/prisma.js';
 import { getAuthenticatedUserId, setOptionalAuthenticatedUser } from '../utils/auth.js';
 import { HttpError, getErrorMessage, getErrorStatusCode, isRecordNotFoundError } from '../utils/httpError.js';
+import { serializeProductResponse } from '../utils/productResponses.js';
 import type { IdParams, ProductIdParams } from '../types/api.js';
 
 interface ProductListItem {
@@ -12,27 +13,6 @@ interface ProductListItem {
   imageUrl: string | null;
   likeCount: number;
   createdAt: Date;
-}
-
-interface ProductCommentSummary {
-  id: number;
-  content: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-interface SerializableProduct {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  imageUrl: string | null;
-  likeCount: number;
-  isLiked?: boolean;
-  comments?: ProductCommentSummary[];
-  tags: string[];
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 interface ProductCreatePayload {
@@ -49,22 +29,6 @@ interface ProductUpdatePayload {
   price?: number;
   imageUrl?: string | null;
   tags?: string[];
-}
-
-function serializeProduct(product: SerializableProduct) {
-  return {
-    id: product.id,
-    name: product.name,
-    description: product.description,
-    price: product.price,
-    imageUrl: product.imageUrl,
-    likeCount: product.likeCount,
-    isLiked: product.isLiked,
-    comments: product.comments,
-    tags: product.tags,
-    createdAt: product.createdAt,
-    updatedAt: product.updatedAt,
-  };
 }
 
 function serializeProductListItem(product: ProductListItem): ProductListItem {
@@ -195,7 +159,7 @@ export async function createProduct(req: Request, res: Response) {
       },
     });
 
-    res.status(201).json(serializeProduct(product));
+    res.status(201).json(serializeProductResponse(product));
   } catch (error) {
     res.status(getErrorStatusCode(error, 400)).json({ message: getErrorMessage(error) });
   }
@@ -210,6 +174,7 @@ export async function getProduct(req: Request<IdParams>, res: Response) {
       where: { id: Number(req.params.id) },
       select: {
         id: true,
+        userId: true,
         name: true,
         description: true,
         price: true,
@@ -231,7 +196,7 @@ export async function getProduct(req: Request<IdParams>, res: Response) {
     }
 
     const { likes, ...productWithoutLikes } = product;
-    res.json(serializeProduct({ ...productWithoutLikes, isLiked: likes.length > 0 }));
+    res.json(serializeProductResponse({ ...productWithoutLikes, isLiked: likes.length > 0 }));
   } catch {
     res.status(400).json({ message: '잘못된 상품 id입니다.' });
   }
@@ -257,7 +222,7 @@ export async function updateProduct(req: Request<IdParams>, res: Response) {
       data,
     });
 
-    res.json(serializeProduct(updated));
+    res.json(serializeProductResponse(updated));
   } catch (error) {
     if (isRecordNotFoundError(error)) {
       return res.status(404).json({ message: '상품을 찾을 수 없습니다.' });
@@ -304,7 +269,8 @@ export async function likeProduct(req: Request<ProductIdParams>, res: Response) 
       });
     });
 
-    res.json({ ...serializeProduct(product as SerializableProduct), isLiked: true });
+    if (!product) return res.status(404).json({ message: '상품을 찾을 수 없습니다.' });
+    res.json({ ...serializeProductResponse(product), isLiked: true });
   } catch (error) {
     res.status(getErrorStatusCode(error, 400)).json({ message: getErrorMessage(error) });
   }
@@ -332,7 +298,7 @@ export async function unlikeProduct(req: Request<ProductIdParams>, res: Response
     });
 
     if (!product) return res.status(404).json({ message: '상품을 찾을 수 없습니다.' });
-    res.json({ ...serializeProduct(product), isLiked: false });
+    res.json({ ...serializeProductResponse(product), isLiked: false });
   } catch (error) {
     res.status(400).json({ message: getErrorMessage(error) });
   }
