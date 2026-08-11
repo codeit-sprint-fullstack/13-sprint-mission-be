@@ -10,3 +10,4 @@ node_modules
 !/uploads/.gitkeep
 
 docs/library-db/
+.worktrees/
