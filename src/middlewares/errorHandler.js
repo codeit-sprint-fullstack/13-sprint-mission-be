@@ -2,8 +2,8 @@
 // Error Handler
 // ============================================================
 
-import { z } from "zod";
 import { Prisma } from "@prisma/client";
+import { z } from "zod";
 import { AppError } from "./errors.js";
 
 /**
@@ -20,7 +20,9 @@ import { AppError } from "./errors.js";
 export default function errorHandler(error, req, res, next) {
   // express-jwt 인증 에러
   if (error.name === "UnauthorizedError") {
-    return res.status(401).json({ success: false, message: "invalid token..." });
+    return res
+      .status(401)
+      .json({ success: false, message: "invalid token..." });
   }
 
   // Zod 검증 에러 - 컨트롤러 안 schema.parse()가 던진 ZodError 처리
@@ -84,7 +86,10 @@ export default function errorHandler(error, req, res, next) {
     success: false,
     path: req.path,
     method: req.method,
-    message: error.message ?? "서버 에러가 발생했습니다",
+    message:
+      process.env.NODE_ENV === "production"
+        ? "서버 에러가 발생했습니다"
+        : error.message,
     date: new Date(),
   });
 }
