@@ -23,42 +23,31 @@ const productRouter = express.Router();
 
 /** ======== 상품 라우트 ======== */
 
-// GET /products
-productRouter.get(
-  "/",
-  authMiddleware.verifyAccessTokenOptional,
-  productController.getAllProducts,
-);
+// GET /products, POST /products
+productRouter
+  .route("/")
+  .get(
+    authMiddleware.verifyAccessTokenOptional,
+    productController.getAllProducts,
+  )
+  .post(
+    authMiddleware.verifyAccessToken,
+    validate(createProductSchema),
+    productController.createProduct,
+  );
 
 // GET /products/:id
-productRouter.get(
-  "/:id",
-  authMiddleware.verifyAccessTokenOptional,
-  productController.getProduct,
-);
-
-// POST /products
-productRouter.post(
-  "/",
-  authMiddleware.verifyAccessToken,
-  validate(createProductSchema),
-  productController.createProduct,
-);
-
 // PATCH /products/:id
-productRouter.patch(
-  "/:id",
-  authMiddleware.verifyAccessToken,
-  validate(updateProductSchema),
-  productController.updateProduct,
-);
-
 // DELETE /products/:id
-productRouter.delete(
-  "/:id",
-  authMiddleware.verifyAccessToken,
-  productController.deleteProduct,
-);
+productRouter
+  .route("/:id")
+  .get(authMiddleware.verifyAccessTokenOptional, productController.getProduct)
+  .patch(
+    authMiddleware.verifyAccessToken,
+    validate(updateProductSchema),
+    productController.updateProduct,
+  )
+  .delete(authMiddleware.verifyAccessToken, productController.deleteProduct);
 
 /** ======== 상품 좋아요 라우트 ======== */
 
@@ -72,33 +61,31 @@ productRouter.post(
 /** ======== 상품 댓글 라우트 ======== */
 
 // GET /products/:productId/comments
-productRouter.get(
-  "/:productId/comments",
-  authMiddleware.verifyAccessTokenOptional,
-  commentController.getAllProductComments,
-);
-
 // POST /products/:productId/comments
-productRouter.post(
-  "/:productId/comments",
-  authMiddleware.verifyAccessToken,
-  validate(createCommentSchema),
-  commentController.createProductComment,
-);
+productRouter
+  .route("/:productId/comments")
+  .get(
+    authMiddleware.verifyAccessTokenOptional,
+    commentController.getAllProductComments,
+  )
+  .post(
+    authMiddleware.verifyAccessToken,
+    validate(createCommentSchema),
+    commentController.createProductComment,
+  );
 
 // PATCH /products/:productId/comments/:commentId
-productRouter.patch(
-  "/:productId/comments/:commentId",
-  authMiddleware.verifyAccessToken,
-  validate(updateCommentSchema),
-  commentController.updateProductComment,
-);
-
 // DELETE /products/:productId/comments/:commentId
-productRouter.delete(
-  "/:productId/comments/:commentId",
-  authMiddleware.verifyAccessToken,
-  commentController.deleteProductComment,
-);
+productRouter
+  .route("/:productId/comments/:commentId")
+  .patch(
+    authMiddleware.verifyAccessToken,
+    validate(updateCommentSchema),
+    commentController.updateProductComment,
+  )
+  .delete(
+    authMiddleware.verifyAccessToken,
+    commentController.deleteProductComment,
+  );
 
 export default productRouter;

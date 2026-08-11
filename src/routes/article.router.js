@@ -11,54 +11,44 @@ import commentController from "../controllers/comment.controller.js";
 import authMiddleware from "../middlewares/auth.js";
 import { validate } from "../middlewares/validate.js";
 import {
-  createCommentSchema,
-  updateCommentSchema,
-} from "../schemas/comment.schemas.js";
-import {
   createArticleSchema,
   updateArticleSchema,
 } from "../schemas/article.schemas.js";
+import {
+  createCommentSchema,
+  updateCommentSchema,
+} from "../schemas/comment.schemas.js";
 
 const articleRouter = express.Router();
 
 /** ======== 게시글 라우트 ======== */
 
 // GET /articles
-articleRouter.get(
-  "/",
-  authMiddleware.verifyAccessTokenOptional,
-  articleController.getAllArticles,
-);
+// POST /articles
+articleRouter
+  .route("/")
+  .get(
+    authMiddleware.verifyAccessTokenOptional,
+    articleController.getAllArticles,
+  )
+  .post(
+    authMiddleware.verifyAccessToken,
+    validate(createArticleSchema),
+    articleController.createArticle,
+  );
 
 // GET /articles/:id
-articleRouter.get(
-  "/:id",
-  authMiddleware.verifyAccessTokenOptional,
-  articleController.getArticle,
-);
-
-// POST /articles
-articleRouter.post(
-  "/",
-  authMiddleware.verifyAccessToken,
-  validate(createArticleSchema),
-  articleController.createArticle,
-);
-
 // PATCH /articles/:id
-articleRouter.patch(
-  "/:id",
-  authMiddleware.verifyAccessToken,
-  validate(updateArticleSchema),
-  articleController.updateArticle,
-);
-
 // DELETE /articles/:id
-articleRouter.delete(
-  "/:id",
-  authMiddleware.verifyAccessToken,
-  articleController.deleteArticle,
-);
+articleRouter
+  .route("/:id")
+  .get(authMiddleware.verifyAccessTokenOptional, articleController.getArticle)
+  .patch(
+    authMiddleware.verifyAccessToken,
+    validate(updateArticleSchema),
+    articleController.updateArticle,
+  )
+  .delete(authMiddleware.verifyAccessToken, articleController.deleteArticle);
 
 /** ======== 게시글 좋아요 라우트 ======== */
 
@@ -72,33 +62,31 @@ articleRouter.post(
 /** ======== 게시글 댓글 라우트 ======== */
 
 // GET /articles/:articleId/comments
-articleRouter.get(
-  "/:articleId/comments",
-  authMiddleware.verifyAccessTokenOptional,
-  commentController.getAllArticleComments,
-);
-
 // POST /articles/:articleId/comments
-articleRouter.post(
-  "/:articleId/comments",
-  authMiddleware.verifyAccessToken,
-  validate(createCommentSchema),
-  commentController.createArticleComment,
-);
+articleRouter
+  .route("/:articleId/comments")
+  .get(
+    authMiddleware.verifyAccessTokenOptional,
+    commentController.getAllArticleComments,
+  )
+  .post(
+    authMiddleware.verifyAccessToken,
+    validate(createCommentSchema),
+    commentController.createArticleComment,
+  );
 
 // PATCH /articles/:articleId/comments/:commentId
-articleRouter.patch(
-  "/:articleId/comments/:commentId",
-  authMiddleware.verifyAccessToken,
-  validate(updateCommentSchema),
-  commentController.updateArticleComment,
-);
-
 // DELETE /articles/:articleId/comments/:commentId
-articleRouter.delete(
-  "/:articleId/comments/:commentId",
-  authMiddleware.verifyAccessToken,
-  commentController.deleteArticleComment,
-);
+articleRouter
+  .route("/:articleId/comments/:commentId")
+  .patch(
+    authMiddleware.verifyAccessToken,
+    validate(updateCommentSchema),
+    commentController.updateArticleComment,
+  )
+  .delete(
+    authMiddleware.verifyAccessToken,
+    commentController.deleteArticleComment,
+  );
 
 export default articleRouter;
