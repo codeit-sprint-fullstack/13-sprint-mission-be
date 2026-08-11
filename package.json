@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/app.js",
-    "dev": "tsx watch app.ts",
+    "dev": "nodemon --watch . --ext ts --exec \"node --loader ts-node/esm\" app.ts",
     "frontend:dev": "vite --config frontend/vite.config.js",
     "frontend:build": "vite build --config frontend/vite.config.js",
     "frontend:preview": "vite preview --config frontend/vite.config.js",
@@ -48,7 +48,8 @@
     "dotenv": "^17.4.2",
     "nodemon": "^3.1.14",
     "prisma": "^7.8.0",
+    "ts-node": "^10.9.2",
     "tsx": "^4.23.5",
-    "typescript": "^7.0.2"
+    "typescript": "^5.9.3"
   }
 }
