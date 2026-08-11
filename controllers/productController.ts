@@ -1,37 +1,28 @@
-import type { Request, Response } from 'express';
 import { Prisma } from '@prisma/client';
 import prisma from '../lib/prisma.js';
 import { getAuthenticatedUserId, setOptionalAuthenticatedUser } from '../utils/auth.js';
 import { HttpError, getErrorMessage, getErrorStatusCode, isRecordNotFoundError } from '../utils/httpError.js';
 import { serializeProductResponse } from '../utils/productResponses.js';
-import type { IdParams, ProductIdParams } from '../types/api.js';
+import { isRequestBody } from '../utils/requestValidation.js';
+import type {
+  ApiRequest,
+  ApiResponse,
+  IdParams,
+  ListResponse,
+  NoParams,
+  OffsetListResponse,
+  ProductCreatePayload,
+  ProductIdParams,
+  ProductListItemResponse,
+  ProductListQuery,
+  ProductResponse,
+  ProductUpdatePayload,
+} from '../types/api.js';
 
-interface ProductListItem {
-  id: number;
-  name: string;
-  price: number;
-  imageUrl: string | null;
-  likeCount: number;
-  createdAt: Date;
-}
+type ProductListResult = OffsetListResponse<ProductListItemResponse>;
+type BestProductListResult = ListResponse<ProductListItemResponse>;
 
-interface ProductCreatePayload {
-  name: string;
-  description: string;
-  price: number;
-  imageUrl: string | null;
-  tags: string[];
-}
-
-interface ProductUpdatePayload {
-  name?: string;
-  description?: string;
-  price?: number;
-  imageUrl?: string | null;
-  tags?: string[];
-}
-
-function serializeProductListItem(product: ProductListItem): ProductListItem {
+function serializeProductListItem(product: ProductListItemResponse): ProductListItemResponse {
   return {
     id: product.id,
     name: product.name,
@@ -46,12 +37,13 @@ function throwValidationError(message: string): never {
   throw new HttpError(message, 400);
 }
 
-function validateProductPayload(body: Record<string, unknown>, options: { partial: true }): ProductUpdatePayload;
-function validateProductPayload(body: Record<string, unknown>, options?: { partial?: false }): ProductCreatePayload;
+function validateProductPayload(body: unknown, options: { partial: true }): ProductUpdatePayload;
+function validateProductPayload(body: unknown, options?: { partial?: false }): ProductCreatePayload;
 function validateProductPayload(
-  body: Record<string, unknown>,
+  body: unknown,
   { partial = false }: { partial?: boolean } = {},
 ): ProductCreatePayload | ProductUpdatePayload {
+  if (!isRequestBody(body)) throwValidationError('요청 본문을 확인해 주세요.');
   const data: ProductUpdatePayload = {};
 
   if (!partial || body.name !== undefined) {
@@ -94,7 +86,10 @@ function validateProductPayload(
   }
 
   if (body.tags !== undefined) {
-    data.tags = Array.isArray(body.tags) ? (body.tags as string[]) : [];
+    if (!Array.isArray(body.tags) || !body.tags.every((tag) => typeof tag === 'string')) {
+      throwValidationError('상품 태그를 확인해 주세요.');
+    }
+    data.tags = body.tags;
   } else if (!partial) {
     data.tags = [];
   }
@@ -102,7 +97,10 @@ function validateProductPayload(
   return data as ProductCreatePayload | ProductUpdatePayload;
 }
 
-export async function getProducts(req: Request, res: Response) {
+export async function getProducts(
+  req: ApiRequest<ProductListResult, NoParams, ProductListQuery>,
+  res: ApiResponse<ProductListResult>,
+) {
   try {
     const page = Math.max(Number(req.query.page) || 1, 1);
     const limit = Math.min(Math.max(Number(req.query.limit || req.query.pageSize) || 10, 1), 50);
@@ -146,7 +144,7 @@ export async function getProducts(req: Request, res: Response) {
   }
 }
 
-export async function createProduct(req: Request, res: Response) {
+export async function createProduct(req: ApiRequest<ProductResponse>, res: ApiResponse<ProductResponse>) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
@@ -165,7 +163,10 @@ export async function createProduct(req: Request, res: Response) {
   }
 }
 
-export async function getProduct(req: Request<IdParams>, res: Response) {
+export async function getProduct(
+  req: ApiRequest<ProductResponse, IdParams>,
+  res: ApiResponse<ProductResponse>,
+) {
   try {
     setOptionalAuthenticatedUser(req);
     // 비로그인(-1)은 어떤 실제 userId와도 매칭되지 않는 좋아요 조회 sentinel
@@ -208,7 +209,10 @@ export async function getProduct(req: Request<IdParams>, res: Response) {
   }
 }
 
-export async function updateProduct(req: Request<IdParams>, res: Response) {
+export async function updateProduct(
+  req: ApiRequest<ProductResponse, IdParams>,
+  res: ApiResponse<ProductResponse>,
+) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
@@ -237,7 +241,10 @@ export async function updateProduct(req: Request<IdParams>, res: Response) {
   }
 }
 
-export async function getBestProducts(req: Request, res: Response) {
+export async function getBestProducts(
+  req: ApiRequest<BestProductListResult>,
+  res: ApiResponse<BestProductListResult>,
+) {
   try {
     const products = await prisma.product.findMany({
       orderBy: { likeCount: 'desc' },
@@ -251,7 +258,10 @@ export async function getBestProducts(req: Request, res: Response) {
   }
 }
 
-export async function likeProduct(req: Request<ProductIdParams>, res: Response) {
+export async function likeProduct(
+  req: ApiRequest<ProductResponse, ProductIdParams>,
+  res: ApiResponse<ProductResponse>,
+) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
@@ -282,7 +292,10 @@ export async function likeProduct(req: Request<ProductIdParams>, res: Response) 
   }
 }
 
-export async function unlikeProduct(req: Request<ProductIdParams>, res: Response) {
+export async function unlikeProduct(
+  req: ApiRequest<ProductResponse, ProductIdParams>,
+  res: ApiResponse<ProductResponse>,
+) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
@@ -310,7 +323,7 @@ export async function unlikeProduct(req: Request<ProductIdParams>, res: Response
   }
 }
 
-export async function deleteProduct(req: Request<IdParams>, res: Response) {
+export async function deleteProduct(req: ApiRequest<void, IdParams>, res: ApiResponse<void>) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 

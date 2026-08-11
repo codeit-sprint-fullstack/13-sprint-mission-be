@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import type { JwtPayload } from 'jsonwebtoken';
 import type { Response } from 'express';
-import type { AuthenticatedRequest } from '../types/api.js';
+import type { AuthenticatedRequest, ErrorResponse } from '../types/api.js';
 
 /** 액세스 토큰에 담기는 페이로드 */
 export interface AccessTokenPayload extends JwtPayload {
@@ -25,7 +25,10 @@ function isAccessTokenPayload(payload: string | JwtPayload): payload is AccessTo
 }
 
 /** 인증 필수 라우트용. 실패하면 401 응답까지 보내고 null을 돌려준다. */
-export function getAuthenticatedUserId(req: AuthenticatedRequest, res: Response): number | null {
+export function getAuthenticatedUserId(
+  req: AuthenticatedRequest,
+  res: Response<ErrorResponse>,
+): number | null {
   const token = getBearerToken(req);
 
   if (!token) {

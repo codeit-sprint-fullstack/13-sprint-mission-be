@@ -10,7 +10,7 @@ const swaggerSpecs = swaggerJsdoc({
     },
     servers: [
       {
-        url: 'http://localhost:3000',
+        url: 'http://localhost:3001',
         description: 'Local server',
       },
     ],
@@ -44,6 +44,14 @@ const swaggerSpecs = swaggerJsdoc({
             nickname: { type: 'string' },
           },
         },
+        Writer: {
+          type: 'object',
+          required: ['id', 'nickname'],
+          properties: {
+            id: { type: 'integer' },
+            nickname: { type: 'string' },
+          },
+        },
         Product: {
           type: 'object',
           properties: {
@@ -63,12 +71,17 @@ const swaggerSpecs = swaggerJsdoc({
         },
         Article: {
           type: 'object',
+          required: ['id', 'title', 'content', 'likeCount', 'createdAt', 'updatedAt', 'writer'],
           properties: {
             id: { type: 'integer' },
             title: { type: 'string' },
             content: { type: 'string' },
+            image: { type: 'string', nullable: true },
+            likeCount: { type: 'integer' },
+            isLiked: { type: 'boolean' },
             createdAt: { type: 'string', format: 'date-time' },
             updatedAt: { type: 'string', format: 'date-time' },
+            writer: { $ref: '#/components/schemas/Writer' },
           },
         },
         Comment: {
@@ -78,13 +91,7 @@ const swaggerSpecs = swaggerJsdoc({
             content: { type: 'string' },
             createdAt: { type: 'string', format: 'date-time' },
             updatedAt: { type: 'string', format: 'date-time' },
-            writer: {
-              type: 'object',
-              properties: {
-                id: { type: 'integer' },
-                nickname: { type: 'string' },
-              },
-            },
+            writer: { $ref: '#/components/schemas/Writer' },
           },
         },
         OffsetList: {
@@ -378,14 +385,41 @@ const swaggerSpecs = swaggerJsdoc({
           parameters: [
             { in: 'query', name: 'page', schema: { type: 'integer', default: 1 } },
             { in: 'query', name: 'limit', schema: { type: 'integer', default: 10 } },
+            { in: 'query', name: 'pageSize', schema: { type: 'integer' } },
             { in: 'query', name: 'keyword', schema: { type: 'string' } },
+            { in: 'query', name: 'orderBy', schema: { type: 'string', enum: ['recent', 'like'] } },
           ],
-          responses: { 200: { description: 'OK' } },
+          responses: {
+            200: {
+              description: 'OK',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      list: { type: 'array', items: { $ref: '#/components/schemas/Article' } },
+                      totalCount: { type: 'integer' },
+                      offset: { type: 'integer' },
+                      limit: { type: 'integer' },
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
         post: {
           tags: ['Article'],
           summary: '게시글 등록',
-          responses: { 201: { description: 'Created' } },
+          security: [{ bearerAuth: [] }],
+          responses: {
+            201: {
+              description: 'Created',
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/Article' } },
+              },
+            },
+          },
         },
       },
       '/articles/{articleId}/like': {
@@ -395,7 +429,12 @@ const swaggerSpecs = swaggerJsdoc({
           security: [{ bearerAuth: [] }],
           parameters: [{ in: 'path', name: 'articleId', required: true, schema: { type: 'integer' } }],
           responses: {
-            200: { description: 'OK' },
+            200: {
+              description: 'OK',
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/Article' } },
+              },
+            },
             401: { description: 'Unauthorized' },
             404: { description: 'Not Found' },
           },
@@ -406,7 +445,12 @@ const swaggerSpecs = swaggerJsdoc({
           security: [{ bearerAuth: [] }],
           parameters: [{ in: 'path', name: 'articleId', required: true, schema: { type: 'integer' } }],
           responses: {
-            200: { description: 'OK' },
+            200: {
+              description: 'OK',
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/Article' } },
+              },
+            },
             401: { description: 'Unauthorized' },
             404: { description: 'Not Found' },
           },
@@ -418,19 +462,33 @@ const swaggerSpecs = swaggerJsdoc({
           summary: '게시글 상세 조회',
           parameters: [{ in: 'path', name: 'id', required: true, schema: { type: 'integer' } }],
           responses: {
-            200: { description: 'OK' },
+            200: {
+              description: 'OK',
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/Article' } },
+              },
+            },
             404: { description: 'Not Found' },
           },
         },
         patch: {
           tags: ['Article'],
           summary: '게시글 수정',
+          security: [{ bearerAuth: [] }],
           parameters: [{ in: 'path', name: 'id', required: true, schema: { type: 'integer' } }],
-          responses: { 200: { description: 'OK' } },
+          responses: {
+            200: {
+              description: 'OK',
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/Article' } },
+              },
+            },
+          },
         },
         delete: {
           tags: ['Article'],
           summary: '게시글 삭제',
+          security: [{ bearerAuth: [] }],
           parameters: [{ in: 'path', name: 'id', required: true, schema: { type: 'integer' } }],
           responses: { 204: { description: 'No Content' } },
         },
@@ -440,28 +498,60 @@ const swaggerSpecs = swaggerJsdoc({
           tags: ['Article Comment'],
           summary: '게시글 댓글 목록 조회',
           parameters: [{ in: 'path', name: 'articleId', required: true, schema: { type: 'integer' } }],
-          responses: { 200: { description: 'OK' } },
+          responses: {
+            200: {
+              description: 'OK',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      list: { type: 'array', items: { $ref: '#/components/schemas/Comment' } },
+                      nextCursor: { type: 'integer', nullable: true },
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
         post: {
           tags: ['Article Comment'],
           summary: '게시글 댓글 등록',
+          security: [{ bearerAuth: [] }],
           parameters: [{ in: 'path', name: 'articleId', required: true, schema: { type: 'integer' } }],
-          responses: { 201: { description: 'Created' } },
+          responses: {
+            201: {
+              description: 'Created',
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/Comment' } },
+              },
+            },
+          },
         },
       },
       '/articles/{articleId}/comments/{commentId}': {
         patch: {
           tags: ['Article Comment'],
           summary: '게시글 댓글 수정',
+          security: [{ bearerAuth: [] }],
           parameters: [
             { in: 'path', name: 'articleId', required: true, schema: { type: 'integer' } },
             { in: 'path', name: 'commentId', required: true, schema: { type: 'integer' } },
           ],
-          responses: { 200: { description: 'OK' } },
+          responses: {
+            200: {
+              description: 'OK',
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/Comment' } },
+              },
+            },
+          },
         },
         delete: {
           tags: ['Article Comment'],
           summary: '게시글 댓글 삭제',
+          security: [{ bearerAuth: [] }],
           parameters: [
             { in: 'path', name: 'articleId', required: true, schema: { type: 'integer' } },
             { in: 'path', name: 'commentId', required: true, schema: { type: 'integer' } },

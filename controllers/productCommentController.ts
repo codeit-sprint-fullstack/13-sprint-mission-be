@@ -1,21 +1,43 @@
-import type { Request, Response } from 'express';
 import prisma from '../lib/prisma.js';
 import { getAuthenticatedUserId } from '../utils/auth.js';
-import { getErrorMessage, isRecordNotFoundError } from '../utils/httpError.js';
+import { HttpError, getErrorMessage, isRecordNotFoundError } from '../utils/httpError.js';
 import { serializeProductCommentResponse } from '../utils/productResponses.js';
-import type { ProductCommentParams, ProductIdParams } from '../types/api.js';
+import { isRequestBody } from '../utils/requestValidation.js';
+import type {
+  ApiRequest,
+  ApiResponse,
+  CommentListQuery,
+  CommentPayload,
+  CommentResponse,
+  CursorListResponse,
+  ProductCommentParams,
+  ProductIdParams,
+} from '../types/api.js';
 
-export async function createProductComment(req: Request<ProductIdParams>, res: Response) {
+type ProductCommentListResult = CursorListResponse<CommentResponse>;
+
+function validateCommentPayload(body: unknown): CommentPayload {
+  if (!isRequestBody(body) || typeof body.content !== 'string') {
+    throw new HttpError('댓글 내용을 확인해 주세요.', 400);
+  }
+  return { content: body.content };
+}
+
+export async function createProductComment(
+  req: ApiRequest<CommentResponse, ProductIdParams>,
+  res: ApiResponse<CommentResponse>,
+) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
   try {
     const productId = Number(req.params.productId);
+    const { content } = validateCommentPayload(req.body);
     const product = await prisma.product.findUnique({ where: { id: productId } });
     if (!product) return res.status(404).json({ message: '상품을 찾을 수 없습니다.' });
 
     const comment = await prisma.productComment.create({
-      data: { content: req.body.content, productId, userId },
+      data: { content, productId, userId },
       include: { user: { select: { id: true, nickname: true } } },
     });
     res.status(201).json(serializeProductCommentResponse(comment));
@@ -24,7 +46,10 @@ export async function createProductComment(req: Request<ProductIdParams>, res: R
   }
 }
 
-export async function getProductComments(req: Request<ProductIdParams>, res: Response) {
+export async function getProductComments(
+  req: ApiRequest<ProductCommentListResult, ProductIdParams, CommentListQuery>,
+  res: ApiResponse<ProductCommentListResult>,
+) {
   try {
     const productId = Number(req.params.productId);
     const limit = Math.min(Math.max(Number(req.query.limit) || 10, 1), 50);
@@ -55,11 +80,15 @@ export async function getProductComments(req: Request<ProductIdParams>, res: Res
   }
 }
 
-export async function updateProductComment(req: Request<ProductCommentParams>, res: Response) {
+export async function updateProductComment(
+  req: ApiRequest<CommentResponse, ProductCommentParams>,
+  res: ApiResponse<CommentResponse>,
+) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
   try {
+    const { content } = validateCommentPayload(req.body);
     const comment = await prisma.productComment.findUnique({
       where: { id: Number(req.params.commentId) },
       select: { productId: true, userId: true },
@@ -71,7 +100,7 @@ export async function updateProductComment(req: Request<ProductCommentParams>, r
 
     const updated = await prisma.productComment.update({
       where: { id: Number(req.params.commentId) },
-      data: { content: req.body.content },
+      data: { content },
       include: { user: { select: { id: true, nickname: true } } },
     });
     res.json(serializeProductCommentResponse(updated));
@@ -81,7 +110,10 @@ export async function updateProductComment(req: Request<ProductCommentParams>, r
   }
 }
 
-export async function deleteProductComment(req: Request<ProductCommentParams>, res: Response) {
+export async function deleteProductComment(
+  req: ApiRequest<void, ProductCommentParams>,
+  res: ApiResponse<void>,
+) {
   const userId = getAuthenticatedUserId(req, res);
   if (!userId) return;
 
