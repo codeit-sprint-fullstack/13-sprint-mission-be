@@ -1,10 +1,9 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { nanoid } from 'nanoid';
 import sharp from 'sharp';
 
-const uploadDirectory = fileURLToPath(new URL('../uploads/', import.meta.url));
+const uploadDirectory = path.resolve(process.cwd(), 'uploads');
 const allowedExtensions = {
   png: 'png',
   jpeg: 'jpg',
