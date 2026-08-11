@@ -55,6 +55,8 @@ const swaggerSpecs = swaggerJsdoc({
               type: 'array',
               items: { type: 'string' },
             },
+            ownerId: { type: 'integer' },
+            isLiked: { type: 'boolean' },
             createdAt: { type: 'string', format: 'date-time' },
             updatedAt: { type: 'string', format: 'date-time' },
           },
@@ -76,6 +78,13 @@ const swaggerSpecs = swaggerJsdoc({
             content: { type: 'string' },
             createdAt: { type: 'string', format: 'date-time' },
             updatedAt: { type: 'string', format: 'date-time' },
+            writer: {
+              type: 'object',
+              properties: {
+                id: { type: 'integer' },
+                nickname: { type: 'string' },
+              },
+            },
           },
         },
         OffsetList: {
@@ -249,9 +258,17 @@ const swaggerSpecs = swaggerJsdoc({
         get: {
           tags: ['Product'],
           summary: '상품 상세 조회',
+          security: [{ bearerAuth: [] }, {}],
           parameters: [{ in: 'path', name: 'id', required: true, schema: { type: 'integer' } }],
           responses: {
-            200: { description: 'OK' },
+            200: {
+              description: 'OK',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Product' },
+                },
+              },
+            },
             404: { description: 'Not Found' },
           },
         },
@@ -285,7 +302,25 @@ const swaggerSpecs = swaggerJsdoc({
           tags: ['Product Comment'],
           summary: '상품 댓글 목록 조회',
           parameters: [{ in: 'path', name: 'productId', required: true, schema: { type: 'integer' } }],
-          responses: { 200: { description: 'OK' } },
+          responses: {
+            200: {
+              description: 'OK',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      list: {
+                        type: 'array',
+                        items: { $ref: '#/components/schemas/Comment' },
+                      },
+                      nextCursor: { type: 'integer', nullable: true },
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
         post: {
           tags: ['Product Comment'],
@@ -293,7 +328,14 @@ const swaggerSpecs = swaggerJsdoc({
           security: [{ bearerAuth: [] }],
           parameters: [{ in: 'path', name: 'productId', required: true, schema: { type: 'integer' } }],
           responses: {
-            201: { description: 'Created' },
+            201: {
+              description: 'Created',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Comment' },
+                },
+              },
+            },
             401: { description: 'Unauthorized' },
           },
         },
@@ -307,7 +349,16 @@ const swaggerSpecs = swaggerJsdoc({
             { in: 'path', name: 'productId', required: true, schema: { type: 'integer' } },
             { in: 'path', name: 'commentId', required: true, schema: { type: 'integer' } },
           ],
-          responses: { 200: { description: 'OK' } },
+          responses: {
+            200: {
+              description: 'OK',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Comment' },
+                },
+              },
+            },
+          },
         },
         delete: {
           tags: ['Product Comment'],
