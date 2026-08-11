@@ -1,0 +1,59 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    // File Layout
+    "rootDir": "./src",
+    "outDir": "./dist", // 컴파일된 JavaScript 파일 출력 경로
+
+    // Environment Settings
+    // See also https://aka.ms/tsconfig/module
+    "module": "nodenext", // Node.js ESM/CJS 판단 규칙 그대로 시뮬레이션
+    "target": "es2016",
+    "lib": ["esnext"],
+    "esModuleInterop": true, // CommonJS 로 된 패키지도 ES 모듈 방식으로 사용할 수 있게 해주는 설정
+
+    // Other Outputs
+    "sourceMap": true, // 디버깅 시 TS 원본 코드 추적 가능
+    "declaration": true,
+    "declarationMap": true,
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Style Options
+    // "noImplicitReturns": true,
+    // "noImplicitOverride": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    // "noFallthroughCasesInSwitch": true,
+    // "noPropertyAccessFromIndexSignature": true,
+
+    // Recommended Options
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+
+    /* JavaScript Support */
+    "allowJs": true,
+    /* Allow multiple folders to be treated as one when resolving modules. */
+    "rootDirs": ["./src"],
+    /* Specify multiple folders that act like './node_modules/@types'. */
+    "typeRoots": ["./node_modules/@types", "./src/types"]
+  },
+  // Compile Options
+  "include": ["src/**/*"], // 컴파일할 파일들
+  // 컴파일에서 제외할 파일들
+  "exclude": [
+    "dist",
+    "node_modules",
+    "src/**/*.test.ts", // 테스트 파일 제외
+    "src/**/*.spec.ts", // 스펙 파일 제외
+    "src/temp/**/*", // 임시 폴더 제외
+    "src/generated/**/*"
+  ]
+}
