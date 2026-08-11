@@ -3,10 +3,10 @@
 ### POST Comment 테스트
 POST {{baseUrl}}
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODY0MzYwNjYsImV4cCI6MTc4NjQzOTY2Nn0.frLRIulIRN6f3RhXlOobtYSr5j5uD-jSx4Odag1U-eg
 
 {
-    "content": "죄송합니다"
+    "content": "근데 이거 무슨 글이었더라"
 }
 
 POST {{baseUrl}}
@@ -18,7 +18,7 @@ Content-Type: application/json
 
 POST http://localhost:3000/articles/1000/comments
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODY0MzYwNjYsImV4cCI6MTc4NjQzOTY2Nn0.frLRIulIRN6f3RhXlOobtYSr5j5uD-jSx4Odag1U-eg
 
 {
     "content": "똥탱"
@@ -26,7 +26,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6I
 
 POST http://localhost:3000/articles/1/comments
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODY0MzYwNjYsImV4cCI6MTc4NjQzOTY2Nn0.frLRIulIRN6f3RhXlOobtYSr5j5uD-jSx4Odag1U-eg
 
 {
     "content": ""
@@ -41,10 +41,10 @@ GET {{baseUrl}}?cursor=1
 ### PATCH Article 테스트
 PATCH {{baseUrl}}/13
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODY0MzYwNjYsImV4cCI6MTc4NjQzOTY2Nn0.frLRIulIRN6f3RhXlOobtYSr5j5uD-jSx4Odag1U-eg
 
 {
-    "content": "마인크래프트로 돈 벌어요 저는"
+    "content": "뜬금없지만 마크로 돈 벌어요 저는"
 }
 
 PATCH {{baseUrl}}/2
@@ -64,7 +64,7 @@ Content-Type: application/json
 
 PATCH {{baseUrl}}/4000
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODY0MzYwNjYsImV4cCI6MTc4NjQzOTY2Nn0.frLRIulIRN6f3RhXlOobtYSr5j5uD-jSx4Odag1U-eg
 
 {
     "content": "오버워치지~!!!!!!!!!!!"
@@ -87,8 +87,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6I
 }
 
 ### DELETE Comment 테스트
-DELETE {{baseUrl}}/14
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDUxMjgsImV4cCI6MTc4MzE0ODcyOH0.O-Wec5v5lEriOGQFvDyfO-16LNm6lMuDwCO_MAE9PMk
+DELETE {{baseUrl}}/32
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODY0MzYwNjYsImV4cCI6MTc4NjQzOTY2Nn0.frLRIulIRN6f3RhXlOobtYSr5j5uD-jSx4Odag1U-eg
 
 DELETE {{baseUrl}}/12
 

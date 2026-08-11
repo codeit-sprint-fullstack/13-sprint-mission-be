@@ -1,6 +1,6 @@
 import express from "express";
 import auth from "../middleware/auth.js";
-import commentController from "../controllers/commentController.js";
+import commentController from "../controllers/commentController";
 
 const commentRouter = express.Router({
   mergeParams: true,

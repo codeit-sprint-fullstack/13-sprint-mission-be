@@ -1,6 +1,13 @@
-import prisma from "../config/prisma.js";
+import prisma from "../config/prisma";
+import createError from "../utils/createError";
 
-async function create(articleId, comment) {
+import { Article, Comment } from "@prisma/client";
+import { CommentRequestType, CommentReturnType } from "./../types/comment";
+
+async function create(
+  articleId: Article["id"],
+  comment: CommentRequestType,
+): Promise<CommentReturnType> {
   const createdComment = await prisma.comment.create({
     data: {
       articleId: Number(articleId),
@@ -17,7 +24,7 @@ async function create(articleId, comment) {
   return createdComment;
 }
 
-async function findById(commentId) {
+async function findById(commentId: Comment["id"]): Promise<CommentReturnType> {
   const comment = await prisma.comment.findUnique({
     where: { id: Number(commentId) },
     include: {
@@ -28,14 +35,19 @@ async function findById(commentId) {
       },
     },
   });
+  if (!comment) {
+    throw createError(404, "댓글을 찾을 수 없습니다.");
+  }
   return comment;
 }
 
-async function findAll(articleId, cursor) {
+async function findAll(
+  articleId: Article["id"],
+  cursor?: number,
+): Promise<CommentReturnType[]> {
   const comments = await prisma.comment.findMany({
     take: 10,
-    cursor: cursor ? { id: Number(cursor) } : undefined,
-    skip: cursor ? 1 : 0,
+    ...(cursor !== undefined ? { cursor: { id: cursor }, skip: 1 } : {}),
     orderBy: {
       id: "asc",
     },
@@ -51,7 +63,11 @@ async function findAll(articleId, cursor) {
   return comments;
 }
 
-async function update(articleId, commentId, update) {
+async function update(
+  articleId: Article["id"],
+  commentId: Comment["id"],
+  update: CommentRequestType,
+): Promise<CommentReturnType> {
   const updatedComment = await prisma.comment.update({
     where: { id: Number(commentId) },
     data: {
@@ -69,7 +85,9 @@ async function update(articleId, commentId, update) {
   return updatedComment;
 }
 
-async function deleteById(commentId) {
+async function deleteById(
+  commentId: Comment["id"],
+): Promise<CommentReturnType> {
   const deletedComment = await prisma.comment.delete({
     where: { id: Number(commentId) },
     include: {
