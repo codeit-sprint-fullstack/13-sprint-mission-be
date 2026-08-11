@@ -86,6 +86,7 @@ const swaggerSpecs = swaggerJsdoc({
         },
         Comment: {
           type: 'object',
+          required: ['id', 'content', 'createdAt', 'writer'],
           properties: {
             id: { type: 'integer' },
             content: { type: 'string' },

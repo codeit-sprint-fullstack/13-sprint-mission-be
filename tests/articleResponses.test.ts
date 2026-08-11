@@ -14,6 +14,7 @@ import {
   updateArticle,
 } from '../controllers/articleController.js';
 import prisma from '../lib/prisma.js';
+import swaggerSpecs from '../src/config/swagger.js';
 
 const jwtSecret = 'article-response-test-secret';
 const token = jwt.sign({ userId: 7 }, jwtSecret);
@@ -65,6 +66,21 @@ function request(value: object): Request {
   return value as unknown as Request;
 }
 
+function getRequiredSchemaFields(schemaName: string): string[] {
+  const document = swaggerSpecs as unknown;
+  if (!document || typeof document !== 'object' || !('components' in document)) return [];
+  const components = document.components;
+  if (!components || typeof components !== 'object' || !('schemas' in components)) return [];
+  const schemas = components.schemas;
+  if (!schemas || typeof schemas !== 'object' || !(schemaName in schemas)) return [];
+  const schema = schemas[schemaName];
+  if (!schema || typeof schema !== 'object' || !('required' in schema)) return [];
+  const required: unknown = schema.required;
+  return Array.isArray(required)
+    ? required.filter((field: unknown): field is string => typeof field === 'string')
+    : [];
+}
+
 const writer = { id: 7, nickname: '판다' };
 const createdAt = new Date('2026-08-11T00:00:00.000Z');
 const updatedAt = new Date('2026-08-11T01:00:00.000Z');
@@ -78,6 +94,11 @@ const articleSource = {
   createdAt,
   updatedAt,
 };
+
+test('OpenAPI requires writer identity on article and comment responses', () => {
+  assert.ok(getRequiredSchemaFields('Article').includes('writer'));
+  assert.ok(getRequiredSchemaFields('Comment').includes('writer'));
+});
 
 function selectedArticle(args: unknown) {
   const { userId: _userId, ...article } = articleSource;
