@@ -186,7 +186,13 @@ export async function getProduct(req: Request<IdParams>, res: Response) {
         likes: { where: { userId }, select: { id: true } },
         comments: {
           orderBy: { createdAt: 'asc' },
-          select: { id: true, content: true, createdAt: true, updatedAt: true },
+          select: {
+            id: true,
+            content: true,
+            createdAt: true,
+            updatedAt: true,
+            user: { select: { id: true, nickname: true } },
+          },
         },
       },
     });
