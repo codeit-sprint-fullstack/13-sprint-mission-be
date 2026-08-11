@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import cookieParser from "cookie-parser";
+import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 
 import errorHandler from "./middlewares/errorHandler.js";
@@ -18,6 +19,10 @@ const PORT = process.env.PORT || 3000;
 const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
 
 const app = express();
+
+// 요청 로깅
+const logFormat = env === "production" ? "combined" : "dev";
+app.use(morgan(logFormat));
 
 // CORS 설정
 app.use(
