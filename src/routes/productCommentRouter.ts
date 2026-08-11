@@ -1,6 +1,6 @@
 import express from "express";
-import auth from "../middleware/auth.js";
-import productCommentController from "../controllers/productCommentController.js";
+import auth from "../middleware/auth";
+import productCommentController from "../controllers/productCommentController";
 
 const productCommentRouter = express.Router({
   mergeParams: true,
