@@ -3,7 +3,7 @@
 // - 인증/인가 미들웨어
 // ============================================================
 import { expressjwt } from "express-jwt";
-import { validateEmailAndPasswordSchema } from "../schemas/auth.schema.js";
+import { validate } from "../middlewares/validate.js";
 
 /** 엑세스 토큰 미들웨어 */
 const verifyAccessToken = expressjwt({
@@ -32,7 +32,7 @@ const verifyRefreshToken = expressjwt({
 
 /** 이메일 및 패스워드 검증 미들웨어 */
 function validateEmailAndPassword(req, res, next) {
-  validateEmailAndPasswordSchema(req.body);
+  validate(req.body);
   next();
 }
 

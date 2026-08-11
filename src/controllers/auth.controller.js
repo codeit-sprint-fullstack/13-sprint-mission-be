@@ -1,23 +1,17 @@
 // ============================================================
 // Auth 컨트롤러
 // ============================================================
-import {
-  signUpSchema,
-  validateEmailAndPasswordSchema,
-} from "../schemas/auth.schema.js";
 import authService from "../services/auth.service.js";
 
 /** 회원 가입 컨트롤러 */
 async function signup(req, res, next) {
-  const data = signUpSchema.parse(req.body); // 유효성 검사 완료된 데이터
-  const user = await authService.signup(data); // 유저 데이터
+  const user = await authService.signup(req.body); // 유저 데이터
   return res.status(201).json({ success: true, data: user });
 }
 
 /** 로그인 컨트롤러 */
 async function signin(req, res, next) {
-  const data = validateEmailAndPasswordSchema.parse(req.body); // 유효성 검사 완료된 데이터
-  const { email, password } = data;
+  const { email, password } = req.body;
   const user = await authService.getUser(email, password); // 유저 데이터
 
   const accessToken = authService.createToken(user);
