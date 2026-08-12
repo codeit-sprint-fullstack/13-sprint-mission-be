@@ -1,13 +1,21 @@
 // ============================================================
 // Article Service
 // ============================================================
-import articleRepository from "../repositories/article.repository.js";
+import { Article, Prisma, User } from "@prisma/client";
 import { AppError } from "../middlewares/errors.js";
+import articleRepository from "../repositories/article.repository.js";
+import { ArticleInput, ArticleQuery } from "../types/article.js";
 
 /** 게시글 목록 조회 서비스 로직
  * - 검색 / 정렬 / 페이지네이션
  * - userId가 있으면 isLiked 계산 */
-async function getAll({ page, pageSize, search, order, userId }) {
+async function getAll({
+  page = "1",
+  pageSize = "10",
+  search = "",
+  order = "recent",
+  userId,
+}: ArticleQuery & { userId: User["id"] }) {
   const currentPage = Math.max(parseInt(page, 10) || 1, 1);
   const articlesPerPage = Math.min(
     Math.max(parseInt(pageSize, 10) || 10, 1),
@@ -16,7 +24,7 @@ async function getAll({ page, pageSize, search, order, userId }) {
   const keyword = search || "";
   const orderBy = order || "recent";
 
-  let where = {};
+  let where: Prisma.ArticleWhereInput = {};
 
   if (keyword) {
     where.OR = [
@@ -26,9 +34,9 @@ async function getAll({ page, pageSize, search, order, userId }) {
   }
 
   const sortOption = {
-    recent: { createdAt: "desc" },
-    like: { likeCount: "desc" },
-  }[orderBy] || { createdAt: "desc", likeCount: "desc" };
+    recent: { createdAt: "desc" as const },
+    like: { likeCount: "desc" as const },
+  }[orderBy] || { createdAt: "desc" as const, likeCount: "desc" as const };
 
   const offset = (currentPage - 1) * articlesPerPage;
 
@@ -66,7 +74,7 @@ async function getAll({ page, pageSize, search, order, userId }) {
 
 /** 게시글 단건 조회 서비스 로직
  * - userId가 있으면 isLiked 계산 */
-async function getById(id, userId) {
+async function getById(id: Article["id"], userId: User["id"]) {
   const article = await articleRepository.findById(id);
 
   const isLiked = userId
@@ -82,7 +90,13 @@ async function getById(id, userId) {
 }
 
 /** 게시글 등록 서비스 로직 */
-async function create({ data, userId }) {
+async function create({
+  data,
+  userId,
+}: {
+  data: ArticleInput;
+  userId: User["id"];
+}) {
   return await articleRepository.create({
     data,
     userId,
@@ -91,7 +105,15 @@ async function create({ data, userId }) {
 
 /** 게시글 수정 서비스 로직
  * - 게시글을 등록한 유저만 수정 가능 */
-async function update({ id, data, userId }) {
+async function update({
+  id,
+  data,
+  userId,
+}: {
+  id: Article["id"];
+  data: ArticleInput;
+  userId: User["id"];
+}) {
   const ownerId = await articleRepository.findOwnerId(id);
 
   if (ownerId !== userId) {
@@ -103,7 +125,7 @@ async function update({ id, data, userId }) {
 
 /** 게시글 삭제 서비스 로직
  * - 게시글을 등록한 유저만 삭제 가능 */
-async function deleteById(id, userId) {
+async function deleteById(id: Article["id"], userId: User["id"]) {
   const ownerId = await articleRepository.findOwnerId(id);
 
   if (ownerId !== userId) {
@@ -114,7 +136,13 @@ async function deleteById(id, userId) {
 }
 
 /** 좋아요 토글 서비스 로직 */
-async function toggleLike({ ownerId, articleId }) {
+async function toggleLike({
+  ownerId,
+  articleId,
+}: {
+  ownerId: User["id"];
+  articleId: Article["id"];
+}) {
   const hasLikedArticle = await articleRepository.findLikedArticleById({
     ownerId,
     articleId,
