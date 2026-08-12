@@ -1,9 +1,10 @@
 // ============================================================
 // Auth Repository
 // ============================================================
+import { Prisma, User } from "@prisma/client";
 import prisma from "../config/prisma.js";
 
-async function create(user) {
+async function create(user: Pick<User, "email" | "nickname" | "password">) {
   return prisma.user.create({
     data: {
       email: user.email,
@@ -13,7 +14,7 @@ async function create(user) {
   });
 }
 
-async function findByEmail(email) {
+async function findByEmail(email: User["email"]) {
   return await prisma.user.findUnique({
     where: {
       email,
@@ -21,7 +22,7 @@ async function findByEmail(email) {
   });
 }
 
-async function findById(id) {
+async function findById(id: User["id"]) {
   return prisma.user.findUnique({
     where: {
       id,
@@ -29,8 +30,7 @@ async function findById(id) {
   });
 }
 
-async function update(id, data) {
-  
+async function update(id: User["id"], data: Prisma.UserUpdateInput) {
   return prisma.user.update({
     where: {
       id,

@@ -1,21 +1,31 @@
 // ============================================================
 // Auth 컨트롤러
 // ============================================================
+import { User } from "@prisma/client";
+import { NextFunction, Request, Response } from "express";
 import authService from "../services/auth.service.js";
 
 /** 회원 가입 컨트롤러 */
-async function signup(req, res, next) {
+async function signup(
+  req: Request<{}, {}, Pick<User, "email" | "nickname" | "password">>,
+  res: Response,
+  next: NextFunction,
+) {
   const user = await authService.signup(req.body); // 유저 데이터
   return res.status(201).json({ success: true, data: user });
 }
 
 /** 로그인 컨트롤러 */
-async function signin(req, res, next) {
+async function signin(
+  req: Request<{}, {}, Pick<User, "email" | "password">>,
+  res: Response,
+  next: NextFunction,
+) {
   const { email, password } = req.body;
   const user = await authService.getUser(email, password); // 유저 데이터
 
-  const accessToken = authService.createToken(user);
-  const refreshToken = authService.createToken(user, "refresh");
+  const accessToken = authService.createToken(user.id);
+  const refreshToken = authService.createToken(user.id, "refresh");
 
   await authService.updateUser(user.id, { refreshToken });
 
@@ -30,7 +40,10 @@ async function signin(req, res, next) {
 }
 
 /** 토큰 갱신 컨트롤러 */
-async function refreshToken(req, res, next) {
+async function refreshToken(req: Request, res: Response, next: NextFunction) {
+  if (!req.user)
+    return res.status(401).json({ success: false, message: "인증 필요" });
+
   const { newAccessToken, newRefreshToken } = await authService.refreshToken(
     req.user.userId,
     req.cookies.refreshToken,
