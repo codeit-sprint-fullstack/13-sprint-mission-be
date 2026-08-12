@@ -1,9 +1,10 @@
 // ============================================================
 // User Repository
 // ============================================================
+import { User } from "@prisma/client";
 import prisma from "../config/prisma.js";
 
-async function findById(id) {
+async function findById(id: User["id"]) {
   return await prisma.user.findUniqueOrThrow({
     where: { id },
     select: {
