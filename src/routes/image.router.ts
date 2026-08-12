@@ -2,9 +2,9 @@
 // 이미지 라우트
 // - 상품/게시글 이미지 업로드
 // ============================================
-import express from "express";
-import multer from "multer";
 import crypto from "crypto";
+import express, { Request } from "express";
+import multer from "multer";
 import path from "path";
 
 import imageController from "../controllers/image.controller.js";
@@ -24,17 +24,18 @@ const storage = multer.diskStorage({
 /** 이미지 파일 타입 설정
  * - jpeg, png, gif
  */
-const imageFilter = (req, file, cb) => {
+const imageFilter = (
+  req: Request,
+  file: Express.Multer.File,
+  cb: multer.FileFilterCallback,
+) => {
   const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
 
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true); // 유효한 파일 타입
   } else {
     // 유효하지 않은 파일타입
-    cb(
-      new AppError(".jpeg, .png, .gif 파일만 업로드할 수 있습니다.", 400),
-      false,
-    );
+    cb(new AppError(".jpeg, .png, .gif 파일만 업로드할 수 있습니다.", 400));
   }
 };
 
