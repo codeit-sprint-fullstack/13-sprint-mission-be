@@ -1,12 +1,18 @@
 // ============================================================
 // Product Service
 // ============================================================
-import productRepository from "../repositories/product.repository.js";
+import { Prisma, Product, User } from "@prisma/client";
 import { AppError } from "../middlewares/errors.js";
+import productRepository from "../repositories/product.repository.js";
+import {
+  ProductInput,
+  ProductQuery,
+  ProductWithTags,
+} from "../types/product.js";
 
 /** API 응답 변환 함수
  * - tag 필드만 추출해서 다시 문자열 배열로 */
-export const convertToProductResponse = (product) => ({
+export const convertToProductResponse = (product: ProductWithTags) => ({
   ...product,
   tags: product.tags?.map((tagObj) => tagObj.tag),
 });
@@ -14,7 +20,13 @@ export const convertToProductResponse = (product) => ({
 /** 상품 목록 조회 서비스 로직
  * - 검색 / 정렬 / 페이지네이션
  * - userId가 있으면 isLiked 계산 */
-async function getAll({ page, pageSize, search, order, userId }) {
+async function getAll({
+  page = "1",
+  pageSize = "10",
+  search = "",
+  order = "recent",
+  userId,
+}: ProductQuery & { userId: User["id"] }) {
   const currentPage = Math.max(parseInt(page, 10) || 1, 1);
   const productsPerPage = Math.min(
     Math.max(parseInt(pageSize, 10) || 10, 1),
@@ -23,7 +35,7 @@ async function getAll({ page, pageSize, search, order, userId }) {
   const keyword = search || "";
   const orderBy = order || "recent";
 
-  let where = {};
+  let where: Prisma.ProductWhereInput = {};
 
   if (keyword) {
     where.OR = [
@@ -33,11 +45,11 @@ async function getAll({ page, pageSize, search, order, userId }) {
   }
 
   const sortOption = {
-    recent: { createdAt: "desc" },
-    like: { likeCount: "desc" },
+    recent: { createdAt: "desc" as const },
+    like: { likeCount: "desc" as const },
   }[orderBy] || {
-    createdAt: "desc",
-    likeCount: "desc",
+    createdAt: "desc" as const,
+    likeCount: "desc" as const,
   };
 
   const offset = (currentPage - 1) * productsPerPage;
@@ -76,7 +88,7 @@ async function getAll({ page, pageSize, search, order, userId }) {
 
 /** 상품 단건 조회 서비스 로직
  * - userId가 있으면 isLiked 계산 */
-async function getById(id, userId) {
+async function getById(id: Product["id"], userId: User["id"]) {
   const product = await productRepository.findById(id);
 
   const isLiked = userId
@@ -92,7 +104,13 @@ async function getById(id, userId) {
 }
 
 /** 상품 등록 서비스 로직 */
-async function create({ data, userId }) {
+async function create({
+  data,
+  userId,
+}: {
+  data: ProductInput;
+  userId: User["id"];
+}) {
   const product = await productRepository.create({
     data,
     tags: data.tags,
@@ -104,7 +122,15 @@ async function create({ data, userId }) {
 
 /** 상품 수정 서비스 로직
  * - 상품을 등록한 유저만 수정 가능 */
-async function update({ id, data, userId }) {
+async function update({
+  id,
+  data,
+  userId,
+}: {
+  id: Product["id"];
+  data: ProductInput;
+  userId: User["id"];
+}) {
   const ownerId = await productRepository.findOwnerId(id);
 
   if (ownerId !== userId) {
@@ -118,9 +144,9 @@ async function update({ id, data, userId }) {
 
 /** 상품 삭제 서비스 로직
  * - 상품을 등록한 유저만 삭제 가능 */
-async function deleteById(id, userId) {
+async function deleteById(id: Product["id"], userId: User["id"]) {
   const ownerId = await productRepository.findOwnerId(id);
-  
+
   if (ownerId !== userId) {
     throw new AppError("본인이 등록한 상품만 삭제할 수 있습니다.", 403);
   }
@@ -129,7 +155,13 @@ async function deleteById(id, userId) {
 }
 
 /** 좋아요 토글 서비스 로직 */
-async function toggleLike({ ownerId, productId }) {
+async function toggleLike({
+  ownerId,
+  productId,
+}: {
+  ownerId: User["id"];
+  productId: Product["id"];
+}) {
   const hasLikedProduct = await productRepository.findLikedProductById({
     ownerId,
     productId,
