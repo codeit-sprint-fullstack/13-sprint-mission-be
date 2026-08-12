@@ -1,17 +1,26 @@
 // ============================================================
 // Comment 컨트롤러
 // ============================================================
+import { NextFunction, Request, Response } from "express";
 import commentService from "../services/comment.service.js";
+import { ArticleCommentInput, ProductCommentInput } from "../types/comment.js";
 import parseId from "../utils/parse.js";
 
 /** 상품 댓글 조회
  * - GET /products/:productId/comments
  */
-async function getAllProductComments(req, res, next) {
+async function getAllProductComments(
+  req: Request<{ productId: string }>,
+  res: Response,
+  next: NextFunction,
+) {
+  if (!req.user)
+    return res.status(401).json({ success: false, message: "인증 필요" });
+
   const { data } = await commentService.getAll({
     type: "product",
     id: parseId(req.params.productId),
-    userId: req.user ? parseId(req.user.userId) : undefined,
+    userId: req.user.userId,
   });
 
   res.json({ success: true, data });
@@ -20,12 +29,19 @@ async function getAllProductComments(req, res, next) {
 /** 상품 댓글 생성
  * - POST /products/:productId/comments
  */
-async function createProductComment(req, res, next) {
+async function createProductComment(
+  req: Request<{ productId: string }, {}, ProductCommentInput>,
+  res: Response,
+  next: NextFunction,
+) {
+  if (!req.user)
+    return res.status(401).json({ success: false, message: "인증 필요" });
+
   const newProductComment = await commentService.create({
     type: "product",
     id: parseId(req.params.productId),
     data: req.body, // validate 미들웨어에서 검증 완료된 데이터
-    ownerId: parseId(req.user.userId),
+    ownerId: req.user.userId,
   });
 
   res.status(201).json({ success: true, data: newProductComment });
@@ -34,11 +50,18 @@ async function createProductComment(req, res, next) {
 /** 게시글 댓글 조회
  * - GET /articles/:articleId/comments
  */
-async function getAllArticleComments(req, res, next) {
+async function getAllArticleComments(
+  req: Request<{ articleId: string }>,
+  res: Response,
+  next: NextFunction,
+) {
+  if (!req.user)
+    return res.status(401).json({ success: false, message: "인증 필요" });
+
   const { data } = await commentService.getAll({
     type: "article",
     id: parseId(req.params.articleId),
-    userId: req.user ? parseId(req.user.userId) : undefined,
+    userId: req.user.userId,
   });
 
   res.json({ success: true, data });
@@ -47,12 +70,19 @@ async function getAllArticleComments(req, res, next) {
 /** 게시글 댓글 생성
  * - POST /articles/:articleId/comments
  */
-async function createArticleComment(req, res, next) {
+async function createArticleComment(
+  req: Request<{ articleId: string }, {}, ArticleCommentInput>,
+  res: Response,
+  next: NextFunction,
+) {
+  if (!req.user)
+    return res.status(401).json({ success: false, message: "인증 필요" });
+
   const newArticleComment = await commentService.create({
     type: "article",
     id: parseId(req.params.articleId),
     data: req.body, // validate 미들웨어에서 검증 완료된 데이터
-    ownerId: parseId(req.user.userId),
+    ownerId: req.user.userId,
   });
 
   res.status(201).json({ success: true, data: newArticleComment });
@@ -61,12 +91,19 @@ async function createArticleComment(req, res, next) {
 /** 상품 댓글 수정
  * - PATCH /products/:productId/comments/:commentId
  */
-async function updateProductComment(req, res, next) {
+async function updateProductComment(
+  req: Request<{ commentId: string }, {}, ProductCommentInput>,
+  res: Response,
+  next: NextFunction,
+) {
+  if (!req.user)
+    return res.status(401).json({ success: false, message: "인증 필요" });
+
   const updatedComment = await commentService.update({
+    type: "product",
     id: parseId(req.params.commentId),
     data: req.body, // validate 미들웨어에서 검증 완료된 데이터
-    type: "product",
-    userId: parseId(req.user.userId),
+    userId: req.user.userId,
   });
 
   res.json({ success: true, data: updatedComment });
@@ -75,11 +112,18 @@ async function updateProductComment(req, res, next) {
 /** 상품 댓글 삭제
  * - DELETE /products/:productId/comments/:commentId
  */
-async function deleteProductComment(req, res, next) {
+async function deleteProductComment(
+  req: Request<{ commentId: string }>,
+  res: Response,
+  next: NextFunction,
+) {
+  if (!req.user)
+    return res.status(401).json({ success: false, message: "인증 필요" });
+
   await commentService.deleteById({
-    id: parseId(req.params.commentId),
     type: "product",
-    userId: parseId(req.user.userId),
+    id: parseId(req.params.commentId),
+    userId: req.user.userId,
   });
 
   res.json({ success: true, message: "댓글이 삭제되었습니다" });
@@ -88,12 +132,19 @@ async function deleteProductComment(req, res, next) {
 /** 게시글 댓글 수정
  * - PATCH /articles/:articleId/comments/:commentId
  */
-async function updateArticleComment(req, res, next) {
+async function updateArticleComment(
+  req: Request<{ commentId: string }, {}, ArticleCommentInput>,
+  res: Response,
+  next: NextFunction,
+) {
+  if (!req.user)
+    return res.status(401).json({ success: false, message: "인증 필요" });
+
   const updatedComment = await commentService.update({
+    type: "article",
     id: parseId(req.params.commentId),
     data: req.body, // validate 미들웨어에서 검증 완료된 데이터
-    type: "article",
-    userId: parseId(req.user.userId),
+    userId: req.user.userId,
   });
 
   res.json({ success: true, data: updatedComment });
@@ -102,11 +153,18 @@ async function updateArticleComment(req, res, next) {
 /** 게시글 댓글 삭제
  * - DELETE /articles/:articleId/comments/:commentId
  */
-async function deleteArticleComment(req, res, next) {
+async function deleteArticleComment(
+  req: Request<{ commentId: string }, {}, ArticleCommentInput>,
+  res: Response,
+  next: NextFunction,
+) {
+  if (!req.user)
+    return res.status(401).json({ success: false, message: "인증 필요" });
+
   await commentService.deleteById({
-    id: parseId(req.params.commentId),
     type: "article",
-    userId: parseId(req.user.userId),
+    id: parseId(req.params.commentId),
+    userId: req.user.userId,
   });
 
   res.json({ success: true, message: "댓글이 삭제되었습니다" });

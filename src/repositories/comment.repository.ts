@@ -1,10 +1,12 @@
 // ============================================================
 // Comment Repository
 // ============================================================
+import { User } from "@prisma/client";
 import prisma from "../config/prisma.js";
+import { CommentTarget } from "../types/comment.js";
 
 /** 댓글 목록 조회 (상품/게시글 공통) */
-async function findAll({ type, id }) {
+async function findAll({ type, id }: Omit<CommentTarget, "data">) {
   if (type === "product") {
     return prisma.productComment.findMany({
       where: { productId: id },
@@ -25,7 +27,12 @@ async function findAll({ type, id }) {
 }
 
 /** 댓글 생성 (상품/게시글 공통) */
-async function create({ type, id, data, ownerId }) {
+async function create({
+  type,
+  id,
+  data,
+  ownerId,
+}: CommentTarget & { ownerId: User["id"] }) {
   if (type === "product") {
     return prisma.productComment.create({
       data: { content: data.content, productId: id, ownerId },
@@ -39,7 +46,7 @@ async function create({ type, id, data, ownerId }) {
 
 /** 댓글 수정
  * - 내용만 변경 */
-async function update({ id, data, type }) {
+async function update({ id, data, type }: CommentTarget) {
   if (type === "product") {
     return await prisma.productComment.update({
       where: { id },
@@ -54,7 +61,7 @@ async function update({ id, data, type }) {
 }
 
 /** 댓글 삭제 */
-async function deleteById(id, type) {
+async function deleteById({ id, type }: Omit<CommentTarget, "data">) {
   if (type === "product") {
     return await prisma.productComment.delete({
       where: { id },
@@ -68,7 +75,7 @@ async function deleteById(id, type) {
 
 /** 댓글 소유자 id 조회 (권한 체크용)
  * - type이 라우트에서 이미 정해져 있으므로 해당 테이블만 조회 */
-async function findOwnerId({ id, type }) {
+async function findOwnerId({ id, type }: Omit<CommentTarget, "data">) {
   if (type === "product") {
     const comment = await prisma.productComment.findUnique({
       where: { id },
