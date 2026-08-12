@@ -3,6 +3,7 @@
 // ============================================================
 
 import { Prisma } from "@prisma/client";
+import { ErrorRequestHandler } from "express";
 import { z } from "zod";
 import { AppError } from "./errors.js";
 
@@ -17,7 +18,7 @@ import { AppError } from "./errors.js";
  * @param {import("express").NextFunction} next - Express next 함수 (사용되지 않음)
  * @returns {import("express").Response} 에러 정보를 담은 JSON 응답
  */
-export default function errorHandler(error, req, res, next) {
+const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   // express-jwt 인증 에러
   if (error.name === "UnauthorizedError") {
     return res
@@ -27,7 +28,7 @@ export default function errorHandler(error, req, res, next) {
 
   // Zod 검증 에러 - 컨트롤러 안 schema.parse()가 던진 ZodError 처리
   if (error instanceof z.ZodError) {
-    const errors = error.errors || error.issues || []; // undefined 방어
+    const errors = error.issues;
     return res.status(400).json({
       success: false,
       errors: errors.map((e) => ({
@@ -92,4 +93,6 @@ export default function errorHandler(error, req, res, next) {
         : error.message,
     date: new Date(),
   });
-}
+};
+
+export default errorHandler;
