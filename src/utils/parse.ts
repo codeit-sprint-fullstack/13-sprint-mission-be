@@ -1,7 +1,7 @@
 import { ValidationError } from "../middlewares/errors.js";
 
 /** req.params로 받은 ID 문자열을 정수로 변환, 실패 시 에러 */
-const parseId = (id) => {
+const parseId = (id: string) => {
   const parsed = parseInt(id, 10);
 
   if (isNaN(parsed) || parsed <= 0) {

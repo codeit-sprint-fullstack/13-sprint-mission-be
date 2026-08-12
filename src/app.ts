@@ -1,16 +1,17 @@
-import cors from "cors";
-import express from "express";
 import cookieParser from "cookie-parser";
+import cors from "cors";
+import express, { Response } from "express";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 
-import errorHandler from "./middlewares/errorHandler.js";
+import { Request } from "express";
 import { swaggerSpec } from "./config/swagger.js";
-import userRouter from "./routes/user.router.js";
-import productRouter from "./routes/product.router.js";
+import errorHandler from "./middlewares/errorHandler.js";
 import articleRouter from "./routes/article.router.js";
 import authRouter from "./routes/auth.router.js";
 import imageRouter from "./routes/image.router.js";
+import productRouter from "./routes/product.router.js";
+import userRouter from "./routes/user.router.js";
 
 // 환경 변수 로드
 const env = process.env.NODE_ENV || "development";
@@ -38,7 +39,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // 헬스 체크 엔드포인트 (Render의 health check용)
-app.get("/health", (req, res) => {
+app.get("/health", (req: Request, res: Response) => {
   res.json({ status: "ok" });
 });
 
@@ -66,7 +67,10 @@ async function start() {
       );
     });
   } catch (error) {
-    console.error("❌ 서버 시작 실패:", error.message);
+    console.error(
+      "❌ 서버 시작 실패:",
+      error instanceof Error ? error.message : error,
+    );
     process.exit(1);
   }
 }
