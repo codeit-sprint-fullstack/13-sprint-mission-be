@@ -1,0 +1,7 @@
+**/node_modules/
+**/build/
+**/.npm-cache/
+**/.env
+**/.env.local
+public/images/*
+!public/images/.placeholder

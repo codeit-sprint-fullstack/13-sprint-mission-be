@@ -1,0 +1,43 @@
+version: '2.2'
+
+services:
+  pg-db:
+    image: postgres:16.3-alpine3.19
+    attach: false
+    container_name: panda-market-db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=panda-market
+    networks:
+      - panda-market-network
+    ports:
+      - '15432:5432'
+    command: [postgres]
+
+  service:
+    container_name: panda-market-app
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: no
+    environment:
+      # Application
+      - NODE_ENV=development
+      - HTTP_PORT=3000
+      - BASE_URL=http://localhost:13000
+      - DATABASE_URL=postgresql://postgres:postgres@pg-db:5432/panda-market
+      - JWT_ACCESS_TOKEN_SECRET=${JWT_ACCESS_TOKEN_SECRET:-local-docker-access-secret}
+      - JWT_REFRESH_TOKEN_SECRET=${JWT_REFRESH_TOKEN_SECRET:-local-docker-refresh-secret}
+      - CLIENT_REDIRECT_URI=http://localhost:3000
+    networks:
+      - panda-market-network
+    ports:
+      - '13000:3000'
+    depends_on:
+      - pg-db
+
+networks:
+  panda-market-network:
+    name: panda-market-network
