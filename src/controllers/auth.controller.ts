@@ -4,6 +4,7 @@
 import { User } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 import authService from "../services/auth.service.js";
+import assertUser from "../utils/assertUser.js";
 
 /** 회원 가입 컨트롤러 */
 async function signup(
@@ -41,8 +42,7 @@ async function signin(
 
 /** 토큰 갱신 컨트롤러 */
 async function refreshToken(req: Request, res: Response, next: NextFunction) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const { newAccessToken, newRefreshToken } = await authService.refreshToken(
     req.user.userId,

@@ -3,10 +3,10 @@
 // ============================================================
 import { NextFunction, Request, Response } from "express";
 import userService from "../services/user.service.js";
+import assertUser from "../utils/assertUser.js";
 
 async function getMe(req: Request, res: Response, next: NextFunction) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const user = await userService.getById(req.user.userId);
 

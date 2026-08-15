@@ -4,6 +4,7 @@
 import { NextFunction, Request, Response } from "express";
 import commentService from "../services/comment.service.js";
 import { ArticleCommentInput, ProductCommentInput } from "../types/comment.js";
+import assertUser from "../utils/assertUser.js";
 import parseId from "../utils/parse.js";
 
 /** 상품 댓글 조회
@@ -14,8 +15,7 @@ async function getAllProductComments(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const { data } = await commentService.getAll({
     type: "product",
@@ -34,8 +34,7 @@ async function createProductComment(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const newProductComment = await commentService.create({
     type: "product",
@@ -55,8 +54,7 @@ async function getAllArticleComments(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const { data } = await commentService.getAll({
     type: "article",
@@ -75,8 +73,7 @@ async function createArticleComment(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const newArticleComment = await commentService.create({
     type: "article",
@@ -96,8 +93,7 @@ async function updateProductComment(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const updatedComment = await commentService.update({
     type: "product",
@@ -117,8 +113,7 @@ async function deleteProductComment(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   await commentService.deleteById({
     type: "product",
@@ -137,8 +132,7 @@ async function updateArticleComment(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const updatedComment = await commentService.update({
     type: "article",
@@ -158,8 +152,7 @@ async function deleteArticleComment(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   await commentService.deleteById({
     type: "article",

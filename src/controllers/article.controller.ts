@@ -4,6 +4,7 @@
 import { NextFunction, Request, Response } from "express";
 import articleService from "../services/article.service.js";
 import { ArticleInput, ArticleQuery } from "../types/article.js";
+import assertUser from "../utils/assertUser.js";
 import parseId from "../utils/parse.js";
 
 /** 게시글 조회 컨트롤러
@@ -14,8 +15,7 @@ async function getAllArticles(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const {
     page = "1",
@@ -42,8 +42,7 @@ async function getArticle(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const article = await articleService.getById(
     parseId(req.params.id),
@@ -61,8 +60,7 @@ async function createArticle(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const newArticle = await articleService.create({
     data: req.body, // validate 미들웨어에서 검증 완료된 데이터
@@ -80,8 +78,7 @@ async function updateArticle(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const updatedArticle = await articleService.update({
     id: parseId(req.params.id),
@@ -100,8 +97,7 @@ async function deleteArticle(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   await articleService.deleteById(parseId(req.params.id), req.user.userId);
 
@@ -116,8 +112,7 @@ async function toggleArticleLike(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const likedArticle = await articleService.toggleLike({
     ownerId: req.user.userId,

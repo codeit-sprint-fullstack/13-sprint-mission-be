@@ -4,6 +4,7 @@
 import { NextFunction, Request, Response } from "express";
 import productService from "../services/product.service.js";
 import { ProductInput, ProductQuery } from "../types/product.js";
+import assertUser from "../utils/assertUser.js";
 import parseId from "../utils/parse.js";
 
 /** 상품 조회 컨트롤러
@@ -14,8 +15,7 @@ async function getAllProducts(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const {
     page = "1",
@@ -42,8 +42,7 @@ async function getProduct(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const product = await productService.getById(
     parseId(req.params.id),
@@ -61,8 +60,7 @@ async function createProduct(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const newProduct = await productService.create({
     data: req.body, // validate 미들웨어에서 검증 완료된 데이터
@@ -80,8 +78,7 @@ async function updateProduct(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const updatedProduct = await productService.update({
     id: parseId(req.params.id),
@@ -100,8 +97,7 @@ async function deleteProduct(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   await productService.deleteById(parseId(req.params.id), req.user.userId);
 
@@ -116,8 +112,7 @@ async function toggleProductLike(
   res: Response,
   next: NextFunction,
 ) {
-  if (!req.user)
-    return res.status(401).json({ success: false, message: "인증 필요" });
+  assertUser(req);
 
   const likedProduct = await productService.toggleLike({
     ownerId: req.user.userId,
