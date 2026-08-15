@@ -2,19 +2,16 @@
 // Product 컨트롤러
 // ============================================================
 import { NextFunction, Request, Response } from "express";
+import { productQuerySchema } from "../schemas/product.schemas.js";
 import productService from "../services/product.service.js";
-import { ProductInput, ProductQuery } from "../types/product.js";
+import { ProductInput } from "../types/product.js";
 import assertUser from "../utils/assertUser.js";
 import parseId from "../utils/parse.js";
 
 /** 상품 조회 컨트롤러
  * - GET /products
  */
-async function getAllProducts(
-  req: Request<{}, {}, {}, ProductQuery>,
-  res: Response,
-  next: NextFunction,
-) {
+async function getAllProducts(req: Request, res: Response, next: NextFunction) {
   assertUser(req);
 
   const {
@@ -22,7 +19,7 @@ async function getAllProducts(
     pageSize = "10",
     search = "",
     order = "recent",
-  } = req.query;
+  } = productQuerySchema.parse(req.query);
   const { data, pagination } = await productService.getAll({
     page,
     pageSize,

@@ -37,3 +37,13 @@ export const createProductSchema = z.object({
  * @ image, name, price, description, tags
  */
 export const updateProductSchema = createProductSchema.partial();
+
+/** 상품 목록 조회 쿼리 스키마
+ * @ page, pageSize, search, order
+ */
+export const productQuerySchema = z.object({
+  page: z.string().optional(),
+  pageSize: z.string().optional(),
+  search: z.string().optional(),
+  order: z.string().optional(),
+});

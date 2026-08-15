@@ -1,11 +1,8 @@
 import { Prisma, Product } from "@prisma/client";
+import { z } from "zod";
+import { productQuerySchema } from "../schemas/product.schemas.js";
 
-export interface ProductQuery {
-  page?: string;
-  pageSize?: string;
-  search?: string;
-  order?: string;
-}
+export type ProductQuery = z.infer<typeof productQuerySchema>;
 
 export type ProductInput = Pick<
   Product,

@@ -2,19 +2,16 @@
 // Article 컨트롤러
 // ============================================================
 import { NextFunction, Request, Response } from "express";
+import { articleQuerySchema } from "../schemas/article.schemas.js";
 import articleService from "../services/article.service.js";
-import { ArticleInput, ArticleQuery } from "../types/article.js";
+import { ArticleInput } from "../types/article.js";
 import assertUser from "../utils/assertUser.js";
 import parseId from "../utils/parse.js";
 
 /** 게시글 조회 컨트롤러
  * - GET /articles
  */
-async function getAllArticles(
-  req: Request<{}, {}, {}, ArticleQuery>,
-  res: Response,
-  next: NextFunction,
-) {
+async function getAllArticles(req: Request, res: Response, next: NextFunction) {
   assertUser(req);
 
   const {
@@ -22,7 +19,7 @@ async function getAllArticles(
     pageSize = "10",
     search = "",
     order = "recent",
-  } = req.query;
+  } = articleQuerySchema.parse(req.query);
   const { data, pagination } = await articleService.getAll({
     page,
     pageSize,

@@ -23,3 +23,13 @@ export const createArticleSchema = z.object({
  * @ image, title, content
  */
 export const updateArticleSchema = createArticleSchema.partial();
+
+/** 게시글 목록 조회 쿼리 스키마
+ * @ page, pageSize, search, order
+ */
+export const articleQuerySchema = z.object({
+  page: z.string().optional(),
+  pageSize: z.string().optional(),
+  search: z.string().optional(),
+  order: z.string().optional(),
+});
