@@ -8,20 +8,20 @@ datasource db {
 }
 
 model User {
-  id              String           @id
-  email           String           @unique
-  nickname        String
-  image           String?
-  encryptedPassword String        @map("password")
-  refreshToken    String?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  products        Product[]
-  productComments ProductComment[]
-  productLikes    ProductLike[]
-  articles        Article[]
-  articleComments ArticleComment[]
-  articleLikes    ArticleLike[]
+  id                String           @id
+  email             String           @unique
+  nickname          String
+  image             String?
+  encryptedPassword String           @map("password")
+  refreshToken      String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  products          Product[]
+  productComments   ProductComment[]
+  productLikes      ProductLike[]
+  articles          Article[]
+  articleComments   ArticleComment[]
+  articleLikes      ArticleLike[]
 
   @@map("users")
 }
@@ -72,6 +72,7 @@ model Article {
   id              String           @id
   title           String
   content         String
+  images          String[]         @default([])
   favoriteCount   Int              @default(0)
   userId          String
   user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
