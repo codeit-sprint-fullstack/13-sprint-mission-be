@@ -15,7 +15,7 @@
 
 - npm
 - docker
-- cocker-compose
+- docker-compose
 
 #### 실행하는 방법
 
@@ -49,7 +49,15 @@ docker-compose 를 통해 실행했다면, postgresql 은 도커 내부에 자�
 
 #### 실행 전, 필요한 작업
 
-1. `.env` 파일 설정
+1. 의존성 설치
+
+서비스가 동작하기 위해 필요한 라이브러리를 설치합니다.
+
+```shell
+npm install
+```
+
+2. `.env` 파일 설정
 
 이미지 업로드시 노출시킬 서버의 주소를 `BASE_URL`로 설정해 주세요. 이때 주소의 마지막에 슬래시(`/`)는 포함하지 않습니다.
 서버를 실행할 포트 번호를 `HTTP_PORT`에 원하는 값으로 설정해 주세요. 포트 값을 설정하지 않으면 기본 값은 3000으로 실행됩니다.
@@ -83,7 +91,16 @@ CLIENT_REDIRECT_URI=
 구글의 Credentials에서 OAuth Client를 생성할 때 `/auth/google/callback` 이라는 경로를 기준으로 허용 승인된 리디렉션 URI를 추가해 주세요.
 ![설정 화면](./google-auth-setting.png)
 
-2. DB 마이그레이션
+3. Prisma Client 생성
+
+`@prisma/client`는 로컬의 `schema.prisma` 파일을 읽어서 만들어지는 패키지입니다.
+처음 설치하거나 스키마 파일이 변경되면 아래 명령어를 실행해 주세요.
+
+```shell
+npm run prisma:generate
+```
+
+4. DB 마이그레이션
 
 서비스를 운영하기 위해 필요한 테이블들을 생성해야 합니다.
 
@@ -98,27 +115,10 @@ npx prisma migrate deploy
 PostgreSQL 접속정보가 올바르지 않다면 실패할 수 있습니다.
 
 
-3. DB Seeding (옵션)
+5. DB Seeding (선택)
 
 ```
 npm run seed
-```
-
-4. 의존성 설치
-
-서비스가 동작하기 위해 필요한 라이브러리를 설치합니다.
-
-```
-npm install
-```
-
-5. Prisma Client 생성
-
-`@prisma/client` 는 로컬의 `schema.prisma` 파일을 읽어서 만들어지는 패키지입니다.
-처음 및 스키마 파일이 변경될 때 마다, 아래 명령어를 실행해주세요.
-
-```
-npx prisma generate
 ```
 
 6. 서비스 실행

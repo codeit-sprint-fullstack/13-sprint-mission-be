@@ -20,6 +20,9 @@ export class Article {
     /** 마지막 수정시각 */
     _updatedAt;
 
+    /** 좋아요 목록 */
+    _likes;
+
     constructor(param) {
         this._id = param.id;
         this._writerId = param.writerId;

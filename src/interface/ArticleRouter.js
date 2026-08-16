@@ -5,6 +5,7 @@ import { AuthN } from './utils/AuthN.js';
 import { AuthTokenManager } from '../infra/AuthTokenManager.js';
 
 import { asyncErrorHandler } from './utils/asyncErrorHandler.js';
+import { validateBody } from './utils/validateRequest.js';
 import { CreateArticleRequestStruct } from './structs/article/CreateArticleRequestStruct.js';
 import { UpdateArticleRequestStruct } from './structs/article/UpdateArticleRequestStruct.js';
 import { GetArticleListRequestStruct } from './structs/article/GetArticleListRequestStruct.js';
@@ -30,23 +31,10 @@ const articleLikeRoute = ArticleRouter.route('/:articleId/like');
 // 게시글 등록 api
 articlesRoute.post(
     AuthN(),
+    validateBody(CreateArticleRequestStruct),
     asyncErrorHandler(async (req, res) => {
         const requester = AuthTokenManager.getRequesterFromToken(req.headers.authorization);
-
-        /**
-         * [API 요청 유효성 검사]
-         *
-         * assert 메서드는 유효성 검사만 시도하는데 비해,
-         * create 메서드는 데이터를 전처리하고, 유효성 검사를 같이 시도합니다.
-         *
-         * 전처리를 하는 이유는 아래와 같이 다양합니다.
-         * - 기본값을 설정하기 위해              @see GetArticleListRequestStruct
-         * - 데이터를 변환하기 위해
-         *     1. 문자열 앞뒤에 있는 공백 제거    @see CreateArticleRequestStruct
-         *     2. 문자열로 이루어진 숫자 -> 숫자  @see GetArticleListRequestStruct
-         *     ...
-         */
-        const { title, content, image } = create(req.body, CreateArticleRequestStruct);
+        const { title, content, image } = req.body;
 
         const articleView = await CreateArticleHandler.handle(requester, {
             title,
@@ -78,11 +66,12 @@ articleRoute.get(
 // 게시글 수정 api
 articleRoute.patch(
     AuthN(),
+    validateBody(UpdateArticleRequestStruct),
     asyncErrorHandler(async (req, res) => {
         const requester = AuthTokenManager.getRequesterFromToken(req.headers.authorization);
 
         const { articleId } = req.params;
-        const { title, content, image } = create(req.body, UpdateArticleRequestStruct);
+        const { title, content, image } = req.body;
 
         const articleView = await UpdateArticleHandler.handle(requester, {
             articleId: Number(articleId),
@@ -134,11 +123,12 @@ articlesRoute.get(
 // 게시글 댓글 등록 api
 articleCommentsRoute.post(
     AuthN(),
+    validateBody(CreateCommentRequestStruct),
     asyncErrorHandler(async (req, res) => {
         const requester = AuthTokenManager.getRequesterFromToken(req.headers.authorization);
 
         const { articleId } = req.params;
-        const { content } = create(req.body, CreateCommentRequestStruct);
+        const { content } = req.body;
 
         const articleCommentView = await CreateArticleCommentHandler.handle(requester, {
             articleId: Number(articleId),

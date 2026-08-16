@@ -128,11 +128,12 @@ productsRoute.get(
 // 상품 댓글 등록 api
 productCommentsRoute.post(
     AuthN(),
+    validateBody(CreateCommentRequestStruct),
     asyncErrorHandler(async (req, res) => {
         const requester = AuthTokenManager.getRequesterFromToken(req.headers.authorization);
 
         const { productId } = req.params;
-        const { content } = create(req.body, CreateCommentRequestStruct);
+        const { content } = req.body;
 
         const productCommentView = await CreateProductCommentHandler.handle(requester, {
             productId: Number(productId),

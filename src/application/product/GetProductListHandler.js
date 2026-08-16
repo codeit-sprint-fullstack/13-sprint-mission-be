@@ -1,7 +1,6 @@
 import { prismaClient } from '../../infra/prismaClient.js';
 
 import { Product } from '../../domain/Product.js';
-import { Like } from '../../domain/Like.js';
 
 export class GetProductListHandler {
     static async handle(requester, { page, pageSize, orderBy, keyword }) {
@@ -65,7 +64,7 @@ export class GetProductListHandler {
 
         return {
             totalCount: matchedProductCount,
-            list: products.slice(0, pageSize).map((product) => ({
+            list: products.map((product) => ({
                 id: product.getId(),
                 ownerId: product.getOwnerId(),
                 name: product.getName(),

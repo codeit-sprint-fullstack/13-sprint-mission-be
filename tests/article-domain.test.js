@@ -59,9 +59,12 @@ test('상품 입력은 미션 요구사항의 길이와 이미지 개수 제한�
 
     assert.deepEqual(create(validProduct, CreateProductRequestStruct), validProduct);
     assert.throws(() => create({ ...validProduct, name: '' }, CreateProductRequestStruct));
+    assert.throws(() => create({ ...validProduct, name: '!@#$' }, CreateProductRequestStruct));
     assert.throws(() => create({ ...validProduct, description: '짧은 소개' }, CreateProductRequestStruct));
     assert.throws(() => create({ ...validProduct, tags: ['여섯글자태그'] }, CreateProductRequestStruct));
     assert.throws(() => create({ ...validProduct, images: ['1', '2', '3', '4'] }, CreateProductRequestStruct));
+    assert.throws(() => create({ ...validProduct, price: 0 }, CreateProductRequestStruct));
+    assert.throws(() => create({ ...validProduct, price: 2_147_483_648 }, CreateProductRequestStruct));
 });
 
 test('비밀번호는 bcrypt로 해싱하고 평문과 비교한다', () => {

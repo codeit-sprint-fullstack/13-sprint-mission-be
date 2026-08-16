@@ -30,18 +30,18 @@ export class GetArticleListHandler {
         const [totalCount, articleEntities] = await prismaClient.$transaction([
             prismaClient.article.count({ where }),
             prismaClient.article.findMany({
-            skip: pageSize * (page - 1),
-            take: pageSize,
-            orderBy: orderByOption,
-            where,
-            include: {
-                writer: {
-                    select: { id: true, nickname: true, image: true },
+                skip: pageSize * (page - 1),
+                take: pageSize,
+                orderBy: orderByOption,
+                where,
+                include: {
+                    writer: {
+                        select: { id: true, nickname: true, image: true },
+                    },
+                    likes: {
+                        select: { userId: true },
+                    },
                 },
-                likes: {
-                    select: { userId: true },
-                },
-            },
             }),
         ]);
 
