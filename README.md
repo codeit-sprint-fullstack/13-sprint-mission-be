@@ -132,3 +132,25 @@ npm start
 ```
 npm run dev
 ```
+
+## TypeScript 개발 환경
+
+서버 코드는 TypeScript로 작성되어 있으며 `tsconfig.json`의 `outDir`은 `dist`입니다.
+
+```shell
+npm run typecheck
+npm run build
+npm start
+```
+
+개발 중에는 `nodemon`이 `.ts` 파일 변경을 감지하고 `ts-node`로 서버를 다시 실행합니다.
+
+```shell
+npm run dev
+```
+
+테스트는 테스트 파일까지 타입 검사한 다음 `ts-node` 환경에서 실행합니다.
+
+```shell
+npm test
+```
