@@ -1,11 +1,22 @@
 // seed.js
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 import { nanoid } from "nanoid";
 import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 
-const seedData = [
+const SALT_ROUNDS = 10;
+
+const userSeed = [
+  { email: "user1@example.com", nickname: "판다1" },
+  { email: "user2@example.com", nickname: "판다2" },
+  { email: "user3@example.com", nickname: "판다3" },
+  { email: "user4@example.com", nickname: "판다4" },
+  { email: "user5@example.com", nickname: "판다5" },
+];
+
+const productSeed = [
   {
     name: "레노버 노트북",
     price: 1500000,
@@ -140,53 +151,127 @@ const seedData = [
   },
 ];
 
-const articles = Array.from({ length: 20 }, () => {
-  const createdAt = faker.date.between({
-    from: "2024-01-01",
-    to: new Date(),
-  });
-
-  return {
-    id: faker.string.nanoid(),
-    title: faker.lorem.sentence({ min: 4, max: 10 }),
-    content: faker.lorem.paragraphs({ min: 2, max: 5 }, "\n\n"),
-    createdAt,
-    updatedAt: faker.date.between({ from: createdAt, to: new Date() }),
-  };
-});
-
-const comments = Array.from({ length: 20 }, () => {
-  const createdAt = faker.date.between({
-    from: "2024-01-01",
-    to: new Date(),
-  });
-  const randomArticle = faker.helpers.arrayElement(articles);
-
-  return {
-    id: faker.string.nanoid(),
-    content: faker.lorem.paragraphs({ min: 2, max: 5 }, "\n\n"),
-    articleId: randomArticle.id,
-    createdAt,
-    updatedAt: faker.date.between({ from: createdAt, to: new Date() }),
-  };
-});
-
 async function seed() {
-  await prisma.product.deleteMany();
-  await prisma.article.deleteMany();
+  await prisma.user.deleteMany();
   console.log("🧹 기존 데이터 삭제 완료");
 
-  await prisma.product.createMany({
-    data: seedData.map((item) => ({
-      id: nanoid(),
-      ...item,
-    })),
+  const encryptedPassword = await bcrypt.hash("Password123!", SALT_ROUNDS);
+  const users = await Promise.all(
+    userSeed.map((user) =>
+      prisma.user.create({
+        data: {
+          id: nanoid(),
+          email: user.email,
+          nickname: user.nickname,
+          encryptedPassword,
+        },
+      })
+    )
+  );
+
+  const products = await Promise.all(
+    productSeed.map((product) =>
+      prisma.product.create({
+        data: {
+          id: nanoid(),
+          ...product,
+          userId: faker.helpers.arrayElement(users).id,
+        },
+      })
+    )
+  );
+
+  const articles = await Promise.all(
+    Array.from({ length: 20 }).map(async () => {
+      const createdAt = faker.date.between({
+        from: "2024-01-01",
+        to: new Date(),
+      });
+
+      return prisma.article.create({
+        data: {
+          id: nanoid(),
+          title: faker.lorem.sentence({ min: 4, max: 10 }),
+          content: faker.lorem.paragraphs({ min: 2, max: 5 }, "\n\n"),
+          userId: faker.helpers.arrayElement(users).id,
+          createdAt,
+          updatedAt: faker.date.between({ from: createdAt, to: new Date() }),
+        },
+      });
+    })
+  );
+
+  await prisma.productComment.createMany({
+    data: Array.from({ length: 30 }).map(() => {
+      const createdAt = faker.date.between({
+        from: "2024-01-01",
+        to: new Date(),
+      });
+
+      return {
+        id: nanoid(),
+        content: faker.lorem.sentence(),
+        userId: faker.helpers.arrayElement(users).id,
+        productId: faker.helpers.arrayElement(products).id,
+        createdAt,
+        updatedAt: faker.date.between({ from: createdAt, to: new Date() }),
+      };
+    }),
   });
 
-  await prisma.article.createMany({ data: articles });
-  await prisma.articleComment.createMany({ data: comments });
+  await prisma.articleComment.createMany({
+    data: Array.from({ length: 30 }).map(() => {
+      const createdAt = faker.date.between({
+        from: "2024-01-01",
+        to: new Date(),
+      });
 
-  console.log(`🌱 시드 데이터 ${seedData.length}개 삽입 완료`);
+      return {
+        id: nanoid(),
+        content: faker.lorem.paragraphs({ min: 1, max: 3 }, "\n\n"),
+        userId: faker.helpers.arrayElement(users).id,
+        articleId: faker.helpers.arrayElement(articles).id,
+        createdAt,
+        updatedAt: faker.date.between({ from: createdAt, to: new Date() }),
+      };
+    }),
+  });
+
+  for (const product of products) {
+    const likers = faker.helpers.arrayElements(
+      users,
+      faker.number.int({ min: 0, max: users.length })
+    );
+    if (likers.length === 0) continue;
+
+    await prisma.productLike.createMany({
+      data: likers.map((user) => ({ userId: user.id, productId: product.id })),
+    });
+    await prisma.product.update({
+      where: { id: product.id },
+      data: { favoriteCount: likers.length },
+    });
+  }
+
+  for (const article of articles) {
+    const likers = faker.helpers.arrayElements(
+      users,
+      faker.number.int({ min: 0, max: users.length })
+    );
+    if (likers.length === 0) continue;
+
+    await prisma.articleLike.createMany({
+      data: likers.map((user) => ({ userId: user.id, articleId: article.id })),
+    });
+    await prisma.article.update({
+      where: { id: article.id },
+      data: { favoriteCount: likers.length },
+    });
+  }
+
+  console.log(
+    `🌱 시드 데이터 삽입 완료: 유저 ${users.length}명, 상품 ${products.length}개, 게시글 ${articles.length}개`
+  );
 }
 
 seed()
