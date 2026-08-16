@@ -27,3 +27,8 @@ export const updateArticleSchema = z
     (data) => Object.values(data).some((v) => v !== undefined),
     "수정할 내용이 하나라도 있어야 합니다."
   );
+
+export type ArticleIdParam = z.infer<typeof articleIdParamSchema>;
+export type ArticleListQuery = z.infer<typeof articleListQuerySchema>;
+export type CreateArticleInput = z.infer<typeof createArticleSchema>;
+export type UpdateArticleInput = z.infer<typeof updateArticleSchema>;

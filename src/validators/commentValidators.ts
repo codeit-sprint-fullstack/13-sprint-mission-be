@@ -12,3 +12,7 @@ export const commentListQuerySchema = z.object({
   cursor: z.coerce.number().int().positive().optional(),
   limit: z.coerce.number().int().min(1).max(50).optional(),
 });
+
+export type CommentIdParam = z.infer<typeof commentIdParamSchema>;
+export type CommentBodyInput = z.infer<typeof commentBodySchema>;
+export type CommentListQuery = z.infer<typeof commentListQuerySchema>;

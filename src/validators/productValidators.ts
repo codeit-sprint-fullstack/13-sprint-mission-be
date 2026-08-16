@@ -34,3 +34,9 @@ export const updateProductSchema = z
     (data) => Object.values(data).some((v) => v !== undefined),
     "수정할 내용이 하나라도 있어야 합니다."
   );
+
+// zod 스키마로부터 바로 타입을 추론 (Union·Generics 대신 zod 쪽에서 만드는 타입 안전성 확보)
+export type ProductIdParam = z.infer<typeof productIdParamSchema>;
+export type ProductListQuery = z.infer<typeof productListQuerySchema>;
+export type CreateProductInput = z.infer<typeof createProductSchema>;
+export type UpdateProductInput = z.infer<typeof updateProductSchema>;

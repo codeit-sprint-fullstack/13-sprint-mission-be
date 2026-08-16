@@ -30,3 +30,6 @@ export const signInSchema = z.object({
     .string({ error: "비밀번호는 필수입니다." })
     .min(1, "비밀번호는 필수입니다."),
 });
+
+export type SignUpInput = z.infer<typeof signUpSchema>;
+export type SignInInput = z.infer<typeof signInSchema>;

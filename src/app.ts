@@ -2,13 +2,13 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 
-import productsRouter from "./routes/products.js";
-import articlesRouter from "./routes/articles.js";
-import commentsRouter from "./routes/comments.js";
-import authRouter from "./routes/auth.js";
-import usersRouter from "./routes/users.js";
-import uploadRouter from "./routes/upload.js";
-import errorHandler from "./middlewares/errorHandler.js";
+import productsRouter from "./routes/products";
+import articlesRouter from "./routes/articles";
+import commentsRouter from "./routes/comments";
+import authRouter from "./routes/auth";
+import usersRouter from "./routes/users";
+import uploadRouter from "./routes/upload";
+import errorHandler from "./middlewares/errorHandler";
 
 const app = express();
 

@@ -1,6 +1,6 @@
 import express from "express";
-import { updateComment, deleteComment } from "../controllers/commentsController.js";
-import { requireAuth } from "../middlewares/auth.js";
+import { updateComment, deleteComment } from "../controllers/commentsController";
+import { requireAuth } from "../middlewares/auth";
 
 const router = express.Router();
 

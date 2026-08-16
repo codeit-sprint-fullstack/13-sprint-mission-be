@@ -7,12 +7,12 @@ import {
   deleteProduct,
   favoriteProduct,
   unfavoriteProduct,
-} from "../controllers/productsController.js";
+} from "../controllers/productsController";
 import {
   listProductComments,
   createProductComment,
-} from "../controllers/commentsController.js";
-import { requireAuth, optionalAuth } from "../middlewares/auth.js";
+} from "../controllers/commentsController";
+import { requireAuth, optionalAuth } from "../middlewares/auth";
 
 const router = express.Router();
 

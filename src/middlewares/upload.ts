@@ -1,18 +1,31 @@
-import multer from "multer";
+import multer, { type FileFilterCallback } from "multer";
 import path from "path";
 import { randomUUID } from "crypto";
+import type { Request } from "express";
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: (
+    _req: Request,
+    _file: Express.Multer.File,
+    cb: (error: Error | null, destination: string) => void
+  ) => {
     cb(null, "uploads");
   },
-  filename: (req, file, cb) => {
+  filename: (
+    _req: Request,
+    file: Express.Multer.File,
+    cb: (error: Error | null, filename: string) => void
+  ) => {
     const ext = path.extname(file.originalname);
     cb(null, `${randomUUID()}${ext}`);
   },
 });
 
-function fileFilter(req, file, cb) {
+function fileFilter(
+  _req: Request,
+  file: Express.Multer.File,
+  cb: FileFilterCallback
+): void {
   if (file.mimetype.startsWith("image/")) {
     cb(null, true);
   } else {
