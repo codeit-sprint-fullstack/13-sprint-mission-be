@@ -30,7 +30,9 @@ async function findAll({
   orderBy = "createdAt",
   keyword,
   userId,
-}: ArticleFindAllRequestType): Promise<ArticleReturnType[]> {
+}: ArticleFindAllRequestType): Promise<
+  (ArticleReturnType & { liked: boolean })[]
+> {
   const skip = (Number(page) - 1) * Number(pageSize);
   const where: Prisma.ArticleWhereInput = {};
 

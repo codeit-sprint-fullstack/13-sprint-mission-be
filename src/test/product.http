@@ -18,7 +18,7 @@ GET {{baseUrl}}?orderBy=favorite&pageSize=0&page=1
 GET {{baseUrl}}?orderBy=favorite&pageSize=2&page=0
 
 GET {{baseUrl}}
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzOTI3MzAsImV4cCI6MTc4MzM5NjMzMH0.8HqsE9gdpywsxvKNe9cZFKGa3KUkYEL5wEHo8cW14j8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
 
 ### GET Product Detail 테스트
 GET {{baseUrl}}/1
@@ -26,18 +26,18 @@ GET {{baseUrl}}/1
 GET {{baseUrl}}/2000
 
 GET {{baseUrl}}/21
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzMTM3ODQsImV4cCI6MTc4MzMxNzM4NH0.rkgiuFR7urgrx8ClpJOiJhoTSxIE2CLTLxPbr1zmT38
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
 
 ### POST Product 테스트
 POST {{baseUrl}}
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDExMDcsImV4cCI6MTc4MzE0NDcwN30.aCARFDuoyzQ9EOZsS_Cdsv2hFnMExOTkFe0b9r7GjnU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
 
 {
-  "name": "솔저의 생체장",
-  "description": "솔저는 힐러일까 딜러일까. 그의 도시락은 자리 유지 및 생존에 도움을 준다",
-  "tags": ["딜러", "힐러같은", "생존기", "도시락"],
-  "price": 95000
+  "name": "디몬의 부스터",
+  "description": "표지사기이다. 애니메이션에서는 상하좌우로 움직이더니 결론적으로는 못 나는 메카가 출품됐다.",
+  "tags": ["탱커", "표지사기"],
+  "price": 500
 }
 
 POST {{baseUrl}}
@@ -63,7 +63,7 @@ Content-Type: application/json
 
 POST {{baseUrl}}
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDExMDcsImV4cCI6MTc4MzE0NDcwN30.aCARFDuoyzQ9EOZsS_Cdsv2hFnMExOTkFe0b9r7GjnU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
 
 {
   "name": "",
@@ -74,7 +74,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6I
 
 POST {{baseUrl}}
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDExMDcsImV4cCI6MTc4MzE0NDcwN30.aCARFDuoyzQ9EOZsS_Cdsv2hFnMExOTkFe0b9r7GjnU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
 
 {
   "name": "에코의 관",
@@ -85,7 +85,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6I
 
 POST {{baseUrl}}
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDExMDcsImV4cCI6MTc4MzE0NDcwN30.aCARFDuoyzQ9EOZsS_Cdsv2hFnMExOTkFe0b9r7GjnU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
 
 {
   "name": "에코의 관",
@@ -107,7 +107,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6I
 
 PATCH {{baseUrl}}/1000
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxMzY5NzUsImV4cCI6MTc4MzE0MDU3NX0.fF9lIkXPOcYwf8NMj62ezxpoE6MVuAZKBZbCF9TmfrI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
 
 {
   "name": "아나의 생체 슈류탄",
@@ -116,17 +116,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6I
   "price": 62950
 }
 
-PATCH {{baseUrl}}/6
+PATCH {{baseUrl}}/26
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxMzY5NzUsImV4cCI6MTc4MzE0MDU3NX0.fF9lIkXPOcYwf8NMj62ezxpoE6MVuAZKBZbCF9TmfrI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
 
 {
-  "tags": ["힐러", "싸가지", "개사기"]
+  "tags": ["뭥미"]
 }
 
-PATCH {{baseUrl}}/6
+PATCH {{baseUrl}}/26
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxMzY5NzUsImV4cCI6MTc4MzE0MDU3NX0.fF9lIkXPOcYwf8NMj62ezxpoE6MVuAZKBZbCF9TmfrI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
 
 {
   "name": "",
@@ -134,11 +134,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6I
 }
 
 ### DELETE Product 테스트
-DELETE {{baseUrl}}/17
+DELETE {{baseUrl}}/28
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
 
 ## Like Product 테스트
-POST {{baseUrl}}/1/likes
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzMTM3ODQsImV4cCI6MTc4MzMxNzM4NH0.rkgiuFR7urgrx8ClpJOiJhoTSxIE2CLTLxPbr1zmT38
+POST {{baseUrl}}/29/likes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
 
-DELETE {{baseUrl}}/1/likes
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMzMTM3ODQsImV4cCI6MTc4MzMxNzM4NH0.rkgiuFR7urgrx8ClpJOiJhoTSxIE2CLTLxPbr1zmT38
+DELETE {{baseUrl}}/29/likes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE

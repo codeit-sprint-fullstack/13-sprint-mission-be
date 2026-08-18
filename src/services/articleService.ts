@@ -30,7 +30,7 @@ const getArticles = async ({
   userId,
 }: ArticleFindAllRequestType): Promise<{
   totalCount: number;
-  list: ArticleReturnType[];
+  list: (ArticleReturnType & { liked: boolean })[];
 }> => {
   if (page && Number(page) < 1)
     throw createError(400, "page는 1 이상이어야 합니다.");

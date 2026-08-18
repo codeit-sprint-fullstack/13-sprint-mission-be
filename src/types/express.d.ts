@@ -1,4 +1,5 @@
 import { Express } from "express";
+import type { Multer } from "multer";
 
 declare global {
   interface Error {
@@ -11,6 +12,7 @@ declare global {
             id: number;
           }
         | undefined;
+      files?: Multer.File[];
     }
   }
 }
