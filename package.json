@@ -2,21 +2,18 @@
   "name": "sprint-be",
   "version": "1.0.0",
   "description": "13BE스프린트",
-  "main": "app.js",
-  "type": "module",
+  "main": "dist/app.js",
   "scripts": {
-    "dev": "nodemon src/app.js",
-    "start": "cross-env NODE_ENV=production node src/app.js",
-    "build": "npx prisma generate",
+    "dev": "nodemon --watch src --ext ts,json --exec ts-node src/app.ts",
+    "start": "cross-env NODE_ENV=production node dist/app.js",
+    "build": "npx prisma generate && tsc",
+    "type-check": "tsc --noEmit",
     "db:migrate": "dotenv -e .env.development -- npx prisma migrate dev",
     "db:migrate:deploy": "dotenv -e .env.production -- npx prisma migrate deploy",
     "db:reset": "dotenv -e .env.development -- npx prisma migrate reset",
     "db:push": "dotenv -e .env.development -- npx prisma db push",
-    "db:seed": "dotenv -e .env.development -- node prisma/seed.js",
+    "db:seed": "dotenv -e .env.development -- node prisma/seed.mjs",
     "db:studio": "dotenv -e .env.development -- npx prisma studio"
-  },
-  "imports": {
-    "#/*": "./src/*"
   },
   "keywords": [],
   "author": "",
@@ -32,7 +29,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.5.0",
     "multer": "^2.2.0",
-    "nanoid": "^5.1.9",
+    "nanoid": "^3.3.8",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
@@ -42,9 +39,23 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^10.4.0",
+    "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.9",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.2.0",
+    "@types/node": "^24.10.15",
+    "@types/passport": "^1.0.17",
+    "@types/passport-jwt": "^4.0.1",
+    "@types/passport-local": "^1.0.38",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "cross-env": "^10.1.0",
     "dotenv-cli": "^11.0.0",
     "nodemon": "^3.1.14",
-    "prisma": "^6.19.3"
+    "prisma": "^6.19.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }
