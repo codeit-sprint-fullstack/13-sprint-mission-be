@@ -50,7 +50,6 @@ model Product {
   productComments ProductComment[]
   productLikes    ProductLike[]
 
-  @@index([ownerId])
   @@index([createdAt])
   @@map("products")
 }
