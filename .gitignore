@@ -1,0 +1,9 @@
+**/node_modules/
+**/build/
+**/dist/
+**/.ts-node/
+**/.npm-cache/
+**/.env
+**/.env.local
+public/images/*
+!public/images/.placeholder
