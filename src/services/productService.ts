@@ -1,4 +1,5 @@
 import type { Product, User } from "@prisma/client";
+import type { UserReturnType } from "../types/user.js";
 import type {
   ProductRequestType,
   ProductFindAllRequestType,
@@ -7,6 +8,7 @@ import type {
 import productRepository from "../repositories/productRepository.js";
 import createError from "../utils/createError.js";
 import { Optional } from "@prisma/client/runtime/library";
+import { ProductCommentReturnType } from "../types/productComment.js";
 
 const VALID_ORDER_BY = ["recent", "favorite"];
 
@@ -72,7 +74,16 @@ async function deleteProduct(
   return await productRepository.deleteById(productId);
 }
 
-async function getProductDetail(productId: Product["id"], userId?: User["id"]) {
+async function getProductDetail(
+  productId: Product["id"],
+  userId?: User["id"],
+): Promise<
+  ProductReturnType & {
+    liked: boolean;
+    user: UserReturnType;
+    comments: ProductCommentReturnType[];
+  }
+> {
   const product = await productRepository.findById(productId, userId);
   if (!product) throw createError(404, "상품을 찾을 수 없습니다.");
 

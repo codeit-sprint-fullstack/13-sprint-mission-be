@@ -18,6 +18,8 @@ const getProducts: RequestHandler = async (req, res) => {
 
 const postProduct: RequestHandler = async (req, res) => {
   const userId = req.auth!.id;
+  const files = req.files as Express.Multer.File[] | undefined;
+
   const product = await productService.createProduct({
     ...req.body,
     tags: Array.isArray(req.body.tags)
@@ -25,7 +27,7 @@ const postProduct: RequestHandler = async (req, res) => {
       : req.body.tags
         ? [req.body.tags]
         : [],
-    images: req.files?.map((file) => file.path.replaceAll("\\", "/")) ?? [],
+    images: files?.map((file) => file.path.replaceAll("\\", "/")) ?? [],
     userId,
   });
 

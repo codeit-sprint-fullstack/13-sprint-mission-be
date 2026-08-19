@@ -7,6 +7,7 @@ import type {
 import prisma from "../config/prisma.js";
 import { Optional } from "@prisma/client/runtime/library";
 import { ProductCommentReturnType } from "../types/productComment.js";
+import { UserReturnType } from "../types/user.js";
 
 async function create(product: ProductRequestType): Promise<ProductReturnType> {
   const { price, tags = [], images = [], ...rest } = product;
@@ -42,7 +43,7 @@ async function create(product: ProductRequestType): Promise<ProductReturnType> {
 async function findById(
   productId: Product["id"],
   userId?: User["id"],
-): Promise<ProductReturnType & { liked: boolean }> {
+): Promise<ProductReturnType & { liked: boolean; user: UserReturnType }> {
   const product = await prisma.product.findUnique({
     where: { id: Number(productId) },
     include: {
