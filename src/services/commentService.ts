@@ -1,6 +1,6 @@
-import articleRepository from "../repositories/articleRepository";
-import commentRepository from "../repositories/commentRepository";
-import createError from "../utils/createError";
+import articleRepository from "../repositories/articleRepository.js";
+import commentRepository from "../repositories/commentRepository.js";
+import createError from "../utils/createError.js";
 
 import type { Article, Comment } from "@prisma/client";
 import type {

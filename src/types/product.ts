@@ -1,5 +1,5 @@
 import { Product, User } from "@prisma/client";
-import { CommentReturnType } from "./comment";
+import { CommentReturnType } from "./comment.js";
 
 //1. Request 관련 타입들
 export type ProductRequestType = Product & { tags: string[]; images: string[] };

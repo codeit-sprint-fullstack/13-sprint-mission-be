@@ -1,12 +1,12 @@
-import prisma from "../config/prisma";
+import prisma from "../config/prisma.js";
 import type { Prisma, Article, ArticleLike, User } from "@prisma/client";
 import type {
   ArticleFindAllRequestType,
   ArticlePostRequestType,
   ArticlePatchRequestType,
   ArticleReturnType,
-} from "../types/article";
-import type { CommentReturnType } from "../types/comment";
+} from "../types/article.js";
+import type { CommentReturnType } from "../types/comment.js";
 
 async function create(
   article: ArticlePostRequestType & { userId: number },

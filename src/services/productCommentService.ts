@@ -1,12 +1,12 @@
-import productRepository from "../repositories/productRepository";
-import productCommentRepository from "../repositories/productCommentRepository";
-import createError from "../utils/createError";
+import productRepository from "../repositories/productRepository.js";
+import productCommentRepository from "../repositories/productCommentRepository.js";
+import createError from "../utils/createError.js";
 
 import type { Product, ProductComment } from "@prisma/client";
 import type {
   ProductCommentRequestType,
   ProductCommentReturnType,
-} from "../types/productComment";
+} from "../types/productComment.js";
 
 const createComment = async (
   productId: Product["id"],

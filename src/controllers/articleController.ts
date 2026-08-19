@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import articleService from "../services/articleService";
+import articleService from "../services/articleService.js";
 
 const postArticle: RequestHandler = async (req, res) => {
   const article = await articleService.createArticle({

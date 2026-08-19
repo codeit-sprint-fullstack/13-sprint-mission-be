@@ -1,8 +1,8 @@
-import prisma from "../config/prisma";
-import createError from "../utils/createError";
+import prisma from "../config/prisma.js";
+import createError from "../utils/createError.js";
 
 import { Article, Comment } from "@prisma/client";
-import { CommentRequestType, CommentReturnType } from "./../types/comment";
+import { CommentRequestType, CommentReturnType } from "./../types/comment.js";
 
 async function create(
   articleId: Article["id"],

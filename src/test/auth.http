@@ -46,9 +46,9 @@ POST {{baseUrl}}/signUp
 Content-Type: application/json
 
 {
-    "name":"김진서",
-    "email": "shu@gmail.com",
-    "username":"shu",
+    "name":"Jack Morison",
+    "email": "soldier76@gmail.com",
+    "username":"soldier76",
     "password":"test1234!@",
     "passwordConfirmation":"test1234!@"
 }

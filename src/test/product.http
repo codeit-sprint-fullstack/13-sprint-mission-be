@@ -18,7 +18,7 @@ GET {{baseUrl}}?orderBy=favorite&pageSize=0&page=1
 GET {{baseUrl}}?orderBy=favorite&pageSize=2&page=0
 
 GET {{baseUrl}}
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
 
 ### GET Product Detail 테스트
 GET {{baseUrl}}/1
@@ -31,13 +31,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6I
 ### POST Product 테스트
 POST {{baseUrl}}
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
 
 {
-  "name": "디몬의 부스터",
-  "description": "표지사기이다. 애니메이션에서는 상하좌우로 움직이더니 결론적으로는 못 나는 메카가 출품됐다.",
-  "tags": ["탱커", "표지사기"],
-  "price": 500
+  "name": "프레야의 망토",
+  "description": "시그마가 개발한 기술을 사용한다고 한다.",
+  "tags": ["딜러", "잠시날다"],
+  "price": 6900
 }
 
 POST {{baseUrl}}
@@ -63,7 +63,7 @@ Content-Type: application/json
 
 POST {{baseUrl}}
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
 
 {
   "name": "",
@@ -74,7 +74,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6I
 
 POST {{baseUrl}}
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
 
 {
   "name": "에코의 관",
@@ -85,7 +85,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6I
 
 POST {{baseUrl}}
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
 
 {
   "name": "에코의 관",
@@ -94,14 +94,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6I
 }
 
 ### PATCH Product 테스트
-PATCH {{baseUrl}}/20
+PATCH {{baseUrl}}/30
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDExMDcsImV4cCI6MTc4MzE0NDcwN30.aCARFDuoyzQ9EOZsS_Cdsv2hFnMExOTkFe0b9r7GjnU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
 
 {
-  "name": "에코의 관",
-  "description": "에코가 갇혀있던 관이다. 캐서디가 열었다. 배송사 Deadlock Co.",
-  "tags": ["상자", "포근"],
+  "name": "프레야의 망토",
+  "description": "시그마의 자기부상 기술이 적용되어 있는 망토이다. 잠시동안 날 수 있게 해준다.",
+  "tags": ["딜러", "의류"],
   "price": 62950
 }
 
@@ -116,17 +116,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6I
   "price": 62950
 }
 
-PATCH {{baseUrl}}/26
+PATCH {{baseUrl}}/30
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
 
 {
-  "tags": ["뭥미"]
+  "tags": ["딜러", "의류", "망토", "자기부상"]
 }
 
 PATCH {{baseUrl}}/26
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
 
 {
   "name": "",
@@ -134,12 +134,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6I
 }
 
 ### DELETE Product 테스트
-DELETE {{baseUrl}}/28
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
+DELETE {{baseUrl}}/30
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
 
 ## Like Product 테스트
-POST {{baseUrl}}/29/likes
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
+POST {{baseUrl}}/32/likes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
 
-DELETE {{baseUrl}}/29/likes
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
+DELETE {{baseUrl}}/32/likes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4

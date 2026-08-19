@@ -6,8 +6,8 @@ import type {
   ArticlePostRequestType,
   ArticlePatchRequestType,
   ArticleReturnType,
-} from "../types/article";
-import type { CommentReturnType } from "../types/comment";
+} from "../types/article.js";
+import type { CommentReturnType } from "../types/comment.js";
 
 const VALID_ORDER_BY = ["createdAt", "favoriteCount"];
 

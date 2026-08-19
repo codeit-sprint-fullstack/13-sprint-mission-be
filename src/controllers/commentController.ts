@@ -1,4 +1,4 @@
-import commentService from "../services/commentService";
+import commentService from "../services/commentService.js";
 
 import type { RequestHandler } from "express";
 

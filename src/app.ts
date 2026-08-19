@@ -8,7 +8,7 @@ import {
   productCommentRouter,
   authRouter,
   userRouter,
-} from "./routes/index";
+} from "./routes/index.js";
 import errorHandler from "./middleware/errorHandler.js";
 import { setServers } from "node:dns/promises";
 

@@ -1,11 +1,11 @@
-import prisma from "../config/prisma";
-import createError from "../utils/createError";
+import prisma from "../config/prisma.js";
+import createError from "../utils/createError.js";
 
 import type { Product, ProductComment } from "@prisma/client";
 import type {
   ProductCommentRequestType,
   ProductCommentReturnType,
-} from "../types/productComment";
+} from "../types/productComment.js";
 
 async function create(
   productId: Product["id"],

@@ -22,9 +22,9 @@ async function getProducts({
   totalCount: number;
   list: (ProductReturnType & { liked: boolean })[];
 }> {
-  if (page && Number(page) < 1)
+  if (page !== undefined && page < 1)
     throw createError(400, "page는 1 이상이어야 합니다.");
-  if (pageSize && Number(pageSize) < 1)
+  if (pageSize !== undefined && pageSize < 1)
     throw createError(400, "pageSize는 1 이상이어야 합니다.");
   if (orderBy && !VALID_ORDER_BY.includes(orderBy))
     throw createError(400, "잘못된 정렬 기준입니다.");
