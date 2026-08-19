@@ -1,4 +1,5 @@
 import prisma from "../models/prismaClient";
+import { Prisma } from "@prisma/client";
 
 export const productService = {
   createProduct: async (data: {
@@ -26,7 +27,7 @@ export const productService = {
     });
   },
 
-  updateProduct: async (id: number, data: any) => {
+  updateProduct: async (id: number, data: Prisma.ProductUpdateInput) => {
     return await prisma.product.update({
       where: { id },
       data,
