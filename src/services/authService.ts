@@ -1,22 +1,27 @@
 import createError from "../utils/createError.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import type { User } from "@prisma/client";
+import type { UserRequestType, UserReturnType } from "../types/user.js";
 import authRepository from "../repositories/authRepository.js";
 
-function createToken(payload, type = "access") {
-  return jwt.sign(payload, process.env.JWT_SECRET, {
+function createToken(
+  payload: UserReturnType,
+  type: "access" | "refresh" = "access",
+) {
+  return jwt.sign(payload, process.env.JWT_SECRET!, {
     expiresIn: type === "access" ? "1h" : "1w",
   });
 }
-async function hashPassword(plainTextPassword) {
+async function hashPassword(plainTextPassword: string): Promise<string> {
   return await bcrypt.hash(plainTextPassword, 10);
 }
-function filterSensitiveUserData(userData) {
+function filterSensitiveUserData(userData: User): UserReturnType {
   const { password, ...rest } = userData;
   return rest;
 }
 
-async function createUser(userData) {
+async function createUser(userData: UserRequestType): Promise<UserReturnType> {
   const { name, email, username, password, passwordConfirmation } = userData;
   if (!name || !email || !username || !password || !passwordConfirmation)
     throw createError(
@@ -37,12 +42,14 @@ async function createUser(userData) {
     username,
     password: hashedPassword,
   });
-  const filteredUser = filterSensitiveUserData(createdUser);
 
-  return filteredUser;
+  return createdUser;
 }
 
-async function signIn(userData) {
+async function signIn(userData: {
+  id: User["username"] | User["email"]; //둘다 string이지만 들어올 수 있는 값 명시하기 위해 union함
+  password: User["password"];
+}): Promise<UserReturnType> {
   const { id, password } = userData;
   if (!id || !password)
     throw createError(400, "id와 password는 필수 값입니다.");
@@ -50,8 +57,9 @@ async function signIn(userData) {
   const userCheckedByEmail = await authRepository.findByEmail(id);
   const userCheckedByUsername = await authRepository.findByUsername(id);
   const user = userCheckedByEmail || userCheckedByUsername;
-  const filteredUser = filterSensitiveUserData(user);
   if (!user) throw createError(401, "존재하지 않는 사용자입니다.");
+
+  const filteredUser = filterSensitiveUserData(user);
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) throw createError(401, "비밀번호가 일치하지 않습니다");

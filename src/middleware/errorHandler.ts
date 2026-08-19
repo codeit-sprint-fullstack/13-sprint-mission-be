@@ -1,4 +1,6 @@
-export default function errorHandler(error, req, res, next) {
+import type { ErrorRequestHandler } from "express";
+
+const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   if (error.name === "UnauthorizedError") {
     return res.status(401).json({
       path: req.path,
@@ -17,4 +19,5 @@ export default function errorHandler(error, req, res, next) {
     data: error.data ?? undefined,
     date: new Date(),
   });
-}
+};
+export default errorHandler;

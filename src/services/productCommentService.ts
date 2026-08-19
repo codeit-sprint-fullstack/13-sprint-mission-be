@@ -2,7 +2,16 @@ import productRepository from "../repositories/productRepository.js";
 import productCommentRepository from "../repositories/productCommentRepository.js";
 import createError from "../utils/createError.js";
 
-const createComment = async (productId, data) => {
+import type { Product, ProductComment } from "@prisma/client";
+import type {
+  ProductCommentRequestType,
+  ProductCommentReturnType,
+} from "../types/productComment.js";
+
+const createComment = async (
+  productId: Product["id"],
+  data: ProductCommentRequestType,
+): Promise<ProductCommentReturnType> => {
   const article = await productRepository.findById(productId);
   if (!article) throw createError(404, "게시글을 찾을 수 없습니다.");
   const { content } = data;
@@ -11,14 +20,21 @@ const createComment = async (productId, data) => {
   return productCommentRepository.create(productId, data);
 };
 
-const getComments = async (productId, cursor) => {
+const getComments = async (
+  productId: Product["id"],
+  cursor?: number,
+): Promise<ProductCommentReturnType[]> => {
   const article = await productRepository.findById(productId);
   if (!article) throw createError(404, "게시글을 찾을 수 없습니다.");
 
   return productCommentRepository.findAll(productId, cursor);
 };
 
-const updateComment = async (productId, productCommentId, update) => {
+const updateComment = async (
+  productId: Product["id"],
+  productCommentId: ProductComment["id"],
+  update: ProductCommentRequestType,
+): Promise<ProductCommentReturnType> => {
   const article = await productRepository.findById(productId);
   if (!article) throw createError(404, "게시글을 찾을 수 없습니다.");
   const comment = await productCommentRepository.findById(productCommentId);
@@ -30,7 +46,10 @@ const updateComment = async (productId, productCommentId, update) => {
   return productCommentRepository.update(productId, productCommentId, update);
 };
 
-const deleteComment = async (productId, productCommentId) => {
+const deleteComment = async (
+  productId: Product["id"],
+  productCommentId: ProductComment["id"],
+): Promise<ProductCommentReturnType> => {
   const article = await productRepository.findById(productId);
   if (!article) throw createError(404, "게시글을 찾을 수 없습니다.");
   const comment = await productCommentRepository.findById(productCommentId);

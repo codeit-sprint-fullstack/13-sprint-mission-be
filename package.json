@@ -10,9 +10,12 @@
     "test": "test"
   },
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
-    "seed": "node prisma/seed.js"
+    "dev": "tsx watch src/app.ts",
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
@@ -28,6 +31,12 @@
     "nodemon": "^3.1.14"
   },
   "devDependencies": {
-    "prisma": "^6.19.3"
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/multer": "^2.2.0",
+    "prisma": "^6.19.3",
+    "tsx": "^4.23.11",
+    "typescript": "^7.0.2"
   }
 }

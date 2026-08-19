@@ -2,11 +2,11 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
-const hashedPassword = bcrypt.hash("test1234!@", 10);
 
 async function main() {
   //seeding 시작
   console.log("✅ seeding 시작");
+  const hashedPassword = await bcrypt.hash("test1234!@", 10);
 
   // 기존 데이터 삭제
   await prisma.article.deleteMany();

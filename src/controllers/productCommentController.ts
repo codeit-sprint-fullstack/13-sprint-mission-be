@@ -1,46 +1,51 @@
 import productCommentService from "../services/productCommentService.js";
 
-const postComment = async (req, res) => {
+import type { RequestHandler } from "express";
+
+const postComment: RequestHandler = async (req, res) => {
   const { productId } = req.params;
 
-  const comment = await productCommentService.createComment(productId, {
+  const comment = await productCommentService.createComment(Number(productId), {
     ...req.body,
-    userId: req.auth.id,
+    userId: req.auth!.id,
   });
 
   return res.status(201).json(comment);
 };
 
-const getComments = async (req, res) => {
+const getComments: RequestHandler = async (req, res) => {
   const { productId } = req.params;
   const { cursor } = req.query;
 
-  const comments = await productCommentService.getComments(productId, cursor);
+  const comments = await productCommentService.getComments(
+    Number(productId),
+    typeof cursor === "string" ? Number(cursor) : undefined,
+  );
 
   return res.status(200).json(comments);
 };
 
-const patchComment = async (req, res) => {
+const patchComment: RequestHandler = async (req, res) => {
   const { productId, productCommentId } = req.params;
 
   const comment = await productCommentService.updateComment(
-    productId,
-    productCommentId,
+    Number(productId),
+    Number(productCommentId),
     {
       ...req.body,
-      userId: req.auth.id,
+      userId: req.auth!.id,
     },
   );
 
   return res.status(200).json(comment);
 };
 
-const deleteComment = async (req, res) => {
+const deleteComment: RequestHandler = async (req, res) => {
   const { productId, productCommentId } = req.params;
 
   const comment = await productCommentService.deleteComment(
-    productId,
-    productCommentId,
+    Number(productId),
+    Number(productCommentId),
   );
 
   return res.status(200).json(comment);

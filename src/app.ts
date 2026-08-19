@@ -21,8 +21,8 @@ app.use(express.json()); //res.body 설정
 app.use(
   cors({
     origin: [
-      process.env.CLIENT_DEV_URL, // 개발용 프론트엔드
-      process.env.CLIENT_PROD_URL, // 배포된 프론트엔드
+      process.env.CLIENT_DEV_URL!, // 개발용 프론트엔드
+      process.env.CLIENT_PROD_URL!, // 배포된 프론트엔드
     ],
   }),
 );
