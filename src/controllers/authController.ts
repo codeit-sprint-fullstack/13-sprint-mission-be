@@ -1,6 +1,7 @@
+import type { RequestHandler } from "express";
 import authService from "../services/authService.js";
 
-async function signIn(req, res) {
+const signIn: RequestHandler = async (req, res) => {
   const user = await authService.signIn(req.body);
   const accessToken = authService.createToken(user, "access");
   const refreshToken = authService.createToken(user, "refresh");
@@ -10,8 +11,8 @@ async function signIn(req, res) {
     secure: true,
   });
   res.status(200).json({ ...user, accessToken });
-}
-async function signUp(req, res) {
+};
+const signUp: RequestHandler = async (req, res) => {
   const user = await authService.createUser(req.body);
   const accessToken = authService.createToken(user, "access");
   const refreshToken = authService.createToken(user, "refresh");
@@ -21,6 +22,6 @@ async function signUp(req, res) {
     secure: true,
   });
   res.status(201).json({ ...user, accessToken });
-}
+};
 
 export default { signIn, signUp };
