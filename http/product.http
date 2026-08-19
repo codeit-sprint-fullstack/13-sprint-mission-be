@@ -6,13 +6,13 @@ POST {{baseUrl}}/login
 Content-Type: application/json
 
 {
-  "email": "test@test.com",
+  "email": "song@test.com",
   "encryptedpassword": "password123"
 }
 
 ### 상품 생성
 # @name createProduct
-POST {{baseUrl}}/product
+POST {{baseUrl}}/products
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.$.accessToken}}
 
