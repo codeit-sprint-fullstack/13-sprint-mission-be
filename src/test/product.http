@@ -1,0 +1,145 @@
+@baseUrl = http://localhost:3000/products
+
+### GET Product 테스트
+GET {{baseUrl}}
+
+GET {{baseUrl}}?orderBy=favorite
+
+GET {{baseUrl}}?orderBy=favorite&pageSize=2&page=1
+
+GET {{baseUrl}}?orderBy=favorite&pageSize=2&page=2
+
+GET {{baseUrl}}?orderBy=favorite&pageSize=2&page=1&keyword=브
+
+GET {{baseUrl}}?orderBy=favorite&pageSize=2&page=1&keyword=힐
+
+GET {{baseUrl}}?orderBy=whatever&pageSize=2&page=1
+GET {{baseUrl}}?orderBy=favorite&pageSize=0&page=1
+GET {{baseUrl}}?orderBy=favorite&pageSize=2&page=0
+
+GET {{baseUrl}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
+
+### GET Product Detail 테스트
+GET {{baseUrl}}/1
+
+GET {{baseUrl}}/2000
+
+GET {{baseUrl}}/21
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
+
+### POST Product 테스트
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
+
+{
+  "name": "프레야의 망토",
+  "description": "시그마가 개발한 기술을 사용한다고 한다.",
+  "tags": ["딜러", "잠시날다"],
+  "price": 6900
+}
+
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODMxNDExMDcsImV4cCI6MTc4MzE0NDcwN30.aCARFDuoyzQ9EOZsS_Cdsv2hFnMExOTkFe0b9r7GjnU
+
+{
+  "name": "에코의 관",
+  "description": "에코가 갇혀있던 관이다. 캐서디가 열었다.",
+  "tags": ["상자"],
+  "price": 45000
+}
+
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "name": "에코의 관",
+  "description": "에코가 갇혀있던 관이다. 캐서디가 열었다.",
+  "tags": ["상자"],
+  "price": 45000
+}
+
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
+
+{
+  "name": "",
+  "description": "에코가 갇혀있던 관이다. 캐서디가 열었다.",
+  "tags": ["상자"],
+  "price": 45000
+}
+
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
+
+{
+  "name": "에코의 관",
+  "description": "",
+  "tags": ["상자"],
+  "price": 45000
+}
+
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
+
+{
+  "name": "에코의 관",
+  "description": "에코가 갇혀있던 관이다. 캐서디가 열었다.",
+  "tags": ["상자"]
+}
+
+### PATCH Product 테스트
+PATCH {{baseUrl}}/30
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
+
+{
+  "name": "프레야의 망토",
+  "description": "시그마의 자기부상 기술이 적용되어 있는 망토이다. 잠시동안 날 수 있게 해준다.",
+  "tags": ["딜러", "의류"],
+  "price": 62950
+}
+
+PATCH {{baseUrl}}/1000
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcwNjQyMTksImV4cCI6MTc4NzA2NzgxOX0.W6nRJuxmN0iuZtx55_I5ZtruVMuiiPAC4CzNIwdORBE
+
+{
+  "name": "아나의 생체 슈류탄",
+  "description": "정커퀸 궁이 스킬 한번으로 딸깍? 거기다가 힐증까지 된다고?",
+  "tags": ["힐러", "싸가지", "개사기", "정커퀸궁"],
+  "price": 62950
+}
+
+PATCH {{baseUrl}}/30
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
+
+{
+  "tags": ["딜러", "의류", "망토", "자기부상"]
+}
+
+PATCH {{baseUrl}}/26
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
+
+{
+  "name": "",
+  "description": ""
+}
+
+### DELETE Product 테스트
+DELETE {{baseUrl}}/30
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
+
+## Like Product 테스트
+POST {{baseUrl}}/32/likes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4
+
+DELETE {{baseUrl}}/32/likes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6Iuygle2YleykgCIsImVtYWlsIjoicnVsbHVkaW5vQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVsbHVkaW5vIiwiZGVsZXRlZEF0IjpudWxsLCJpYXQiOjE3ODcxMTI2NDgsImV4cCI6MTc4NzExNjI0OH0.q8cuc9dhxIoH5CcAH6GXUEClFVNN6NIShf8kAjb8iB4

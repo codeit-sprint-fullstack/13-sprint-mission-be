@@ -1,0 +1,120 @@
+@baseUrl=http://localhost:3000/auth
+
+## sign in (로그인)
+POST {{baseUrl}}/signIn
+Content-Type: application/json
+
+{
+    "id":"rulludino",
+    "password": "test1234!@"
+}
+
+POST {{baseUrl}}/signIn
+Content-Type: application/json
+
+{
+    "id":"rulludino@gmail.com",
+    "password": "test1234!@"
+}
+
+POST {{baseUrl}}/signIn
+Content-Type: application/json
+
+{
+    "id":"",
+    "password": "test1234!@"
+}
+
+POST {{baseUrl}}/signIn
+Content-Type: application/json
+
+{
+    "id":"rulludino",
+    "password": ""
+}
+
+POST {{baseUrl}}/signIn
+Content-Type: application/json
+
+{
+    "id":"rulludino",
+    "password": "test"
+}
+
+## sign up (회원가입)
+POST {{baseUrl}}/signUp
+Content-Type: application/json
+
+{
+    "name":"Jack Morison",
+    "email": "soldier76@gmail.com",
+    "username":"soldier76",
+    "password":"test1234!@",
+    "passwordConfirmation":"test1234!@"
+}
+
+POST {{baseUrl}}/signUp
+Content-Type: application/json
+
+{
+    "name":"정형준",
+    "email": "rulludino@gmail.com",
+    "username":"rulludino",
+    "password":"test1234!@",
+    "passwordConfirmation":"test"
+}
+
+POST {{baseUrl}}/signUp
+Content-Type: application/json
+
+{
+    "name":"",
+    "email": "rulludino@gmail.com",
+    "username":"rulludino",
+    "password":"test1234!@",
+    "passwordConfirmation":"test1234!@"
+}
+
+POST {{baseUrl}}/signUp
+Content-Type: application/json
+
+{
+    "name":"정형준",
+    "email": "",
+    "username":"rulludino",
+    "password":"test1234!@",
+    "passwordConfirmation":"test1234!@"
+}
+
+POST {{baseUrl}}/signUp
+Content-Type: application/json
+
+{
+    "name":"정형준",
+    "email": "rulludino@gmail.com",
+    "username":"",
+    "password":"test1234!@",
+    "passwordConfirmation":"test1234!@"
+}
+
+POST {{baseUrl}}/signUp
+Content-Type: application/json
+
+{
+    "name":"정형준",
+    "email": "rulludino@gmail.com",
+    "username":"rulludino",
+    "password":"",
+    "passwordConfirmation":"test1234!@"
+}
+
+POST {{baseUrl}}/signUp
+Content-Type: application/json
+
+{
+    "name":"정형준",
+    "email": "rulludino@gmail.com",
+    "username":"rulludino",
+    "password":"test1234!@",
+    "passwordConfirmation":""
+}

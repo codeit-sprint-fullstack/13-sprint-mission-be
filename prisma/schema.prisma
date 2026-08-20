@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite" //원래 "postgresql"였다
+  url      = env("DB_URL")
+}
+
+model User{
+  id              Int       @id @default(autoincrement()) 
+  name            String
+  email           String    @unique
+  username        String    @unique
+  password        String
+  deletedAt       DateTime?
+  articles        Article[]
+  comments        Comment[]
+  products        Product[]
+  productComments ProductComment[]
+  productLikes    ProductLike[]
+  articleLikes    ArticleLike[]
+  @@map("users")
+}
+
+model Article{
+  id              Int       @id @default(autoincrement()) 
+  title           String
+  content         String
+  favoriteCount   Int       @default(0)
+  image           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  userId          Int
+  user            User      @relation(fields:[userId], references: [id], onDelete: Cascade)
+  comments        Comment[]
+  articleLikes    ArticleLike[]
+  @@map("articles")
+}
+
+model Comment{
+  id          Int       @id @default(autoincrement()) 
+  content     String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  userId      Int
+  user        User      @relation(fields:[userId], references: [id], onDelete: Cascade)
+  articleId   Int
+  article     Article   @relation(fields:[articleId], references: [id], onDelete: Cascade)
+  @@map("comments")
+}
+
+model Product {
+  id              Int               @id @default(autoincrement()) 
+  name            String
+  description     String
+  price           Int       
+  favoriteCount   Int               @default(0)
+  tags            Tag[]
+  images          Image[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  userId          Int
+  user            User              @relation(fields:[userId], references:[id], onDelete: Cascade)
+  productLikes    ProductLike[]
+  productComments ProductComment[]
+  @@map("products")
+}
+
+model ProductComment{
+  id          Int       @id @default(autoincrement()) 
+  content     String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  userId      Int
+  productId   Int
+  user        User      @relation(fields:[userId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields:[productId], references: [id], onDelete: Cascade)
+  @@map("product_comments")
+}
+
+model Image{
+  id          Int       @id @default(autoincrement()) 
+  productId   Int
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url         String
+  @@map("images")
+}
+
+model Tag{
+  id          Int         @id @default(autoincrement()) 
+  name        String      @unique
+  products    Product[]
+  @@map("tags")
+}
+
+model ProductLike{
+  id          Int         @id @default(autoincrement())
+  createdAt   DateTime    @default(now())
+  userId      Int
+  productId   Int
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product     Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  @@unique([userId, productId])
+  @@map("product_likes")
+}
+
+model ArticleLike{
+  id          Int         @id @default(autoincrement())
+  createdAt   DateTime    @default(now())
+  userId      Int
+  articleId   Int
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article     Article     @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  @@unique([userId, articleId])
+  @@map("article_likes")
+}
