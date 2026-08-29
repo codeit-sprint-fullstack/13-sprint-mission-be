@@ -1,21 +1,15 @@
-import express, { type Request, type Response } from "express";
+import express from "express";
+import env from "../config/env";
 import upload from "../middlewares/upload";
 import { requireAuth } from "../middlewares/auth";
+import { uploadImages, issuePresignedUrls } from "../controllers/uploadController";
 
 const router = express.Router();
 
-router.post("/", requireAuth, upload.array("images", 3), (req: Request, res: Response) => {
-  const files = req.files as Express.Multer.File[] | undefined;
-  if (!files || files.length === 0) {
-    res.status(400).json({ message: "이미지 파일이 필요합니다." });
-    return;
-  }
+// 서버를 경유하는 업로드 (multer-s3)
+router.post("/", requireAuth, upload.array("images", env.upload.maxFiles), uploadImages);
 
-  const urls = files.map(
-    (file) => `${req.protocol}://${req.get("host")}/uploads/${file.filename}`
-  );
-
-  res.status(201).json({ urls });
-});
+// 브라우저에서 S3로 직접 올리기 위한 서명 발급 (심화)
+router.post("/presigned", requireAuth, issuePresignedUrls);
 
 export default router;
