@@ -8,7 +8,7 @@
 |---|---|
 | 백엔드 API | `http://54.180.25.232` |
 | 헬스 체크 | `http://54.180.25.232/health` |
-| 프론트엔드 | (Vercel 배포 후 기재) |
+| 프론트엔드 | `https://13-sprint-mission-fe-gilt.vercel.app` |
 
 > 과제 채점 후 비용 관리를 위해 EC2·RDS를 중지·삭제하므로, 위 주소는 일정 기간 이후 접속되지 않습니다.
 > 동작 화면은 아래 [배포 증빙](#배포-증빙)의 캡쳐로 확인하실 수 있습니다.
@@ -100,7 +100,7 @@
 ### AWS S3 파일 업로드
 
 - [x] S3 버킷 생성 (`panda-market-images-seonghwi`, 서울 리전)
-- [x] 버킷 정책로 공개 조회 허용 (`s3:GetObject`만) — [deploy/aws/s3-bucket-policy.json](./deploy/aws/s3-bucket-policy.json)
+- [x] 버킷 정책으로 공개 조회 허용 (`s3:GetObject`만) — [deploy/aws/s3-bucket-policy.json](./deploy/aws/s3-bucket-policy.json)
 - [x] CORS 설정 (Presigned URL 직접 업로드용) — [deploy/aws/s3-cors.json](./deploy/aws/s3-cors.json)
 - [x] IAM 최소 권한 정책 `PandaMarketS3Access` — [deploy/aws/iam-policy.json](./deploy/aws/iam-policy.json)
 - [x] EC2용 IAM 역할 `PandaMarketEC2Role` (액세스 키 미사용)
@@ -122,8 +122,8 @@
 - [x] **퍼블릭 액세스 비활성화** — 인터넷에서 직접 접근 불가
 - [x] 보안 그룹 `panda-rds-sg`: 5432 인바운드를 **EC2 보안 그룹(`panda-ec2-sg`) 참조**로 허용
 - [x] 초기 데이터베이스 `panda` 생성
-- [ ] `prisma migrate deploy`로 스키마 반영
-- [ ] CRUD 동작 확인 (캡쳐)
+- [x] `prisma migrate deploy`로 스키마 반영
+- [x] CRUD 동작 확인 — 배포된 사이트에서 회원가입·상품 등록·목록 조회로 검증
 - [ ] SSH 터널링(로컬 5433)으로 RDS 접속 확인
 
 ### AWS EC2
@@ -132,8 +132,8 @@
 - [x] 보안 그룹 `panda-ec2-sg`: **SSH 22(내 IP만)** / HTTP 80 / HTTPS 443
 - [x] 앱 포트(3000)는 외부에 열지 않음 — Nginx만 노출
 - [x] IAM 역할 `PandaMarketEC2Role` 연결 (S3 접근용, 키 저장 불필요)
-- [ ] pm2로 백그라운드 실행 + `pm2 startup`으로 자동 기동
-- [ ] Nginx 리버스 프록시 구성 — `deploy/nginx.conf`
+- [x] pm2로 백그라운드 실행 + `pm2 startup`으로 자동 기동
+- [x] Nginx 리버스 프록시 구성 — `deploy/nginx.conf`
 
 ### 백엔드 테스트
 
@@ -147,8 +147,8 @@
 
 ### 프론트엔드 배포
 
-- [ ] Vercel 배포
-- [ ] `NEXT_PUBLIC_API_URL`을 배포된 백엔드 주소로 변경
+- [x] Vercel 배포 — `https://13-sprint-mission-fe-gilt.vercel.app`
+- [x] 배포된 백엔드 주소에 맞게 API 주소 변경 (Next.js rewrites 프록시로 Mixed Content 해결)
 
 ### 심화
 
@@ -211,7 +211,7 @@ npm run dev             # http://localhost:3000
 | `npm test` | Jest 전체 실행 |
 | `npm run test:coverage` | 커버리지 리포트 |
 | `npm run typecheck` | `tsc --noEmit` (src + tests + scripts) |
-| `npm run check:s3` | S3 연결 점검 (버킷·IAM·정책·Presigned를 6단계로 검사) |
+| `npm run check:s3` | S3 연결 점검 (업로드·조회·공개URL·Presigned·삭제 5단계) |
 | `npm run prisma:deploy` | 배포 환경 마이그레이션 적용 |
 
 ## 배포 스크립트
@@ -267,11 +267,11 @@ npm run dev             # http://localhost:3000
 | 6 | S3 버킷 업로드 객체 목록 | 완료 | _(이미지)_ |
 | 7 | S3 이미지 URL 브라우저 조회 | 완료 | _(이미지)_ |
 | 8 | `npm run test:coverage` 커버리지 리포트 | 완료 | _(이미지)_ |
-| 9 | `pm2 status` (online) | 예정 | _(이미지)_ |
-| 10 | `sudo nginx -t` 성공 | 예정 | _(이미지)_ |
-| 11 | `http://54.180.25.232/health` 응답 | 예정 | _(이미지)_ |
-| 12 | SSH 터널링(5433)으로 RDS 테이블 조회 | 예정 | _(이미지)_ |
-| 13 | 배포 사이트 전체 동작 (로그인 → 상품 등록 → 조회) | 예정 | _(이미지)_ |
+| 9 | `pm2 status` (online) | 완료 | _(이미지)_ |
+| 10 | `sudo nginx -t` 성공 | 완료 | _(이미지)_ |
+| 11 | `http://54.180.25.232/health` 응답 | 완료 | _(이미지)_ |
+| 12 | SSH 터널링(5433)으로 RDS 테이블 조회 | 미완 | _(이미지)_ |
+| 13 | 배포 사이트 전체 동작 (로그인 → 상품 등록 → 조회) | 완료 | _(이미지)_ |
 
 ---
 

@@ -23,6 +23,20 @@ fi
 
 export NODE_ENV=production
 
+# Prisma CLI는 우리 앱과 별개의 프로세스라 src/config/env.ts를 거치지 않는다.
+# Prisma가 읽는 건 .env 뿐이므로, .env.production의 값을 셸 환경 변수로 올려서 넘겨준다.
+# (set -a: 이후 대입되는 변수를 자동으로 export)
+set -a
+# shellcheck disable=SC1091
+. ./.env.production
+set +a
+
+if [[ -z "${DATABASE_URL:-}" ]]; then
+  echo "오류: .env.production에서 DATABASE_URL을 읽지 못했습니다." >&2
+  echo "      따옴표가 짝이 맞는지 확인하세요. 예: KEY=\"value\"" >&2
+  exit 1
+fi
+
 log "1/5 최신 코드 받기"
 git pull
 
