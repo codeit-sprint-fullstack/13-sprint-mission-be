@@ -1,4 +1,24 @@
 node_modules
+
+# 환경 변수 — 실제 값이 담긴 파일은 절대 올리지 않는다.
+# .env.example만 커밋해서 어떤 키가 필요한지 공유한다.
 .env
+.env.*
+!.env.example
+
+# 빌드 산출물 (EC2에서 npm run build로 직접 만든다)
+dist
+
+# 테스트 커버리지 리포트
+coverage
+
+# pm2 로그
+logs
+
+# 로컬 업로드 폴더 (배포 환경에서는 S3를 쓴다)
 uploads/*
 !uploads/.gitkeep
+
+# AWS 자격 증명이 실수로 들어오는 걸 막는다
+*.pem
+.aws/

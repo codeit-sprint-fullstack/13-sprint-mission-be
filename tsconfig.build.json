@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // 빌드 결과물(dist)의 폴더 구조 기준점. 테스트를 포함하면 rootDir이 어긋나므로
+    // 이 설정은 빌드 전용 tsconfig에만 둔다.
+    "rootDir": "src"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "tests", "**/*.test.ts"]
+}
