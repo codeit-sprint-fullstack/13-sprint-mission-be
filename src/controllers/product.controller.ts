@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import {
   createProductSchema,
+  getProductListQuerySchema,
   updateProductSchema,
 } from "../schemas/product.schema";
 import { idSchema } from "../schemas/common.schema";
 import ProductService from "../services/product.service";
+import z from "zod";
 
 const getProductList = async (
   req: Request,
@@ -12,10 +14,9 @@ const getProductList = async (
   next: NextFunction,
 ) => {
   try {
-    const page = Number(req.query.page) || 1;
-    const pageSize = Number(req.query.pageSize) || 10;
-    const sort = String(req.query.orderBy) || "recent";
-    const keyword = String(req.query.keyword) || "";
+    const { page, pageSize, sort, keyword } = req.validatedQuery as z.infer<
+      typeof getProductListQuerySchema
+    >;
 
     const { products, total, pageNum, take } = await ProductService.findProduct(
       page,

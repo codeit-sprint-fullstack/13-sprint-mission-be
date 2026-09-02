@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import userService from "../services/user.service";
 import { AuthenticationError } from "../types/errors";
-import { PaginationDto } from "../dtos/user.dto.js";
+import z from "zod";
+import { getMyLikesQuerySchema } from "../schemas/user.schema";
 
 const getMe = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -23,24 +24,22 @@ const getMe = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const getMyLikes = async (
-  req: Request<{}, {}, {}, PaginationDto>,
-  res: Response,
-  next: NextFunction,
-) => {
+const getMyLikes = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.auth!.userId;
     if (!userId) {
       const error = new AuthenticationError("인증 정보가 유효하지 않습니다.");
       throw error;
     }
-    const { page, pageSize, keyword } = req.query;
+    const { page, pageSize, keyword } = req.validatedQuery as z.infer<
+      typeof getMyLikesQuerySchema
+    >;
 
     const result = await userService.getMyLikes({
       userId,
-      page: parseInt(page, 10) || 1,
-      pageSize: parseInt(pageSize, 10) || 10,
-      keyword: keyword || "",
+      page,
+      pageSize,
+      keyword,
     });
     res.status(200).json(result);
   } catch (error) {

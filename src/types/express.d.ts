@@ -6,6 +6,7 @@ declare global {
       auth?: {
         userId: number;
       };
+      validatedQuery?: unknown;
     }
   }
 }

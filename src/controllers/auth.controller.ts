@@ -1,23 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import userService from "../services/user.service";
-import { CreateUserDto, SigninUserDto } from "../dtos/user.dto";
-import { ValidationError } from "../types/errors";
-import { User } from "@prisma/client";
+import z from "zod";
+import { signInSchema, signUpSchema } from "../schemas/user.schema";
+import { getRefreshTokenCookieOptions } from "../lib/cookie";
 
-const signup = async (
-  req: Request<{}, {}, CreateUserDto>,
-  res: Response,
-  next: NextFunction,
-) => {
+const signup = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email, nickname, password, passwordConfirmation } = req.body;
-
-    if (!email || !nickname || !password) {
-      const error = new ValidationError(
-        "email, name, password 가 모두 필요합니다.",
-      );
-      throw error;
-    }
+    const { email, nickname, password } = req.body as z.infer<
+      typeof signUpSchema
+    >;
 
     const user = await userService.createUser({ email, nickname, password });
     res.status(201).json(user);
@@ -26,31 +17,16 @@ const signup = async (
   }
 };
 
-const signin = async (
-  req: Request<{}, {}, SigninUserDto>,
-  res: Response,
-  next: NextFunction,
-) => {
+const signin = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      const error = new ValidationError("email, password 가 모두 필요합니다.");
-      throw error;
-    }
+    const { email, password } = req.body as z.infer<typeof signInSchema>;
 
     const user = await userService.getUser(email, password);
-
     const accessToken = userService.createToken(user);
     const refreshToken = userService.createToken(user, "refresh");
     await userService.updateUser(user.id, { refreshToken });
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
-      path: "/",
-    });
+    res.cookie("refreshToken", refreshToken, getRefreshTokenCookieOptions());
     res.json({ ...user, accessToken });
   } catch (error) {
     next(error);
@@ -69,12 +45,7 @@ const refreshToken = async (
     const { accessToken, refreshToken: newRefreshToken } =
       await userService.refreshToken(userId, refreshToken);
 
-    res.cookie("refreshToken", newRefreshToken, {
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
-      path: "/",
-    });
+    res.cookie("refreshToken", newRefreshToken, getRefreshTokenCookieOptions());
     return res.json({ accessToken });
   } catch (error) {
     return next(error);

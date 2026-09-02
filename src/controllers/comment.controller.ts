@@ -1,18 +1,23 @@
 import { NextFunction, Request, Response } from "express";
-import createCommentSchema from "../schemas/comment.schema";
+import createCommentSchema, {
+  getCommentListQuerySchema,
+} from "../schemas/comment.schema";
 import { idSchema } from "../schemas/common.schema";
 import CommentService from "../services/comment.service";
 import { AuthenticationError } from "../types/errors";
 import articleService from "../services/article.service";
+import z from "zod";
 
 async function getProductCommentList(
-  req: Request<{}, {}, {}, { limit?: string; sort?: string; lastId?: string }>,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) {
   try {
     const { id } = idSchema.parse(req.params);
-    const { limit, sort, lastId } = req.query;
+    const { limit, sort, lastId } = req.validatedQuery as z.infer<
+      typeof getCommentListQuerySchema
+    >;
     const { comments, total, queryOptions, nextCursor } =
       await CommentService.findCommentList(
         { productId: id },
@@ -60,13 +65,15 @@ async function postProductComment(
 }
 
 async function getArticleCommentList(
-  req: Request<{}, {}, {}, { limit?: string; sort?: string; lastId?: string }>,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) {
   try {
     const { id } = idSchema.parse(req.params);
-    const { limit, sort, lastId } = req.query;
+    const { limit, sort, lastId } = req.validatedQuery as z.infer<
+      typeof getCommentListQuerySchema
+    >;
     const { comments, total, queryOptions, nextCursor } =
       await CommentService.findCommentList(
         { articleId: id },

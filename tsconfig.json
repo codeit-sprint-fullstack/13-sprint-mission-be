@@ -9,11 +9,14 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true, // 디버깅용 소스맵 생성
-    "allowJs": true
+    "allowJs": true,
+    "types": ["jest"],
+    "verbatimModuleSyntax": false
   },
   "include": ["src/**/*"], // 컴파일 대상 폴더
   "exclude": [
-    "src/**/*.test.ts", // 테스트 파일 제외
+    "node_modules",
+    "dist",
     "src/**/*.spec.ts", // 스펙 파일 제외
     "src/temp/**/*", // 임시 폴더 제외
     "src/generated/**/*"

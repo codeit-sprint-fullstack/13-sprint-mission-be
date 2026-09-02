@@ -5,3 +5,9 @@ export const createCommentSchema = z.object({
 });
 
 export default createCommentSchema;
+
+export const getCommentListQuerySchema = z.object({
+  limit: z.coerce.number().int().positive().optional(),
+  sort: z.enum(["recent"]).default("recent"),
+  lastId: z.coerce.number().int().positive().optional(),
+});

@@ -3,10 +3,17 @@ import auth from "../middlewares/auth";
 import { uploadImages } from "../middlewares/imageUpload";
 import ProductController from "../controllers/product.controller";
 import commentController from "../controllers/comment.controller";
+import { validateQuery } from "../middlewares/validate";
+import { getProductListQuerySchema } from "../schemas/product.schema";
+import { getCommentListQuerySchema } from "../schemas/comment.schema";
 
 const router = express.Router();
 
-router.get("/", ProductController.getProductList);
+router.get(
+  "/",
+  validateQuery(getProductListQuerySchema),
+  ProductController.getProductList,
+);
 
 router.get("/:id", auth.isLoggedIn, ProductController.getProductBYId);
 
@@ -27,7 +34,11 @@ router.delete(
   ProductController.deleteProduct,
 );
 
-router.get("/:id/comments", commentController.getProductCommentList);
+router.get(
+  "/:id/comments",
+  validateQuery(getCommentListQuerySchema),
+  commentController.getProductCommentList,
+);
 
 router.post(
   "/:id/comments",

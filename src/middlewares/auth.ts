@@ -49,7 +49,7 @@ async function isArticleOwner(req: Request, res: Response, next: NextFunction) {
     });
 
     if (!article) {
-      const error = new ForbiddenError("해당 게시글을 찾을 수 없습니다.");
+      const error = new NotFoundError("해당 게시글을 찾을 수 없습니다.");
       throw error;
     }
 

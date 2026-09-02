@@ -9,11 +9,15 @@ import productRouter from "./routes/product";
 import commentRouter from "./routes/comment";
 import articleRouter from "./routes/article";
 
+if (!process.env.JWT_SECRET) {
+  throw new Error("JWT_SECRET 환경변수가 설정되지 않았습니다.");
+}
+
 const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3001",
+    origin: process.env.CLIENT_URL || "http://localhost:3001",
     credentials: true,
   }),
 );
@@ -29,7 +33,4 @@ app.use("/articles", articleRouter);
 
 app.use(errorHandler);
 
-const port = process.env.PORT ?? 3000;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+export default app;

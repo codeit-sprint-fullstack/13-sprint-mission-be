@@ -20,17 +20,17 @@ Content-Type: application/json
 }
 
 ###
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc4NjM0NzQwNCwiZXhwIjoxNzg2MzUxMDA0fQ.R59ofWWecVzVqguBkcfSdFn5u_dXseG0Na1-5tg5BAI
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc4NzIwOTUyMSwiZXhwIjoxNzg3MjEzMTIxfQ.jMLw_4ySjOkywzAuUzW-OLiRbKZcGHSLhciBlmh2Ji4
 
 ### -----------------------------------------
 ### 1. 상품 목록 조회 (로그인 불필요)
 ### -----------------------------------------
-GET {{baseUrl}}/products?page=1&pageSize=10&orderBy=recent&keyword=
+GET {{baseUrl}}/products?page=1&pageSize=10&sort=recent&keyword=
 
 ### -----------------------------------------
 ### 2. 상품 목록 조회 - 정렬(좋아요순) + 검색어
 ### -----------------------------------------
-GET {{baseUrl}}/products?page=1&pageSize=5&orderBy=like&keyword=신발
+GET {{baseUrl}}/products?page=1&pageSize=5&sort=like&keyword=신발
 
 ### -----------------------------------------
 ### 3. 상품 목록 조회 - 쿼리 파라미터 없이 (기본값 확인용)

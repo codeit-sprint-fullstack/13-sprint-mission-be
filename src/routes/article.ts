@@ -2,10 +2,17 @@ import express from "express";
 import auth from "../middlewares/auth";
 import ArticleController from "../controllers/article.controller";
 import CommentController from "../controllers/comment.controller";
+import { validateQuery } from "../middlewares/validate";
+import { getArticleListQuerySchema } from "../schemas/article.schema";
+import { getCommentListQuerySchema } from "../schemas/comment.schema";
 
 const router = express.Router();
 
-router.get("/", ArticleController.getArticleList);
+router.get(
+  "/",
+  validateQuery(getArticleListQuerySchema),
+  ArticleController.getArticleList,
+);
 
 router.get("/:id", auth.isLoggedIn, ArticleController.getArticleByID);
 
@@ -25,7 +32,11 @@ router.delete(
   ArticleController.deleteArticle,
 );
 
-router.get("/:id/comments", CommentController.getArticleCommentList);
+router.get(
+  "/:id/comments",
+  validateQuery(getCommentListQuerySchema),
+  CommentController.getArticleCommentList,
+);
 
 router.post(
   "/:id/comments",

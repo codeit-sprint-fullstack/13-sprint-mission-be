@@ -17,4 +17,11 @@ export const createProductSchema = z.object({
   tags: z.array(z.string().max(5, "태그는 5자 이내여야 합니다")).optional(),
 });
 
+export const getProductListQuerySchema = z.object({
+  page: z.coerce.number().int().positive().default(1),
+  pageSize: z.coerce.number().int().positive().default(10),
+  sort: z.enum(["recent", "oldest", "title", "like"]).default("recent"),
+  keyword: z.string().default(""),
+});
+
 export const updateProductSchema = createProductSchema.partial();

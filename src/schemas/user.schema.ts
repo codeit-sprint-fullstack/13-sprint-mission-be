@@ -38,3 +38,9 @@ export const signUpSchema = z
     message: "비밀번호가 일치하지 않습니다.",
     path: ["passwordConfirmation"],
   });
+
+export const getMyLikesQuerySchema = z.object({
+  page: z.coerce.number().int().positive().default(1),
+  pageSize: z.coerce.number().int().positive().default(10),
+  keyword: z.string().default(""),
+});

@@ -6,3 +6,10 @@ export const createArticleSchema = z.object({
 });
 
 export const updateArticleSchema = createArticleSchema.partial();
+
+export const getArticleListQuerySchema = z.object({
+  page: z.coerce.number().int().positive().default(1),
+  pageSize: z.coerce.number().int().positive().default(10),
+  sort: z.enum(["recent", "like"]).default("recent"),
+  keyword: z.string().default(""),
+});
