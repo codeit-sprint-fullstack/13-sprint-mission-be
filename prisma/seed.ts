@@ -1,8 +1,15 @@
-import "dotenv/config";
-import { PrismaClient } from "@prisma/client";
+import dotenv from "dotenv";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient, User } from "../src/generated/prisma/client";
 import bcrypt from "bcrypt";
 
-const prisma = new PrismaClient();
+dotenv.config({
+  path: process.env.NODE_ENV === "production" ? ".env.production" : ".env",
+});
+
+const connectionString = `${process.env.DATABASE_URL}`;
+const adapter = new PrismaPg({ connectionString });
+const prisma = new PrismaClient({ adapter });
 
 const seedUsers = [
   {
@@ -142,7 +149,7 @@ const productData = [
 ];
 
 async function main() {
-  const users = [];
+  const users: User[] = [];
   for (const seedUser of seedUsers) {
     const encryptedPassword = await bcrypt.hash(seedUser.password, 10);
     const user = await prisma.user.upsert({

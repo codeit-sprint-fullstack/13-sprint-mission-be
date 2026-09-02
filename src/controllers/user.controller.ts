@@ -1,11 +1,8 @@
-import bcrypt from "bcrypt";
-import { prisma } from "../lib/prisma";
-import createToken from "../utils/token";
 import { Request, RequestHandler, Response } from "express";
 import { CustomError } from "../utils/customError";
 import { CreateUserDto, LoginUserDto, RefreshTokenDto } from "../dtos/user.dto";
 import { Request as JwtRequest } from "express-jwt";
-import jwt from "jsonwebtoken";
+import userService from "../services/user.service";
 
 const createUser = async (
   req: Request<{}, {}, CreateUserDto>,
@@ -13,25 +10,10 @@ const createUser = async (
 ) => {
   const { email, name, password } = req.body;
   if (!email || !name || !password) {
-    // const error = new Error("이메일 이름 비밀번호 모두 필요합니다");
-    // error.code = 400;
-    // throw error;
     throw new CustomError("이메일, 이름, 비밀번호 모두 필요합니다", 400);
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const userData = await prisma.user.create({
-    data: {
-      email,
-      nickname: name,
-      encryptedPassword: hashedPassword,
-    },
-  });
-
-  const { encryptedPassword, ...rest } = userData;
-  const safeUserData = rest;
-
+  const safeUserData = await userService.createUser({ email, name, password });
   res.status(201).json(safeUserData);
 };
 
@@ -41,30 +23,8 @@ const loginUser = async (req: Request<{}, {}, LoginUserDto>, res: Response) => {
     throw new CustomError("이메일, 비밀번호 모두 필요합니다", 400);
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
-  if (!user) {
-    throw new CustomError("등록된 이메일이 아닙니다", 401);
-  }
-
-  const isMatch = await bcrypt.compare(password, user.encryptedPassword!);
-  if (!isMatch) {
-    throw new CustomError("등록된 비밀번호가 아닙니다", 401);
-  }
-  const refreshToken = createToken(user.id, "refresh");
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { refreshToken },
-  });
-
-  const accessToken = createToken(user.id);
-  //기존의 리프레쉬토큰 제외
-  const { encryptedPassword, refreshToken: _refreshToken, ...rest } = user;
-  const safeUserData = rest;
-  res.status(200).json({ userData: safeUserData, accessToken, refreshToken });
+  const result = await userService.loginUser({ email, password });
+  res.status(200).json(result);
 };
 
 // express의 기본 Request엔 auth 필드가 없어서 express-jwt가 제공하는 Request<T> 사용
@@ -73,13 +33,8 @@ const getUser = async (req: JwtRequest<{ userId: number }>, res: Response) => {
   if (!req.auth?.userId) {
     throw new CustomError("인증 정보가 올바르지 않습니다", 401);
   }
-  const userId = req.auth.userId;
-  const userData = await prisma.user.findUnique({ where: { id: userId } });
-  if (!userData) {
-    throw new CustomError("해당 유저를 찾을 수 없습니다", 404);
-  }
-  const { encryptedPassword, ...rest } = userData;
-  const safeUserData = rest;
+
+  const safeUserData = await userService.getUser(req.auth.userId);
   res.status(200).json(safeUserData);
 };
 
@@ -89,25 +44,8 @@ const refreshToken: RequestHandler = async (req, res): Promise<void> => {
     throw new CustomError("리프레시 토큰이 필요합니다", 401);
   }
 
-  //토큰을 디코딩하면 나의 경우 객체가 나옴
-  const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET!);
-  if (typeof decoded === "string") {
-    throw new CustomError("유효하지 않은 토큰입니다.", 401);
-  }
-  //createToken에서 payload={userId:user.id}를 만들 때 Prisma Int필드라 JS에서도 number 타입이고 JSON으로 직렬화 될 때 userId:3 과 같이 숫자로 저장된다
-  if (typeof decoded.userId !== "number") {
-    throw new CustomError("유효하지 않은 토큰입니다.", 401);
-  }
-  const user = await prisma.user.findUnique({ where: { id: decoded.userId } });
-  if (!user) {
-    throw new CustomError("해당 유저를 찾을 수 없습니다", 404);
-  }
-  if (user.refreshToken !== refreshToken) {
-    throw new CustomError("유효한 리프레시 토큰이 아닙니다.", 401);
-  }
-  const token = createToken(user.id);
-
-  res.json({ accessToken: token });
+  const accessToken = await userService.refreshUserToken(refreshToken);
+  res.json({ accessToken });
 };
 
 const logoutUser = async (
@@ -117,12 +55,8 @@ const logoutUser = async (
   if (!req.auth?.userId) {
     throw new CustomError("인증 정보가 올바르지 않습니다", 401);
   }
-  const userId = req.auth.userId;
-  await prisma.user.update({
-    where: { id: userId },
-    data: { refreshToken: null },
-  });
 
+  await userService.logoutUser(req.auth.userId);
   res.status(200).json({ message: "로그아웃 되었습니다" });
 };
 

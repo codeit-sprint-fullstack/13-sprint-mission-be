@@ -2,21 +2,31 @@ import express from "express";
 import productController from "../controllers/product.controller";
 import auth from "../middlewares/auth";
 import multer from "multer";
-import path from "path";
+import multerS3 from "multer-s3";
 import validateProduct from "../middlewares/validators/product.validator";
 import crypto from "crypto";
+import { S3Client } from "@aws-sdk/client-s3";
 
 const productRouter = express.Router();
 
-const storage = multer.diskStorage({
-  destination: "uploads/",
-  filename: (req, file, cb) => {
-    const fileExt = path.extname(file.originalname);
-    //crypto.randomUUID()로 이미지 동시 업로드시 파일명 겹치는 경우 해결
-    cb(null, `${crypto.randomUUID()}_${fileExt}`);
+const s3 = new S3Client({
+  region: process.env.AWS_REGION!,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
   },
 });
-const upload = multer({ storage });
+
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: process.env.AWS_PUBLIC_BUCKET_NAME!,
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    key: (req, file, cb) => {
+      cb(null, `${crypto.randomUUID()}_${file.originalname}`);
+    },
+  }),
+});
 
 /**
  * @swagger

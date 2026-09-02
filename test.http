@@ -29,17 +29,17 @@ Content-Type:application/json
 
 ### 로그아웃 테스트
 POST {{BASE_URL}}/users/logout
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTc4NjQyMzU5MCwiZXhwIjoxNzg2NDI3MTkwfQ.ssqG7e2iV0f2JTFsFjk5GL5d2krp_XZcV2x4zheEUxE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTc4NzE4NDQ3NCwiZXhwIjoxNzg3MTg4MDc0fQ.6yrGX_-_29dA8gjpX77OhNMu_DEg81AwHOLVc1n9qbk
 
 ### 유저 정보 조회
 GET {{BASE_URL}}/users/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTc4NjM0ODY5MCwiZXhwIjoxNzg2NDM1MDkwfQ.MNzkMC33busUODElcBAMy-RlAj-JZpEW2J0TlBRvba0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTc4NzE4NDQ3NCwiZXhwIjoxNzg3MTg4MDc0fQ.6yrGX_-_29dA8gjpX77OhNMu_DEg81AwHOLVc1n9qbk
 
 
 ### 상품 등록 테스트 (이미지 2개)
 POST {{BASE_URL}}/products
 Content-Type: multipart/form-data; boundary=----boundary
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTc4NjM0ODY5MCwiZXhwIjoxNzg2NDM1MDkwfQ.MNzkMC33busUODElcBAMy-RlAj-JZpEW2J0TlBRvba0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTc4NzQ3MDY5NCwiZXhwIjoxNzg3NDc0Mjk0fQ.FouiBci0N72uuvve8scIj2iRG5PDo67rBJrWy9X7bcc
 
 ------boundary
 Content-Disposition: form-data; name="name"
@@ -101,8 +101,8 @@ Content-Disposition: form-data; name="tags"
 ------boundary--
 
 ###상품 삭제 테스트
-DELETE {{BASE_URL}}/products/16
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTc4NjM0ODY5MCwiZXhwIjoxNzg2NDM1MDkwfQ.MNzkMC33busUODElcBAMy-RlAj-JZpEW2J0TlBRvba0
+DELETE {{BASE_URL}}/products/47
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTc4NzQ3MDY5NCwiZXhwIjoxNzg3NDc0Mjk0fQ.FouiBci0N72uuvve8scIj2iRG5PDo67rBJrWy9X7bcc
 
 ###상품 수정 테스트
 PATCH {{BASE_URL}}/products/12
